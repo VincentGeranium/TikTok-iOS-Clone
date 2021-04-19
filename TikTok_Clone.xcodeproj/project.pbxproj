@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -27,6 +27,7 @@
 		6AAA2A65262C18EB003D463E /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAA2A64262C18EB003D463E /* DatabaseManager.swift */; };
 		6AAA2A68262C1906003D463E /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAA2A67262C1906003D463E /* AuthenticationManager.swift */; };
 		6AAA2A6B262C1913003D463E /* HapticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAA2A6A262C1913003D463E /* HapticsManager.swift */; };
+		6AFA39EE262D7ABD002C958E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6AFA39ED262D7ABD002C958E /* GoogleService-Info.plist */; };
 		F95670C8A70A52B892BC72A0 /* Pods_TikTok_Clone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118FB7E0137244D0A05EB204 /* Pods_TikTok_Clone.framework */; };
 /* End PBXBuildFile section */
 
@@ -55,6 +56,7 @@
 		6AAA2A64262C18EB003D463E /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		6AAA2A67262C1906003D463E /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		6AAA2A6A262C1913003D463E /* HapticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticsManager.swift; sourceTree = "<group>"; };
+		6AFA39ED262D7ABD002C958E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F94DB877476CB2A06806B6B5 /* Pods-TikTok_Clone.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TikTok_Clone.debug.xcconfig"; path = "Target Support Files/Pods-TikTok_Clone/Pods-TikTok_Clone.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -114,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				6A33FE4B262C107D00ABE5A7 /* Assets.xcassets */,
+				6AFA39ED262D7ABD002C958E /* GoogleService-Info.plist */,
 				6A33FE42262C107D00ABE5A7 /* AppDelegate.swift */,
 				6A33FE44262C107D00ABE5A7 /* SceneDelegate.swift */,
 			);
@@ -210,7 +213,6 @@
 				F94DB877476CB2A06806B6B5 /* Pods-TikTok_Clone.debug.xcconfig */,
 				2E8D877CF932677DA393560E /* Pods-TikTok_Clone.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -225,6 +227,8 @@
 				6A33FE3B262C107C00ABE5A7 /* Sources */,
 				6A33FE3C262C107C00ABE5A7 /* Frameworks */,
 				6A33FE3D262C107C00ABE5A7 /* Resources */,
+				6DDB77176B661E43BCEFC683 /* [CP] Embed Pods Frameworks */,
+				6AFA39F0262D7E45002C958E /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -274,12 +278,47 @@
 			files = (
 				6A33FE4F262C107D00ABE5A7 /* LaunchScreen.storyboard in Resources */,
 				6A33FE4C262C107D00ABE5A7 /* Assets.xcassets in Resources */,
+				6AFA39EE262D7ABD002C958E /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		6AFA39F0262D7E45002C958E /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/FirebaseCrashlytics/run\"\n";
+		};
+		6DDB77176B661E43BCEFC683 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TikTok_Clone/Pods-TikTok_Clone-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TikTok_Clone/Pods-TikTok_Clone-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TikTok_Clone/Pods-TikTok_Clone-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		B74920304837DBCC8F75D5D4 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

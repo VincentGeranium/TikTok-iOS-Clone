@@ -26,6 +26,7 @@
 		6AAA2A65262C18EB003D463E /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAA2A64262C18EB003D463E /* DatabaseManager.swift */; };
 		6AAA2A68262C1906003D463E /* AuthenticationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAA2A67262C1906003D463E /* AuthenticationManager.swift */; };
 		6AAA2A6B262C1913003D463E /* HapticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAA2A6A262C1913003D463E /* HapticsManager.swift */; };
+		6AD0449B263012A5000AB3B7 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD0449A263012A5000AB3B7 /* Extensions.swift */; };
 		6AFA39EE262D7ABD002C958E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6AFA39ED262D7ABD002C958E /* GoogleService-Info.plist */; };
 		F95670C8A70A52B892BC72A0 /* Pods_TikTok_Clone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118FB7E0137244D0A05EB204 /* Pods_TikTok_Clone.framework */; };
 /* End PBXBuildFile section */
@@ -54,6 +55,7 @@
 		6AAA2A64262C18EB003D463E /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		6AAA2A67262C1906003D463E /* AuthenticationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationManager.swift; sourceTree = "<group>"; };
 		6AAA2A6A262C1913003D463E /* HapticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticsManager.swift; sourceTree = "<group>"; };
+		6AD0449A263012A5000AB3B7 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		6AFA39ED262D7ABD002C958E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F94DB877476CB2A06806B6B5 /* Pods-TikTok_Clone.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TikTok_Clone.debug.xcconfig"; path = "Target Support Files/Pods-TikTok_Clone/Pods-TikTok_Clone.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -117,6 +119,7 @@
 				6AFA39ED262D7ABD002C958E /* GoogleService-Info.plist */,
 				6A33FE42262C107D00ABE5A7 /* AppDelegate.swift */,
 				6A33FE44262C107D00ABE5A7 /* SceneDelegate.swift */,
+				6AD0449A263012A5000AB3B7 /* Extensions.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -346,6 +349,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6AAA2A6B262C1913003D463E /* HapticsManager.swift in Sources */,
+				6AD0449B263012A5000AB3B7 /* Extensions.swift in Sources */,
 				6AAA2A65262C18EB003D463E /* DatabaseManager.swift in Sources */,
 				6AAA2A53262C17D2003D463E /* SignUpViewController.swift in Sources */,
 				6AAA2A4A262C17A2003D463E /* TabBarViewController.swift in Sources */,

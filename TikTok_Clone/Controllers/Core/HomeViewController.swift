@@ -37,6 +37,9 @@ class HomeViewController: UIViewController {
         options: [:]
     )
     
+    private var forYouPost: [PostModel] = PostModel.mockModel()
+    private var followingPosts: [PostModel] = PostModel.mockModel()
+    
     
     
     // MARK : -Lifecycle
@@ -70,13 +73,14 @@ class HomeViewController: UIViewController {
     }
     
     func setupFollowingFeed() {
-        let vc = UIViewController()
-        vc.view.backgroundColor = .blue
+        guard let model = followingPosts.first else {
+            return
+        }
         
         // set primary view controller
         // c.f : primary = 일 순위
         followingPagingController.setViewControllers(
-            [vc],
+            [PostViewController(model: model)],
             direction: .forward,
             animated: false,
             completion: nil
@@ -94,13 +98,13 @@ class HomeViewController: UIViewController {
     }
     
     func setupForYouFeed() {
-        let vc = UIViewController()
-        vc.view.backgroundColor = .blue
-        
+        guard let model = forYouPost.first else {
+            return
+        }
         // set primary view controller
         // c.f : primary = 일 순위
         forYouPagingController.setViewControllers(
-            [vc],
+            [PostViewController(model: model)],
             direction: .forward,
             animated: false,
             completion: nil
@@ -120,17 +124,71 @@ class HomeViewController: UIViewController {
 
 extension HomeViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
-        return nil
+        // get current user viewing
+        // where the scrolling from post
+        // cast from PostViewController
+        guard let fromPost = (viewController as? PostViewController)?.model else {
+            return nil
+        }
+        
+        guard let index = currentPosts.firstIndex(where: {
+            $0.identifier == fromPost.identifier
+        }) else {
+            return nil
+        }
+        
+        // where is index comming from
+        if index == 0 {
+            return nil
+        }
+        
+        // otherwise get previous model
+        let priorIndex = index - 1
+        let model = currentPosts[priorIndex]
+        let vc = PostViewController(model: model)
+        return vc
     }
     
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         
         // 17:15 부터
         // RandomViewController가 아닌 실제 Posting ViewController이 swipe시 보일 수 있도록 하기 위해
+        guard let fromPost = (viewController as? PostViewController)?.model else {
+            return nil
+        }
         
-        let vc = UIViewController()
-        vc.view.backgroundColor = [UIColor.red, UIColor.blue, UIColor.green, UIColor.systemPink].randomElement()
+        guard let index = currentPosts.firstIndex(where: {
+            // identifier must be unique
+            $0.identifier == fromPost.identifier
+        }) else {
+            return nil
+        }
+        
+        // index less than currentPost
+        // 마지막 인덱스에 대한 crush 관련 코드
+        // 무엇인지 아직 잘 모르겠네,,,,
+        // 코드의 로직이 무엇인지 이해가 필요함.
+        guard index < (currentPosts.count - 1) else {
+            return nil
+        }
+        
+        let nextIndex = index + 1
+        let model = currentPosts[nextIndex]
+        let vc = PostViewController(model: model)
         return vc
+    }
+    
+    // computed property
+    // check view
+    var currentPosts: [PostModel] {
+        if horizontalScrollView.contentOffset.x == 0 {
+            // Following
+            // all the way is left
+            return followingPosts
+        }
+        
+        // For You
+        return forYouPost
     }
     
     

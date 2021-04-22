@@ -23,7 +23,7 @@ class TabBarViewController: UITabBarController {
         let notification = NotificationsViewController()
         let profile = ProfileViewController()
         
-        home.title = "Home"
+        
         explore.title = "Explore"
         notification.title = "Notifications"
         profile.title = "Profile"
@@ -32,6 +32,11 @@ class TabBarViewController: UITabBarController {
         let nav2 = UINavigationController(rootViewController: explore)
         let nav3 = UINavigationController(rootViewController: notification)
         let nav4 = UINavigationController(rootViewController: profile)
+        
+        // segmentcontrol이 있는 상단 부분을 약간의 트릭으로 투명하게 만드는 로직.
+        nav1.navigationBar.backgroundColor = .clear
+        nav1.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        nav1.navigationBar.shadowImage = UIImage()
         
         nav1.tabBarItem = UITabBarItem(title: nil, image: UIImage.init(systemName: "house"), tag: 1)
         nav2.tabBarItem = UITabBarItem(title: nil, image: UIImage.init(systemName: "network"), tag: 2)

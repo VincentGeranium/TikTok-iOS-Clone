@@ -17,11 +17,27 @@ class HomeViewController: UIViewController {
     // closer pattern
     private let horizontalScrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        scrollView.backgroundColor = .red
         scrollView.bounces = false
         scrollView.isPagingEnabled = true
         scrollView.showsHorizontalScrollIndicator = false
         return scrollView
+    }()
+    
+    let control: UISegmentedControl = {
+        // left : following, right : for you
+        let titles = ["Following", "For You"]
+        // segment title color이 검정색으로 바뀌지 않아 stackoverflow 에서 참고하여 만든 코드 -> titleTextAttributes
+        let titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+        let control = UISegmentedControl(items: titles)
+        /*
+         segment title color이 검정색으로 바뀌지 않아 stackoverflow 에서 참고하여 만든 코드
+         -> control.setTitleTextAttributes(titleTextAttributes, for: .normal)
+         */
+        control.setTitleTextAttributes(titleTextAttributes, for: .normal)
+        control.selectedSegmentIndex = 1
+        control.backgroundColor = nil
+        control.selectedSegmentTintColor = .white
+        return control
     }()
     
     // make two PageViewController globaly
@@ -48,14 +64,33 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
         view.addSubview(horizontalScrollView)
+        horizontalScrollView.delegate = self
         setupFeed()
         // tiktok에서 앱이 lunch 후 swipe시 처음 left side애서 swipe 되어야 하므로
         horizontalScrollView.contentOffset = CGPoint(x: view.width, y: 0)
+        
+        // segment controller
+        setupHeaderButtons()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         horizontalScrollView.frame = view.bounds
+    }
+    
+    func setupHeaderButtons() {
+        control.addTarget(self, action: #selector(didChangeSegmentControl(_:)), for: .valueChanged)
+        
+        // setup UISegmentControl
+        navigationItem.titleView = control
+    }
+    
+    @objc private func didChangeSegmentControl(_ sender: UISegmentedControl) {
+        // when segment control is changed view is changed
+        horizontalScrollView.setContentOffset(CGPoint(x: view.width * CGFloat(sender.selectedSegmentIndex),
+                                                      y: 0),
+                                              animated: true)
+        
     }
     
     
@@ -90,9 +125,9 @@ class HomeViewController: UIViewController {
         
         horizontalScrollView.addSubview(followingPagingController.view)
         followingPagingController.view.frame = CGRect(x: 0,
-                                             y: 0,
-                                             width: horizontalScrollView.width,
-                                             height: horizontalScrollView.height)
+                                                      y: 0,
+                                                      width: horizontalScrollView.width,
+                                                      height: horizontalScrollView.height)
         addChild(followingPagingController)
         followingPagingController.didMove(toParent: self)
     }
@@ -114,9 +149,9 @@ class HomeViewController: UIViewController {
         
         horizontalScrollView.addSubview(forYouPagingController.view)
         forYouPagingController.view.frame = CGRect(x: view.width,
-                                             y: 0,
-                                             width: horizontalScrollView.width,
-                                             height: horizontalScrollView.height)
+                                                   y: 0,
+                                                   width: horizontalScrollView.width,
+                                                   height: horizontalScrollView.height)
         addChild(forYouPagingController)
         forYouPagingController.didMove(toParent: self)
     }
@@ -194,3 +229,15 @@ extension HomeViewController: UIPageViewControllerDataSource {
     
 }
 
+extension HomeViewController: UIScrollViewDelegate {
+    // 유저가 segment를 눌러서 뷰를 change 하지 않고 스스로 view를 swipe하여 바꿀 경우 segment도 함께 변하개 하려는 code
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.x == 0 || scrollView.contentOffset.x <= (view.width/2){
+            control.selectedSegmentIndex = 0
+        }
+        else if scrollView.contentOffset.x > (view.width/2) {
+            // 스크롤 뷰가 반 이상 넘어갈 경우 segment control change 한다.
+            control.selectedSegmentIndex = 1
+        }
+    }
+}

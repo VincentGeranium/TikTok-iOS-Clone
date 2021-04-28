@@ -39,6 +39,20 @@ class PostViewController: UIViewController {
         return button
     }()
     
+    // 모든 post는 caption이다
+    private let captionLabel: UILabel = {
+        let label: UILabel = UILabel()
+        label.textAlignment = .left
+        // numberOfLines를 0으로 만들면 label의 라인이 0이므로 unlimit한 라인 레이블이 된다. 즉, 무제한 라인.
+        label.numberOfLines = 0
+        label.text = "This is dummy label text #thisIsTest #Ihope #IWannaGoodJob #GiveMeJob"
+        // bump up the label size used by font size
+        label.font = UIFont.systemFont(ofSize: 24)
+        label.textColor = .white
+        return label
+    }()
+    
+    // MARK: - Init
     init(model: PostModel) {
         self.model = model
         super.init(nibName: nil, bundle: nil)
@@ -59,7 +73,9 @@ class PostViewController: UIViewController {
         view.backgroundColor = colors.randomElement()
         
         setupButtons()
-        setupDoubleTappedLikeButton()
+        // MARK: - Start Video at 15:00
+        setupDoubleTapToLikeButton()
+        view.addSubview(captionLabel)
     }
     
     override func viewDidLayoutSubviews() {
@@ -74,43 +90,58 @@ class PostViewController: UIViewController {
         // x좌표의 -10는 padding
         // y좌표의 + (), 괄호 안에 들어가는 것은 giving postion이다
         for (index, button) in [likeButton, commentButton, shareButton].enumerated() {
-            button.frame = CGRect(x: view.width-size-10, y: yStart + ((CGFloat(index) + 10) + (CGFloat(index) * size)), width: size, height: size)
-            
+            button.frame = CGRect(x: view.width-size-10, y: yStart + ((CGFloat(index) * 10) + (CGFloat(index) * size)), width: size, height: size)
         }
+        
+        // setup captionLabel frame code
+        // captionLabel.sizeToFit() => Autometic resizing code but not correct
+        captionLabel.sizeToFit()
+        // size of label
+        let labelSize = captionLabel.sizeThatFits(CGSize(width: view.width - size - 12, height: view.height))
+        // height is dynamic format
+        // width is basically entire screen width(view.width) and subtract size of button(size), -12 is padding
+        captionLabel.frame = CGRect(x: 5,
+                                    y: view.height - 10 - view.safeAreaInsets.bottom - labelSize.height - (tabBarController?.tabBar.height ?? 0),
+                                    width: view.width - size - 12,
+                                    height: labelSize.height)
     }
     
     
-
+    
     
     func setupButtons() {
         view.addSubview(likeButton)
         view.addSubview(commentButton)
         view.addSubview(shareButton)
         
-        likeButton.addTarget(self, action: #selector(didTappedLikeButton), for: .touchUpInside)
-        commentButton.addTarget(self, action: #selector(didTappedCommentButton), for: .touchUpInside)
-        shareButton.addTarget(self, action: #selector(didTappedShareButton), for: .touchUpInside)
+        likeButton.addTarget(self, action: #selector(didTapLikeButton), for: .touchUpInside)
+        commentButton.addTarget(self, action: #selector(didTapCommentButton), for: .touchUpInside)
+        shareButton.addTarget(self, action: #selector(didTapShareButton), for: .touchUpInside)
     }
     
-    @objc private func didTappedLikeButton() {
+    @objc private func didTapLikeButton() {
         // when like button touched
         // default value 인 false에서 true로 바뀜
         // this code like toggle logic
+        // inverse isLinkedByCurrentUsers
         model.isLikedByCurrentUsers = !model.isLikedByCurrentUsers
+        
         
         // button을 tapped 시 색이 바뀌게 하는 코드
         // 삼항연산자 사용
+        // likeButton update logic code
         likeButton.tintColor = model.isLikedByCurrentUsers ? .systemRed : .white
     }
     
-    @objc private func didTappedCommentButton() {
+    @objc private func didTapCommentButton() {
         // Present comment tray
         
     }
     
-    @objc private func didTappedShareButton() {
+    @objc private func didTapShareButton() {
         // when share button tapped, share 관련 UIActivityViewController를 이용하여 method 띄우기.
         guard let url = URL(string: "https://www.tiktok.com") else {
+            // this is dummy url as for develop app and test
             return
         }
         
@@ -121,12 +152,14 @@ class PostViewController: UIViewController {
         present(vc, animated: true, completion: nil)
     }
     
-    func setupDoubleTappedLikeButton() {
+    func setupDoubleTapToLikeButton() {
         // UITapGestureRecognizer를 사용하여 button을 double tapped 할 경우 작동하게 하는 logic
         let tap = UITapGestureRecognizer(target: self, action: #selector(didDoubleTapped(_:)))
         // tap gesture configure
         // have to tapped 2 times
-        tap.numberOfTouchesRequired = 2
+        //        tap.numberOfTouchesRequired = 2 -> 2손가락으로 터치시 동작하는 코드
+        // 2번의 탭을 해야 동작하는 코드
+        tap.numberOfTapsRequired = 2
         // UITapGestureRecognaizer 관련하여 tap을 만들고 그것을 view에 add
         view.addGestureRecognizer(tap)
         // isUserInteractionEnabled 어떤 기능인지 알아보자.
@@ -138,8 +171,10 @@ class PostViewController: UIViewController {
     // UITapGestureRecognizer를 사용하므로 그에 맞는 parameter와 parameter type인 UITapGestureRecognizer를 준다.
     @objc private func didDoubleTapped(_ gesture: UITapGestureRecognizer) {
         
-        print("🛑 : Double Tapped is Worked")
+        //        print("🛑 : Double Tapped is Worked")
+        // 더블 탭 했을 때 데이터 베이스에서 한 번으로 인식하고 그에 대한 결과값을 돌려주기 위해?
         if !model.isLikedByCurrentUsers {
+            print("🛑 : Double Tapped is Worked")
             model.isLikedByCurrentUsers = true
         }
         
@@ -164,7 +199,6 @@ class PostViewController: UIViewController {
         } completion: { done in
             if done {
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
-                    // 실제 Fade out 코드
                     UIView.animate(withDuration: 0.3) {
                         imageView.alpha = 0
                     } completion: { done in
@@ -172,9 +206,13 @@ class PostViewController: UIViewController {
                             imageView.removeFromSuperview()
                         }
                     }
+                    
                 }
+                
             }
         }
+        
+        
     }
 }
 

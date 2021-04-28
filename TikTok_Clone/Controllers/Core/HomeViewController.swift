@@ -15,18 +15,19 @@ import UIKit
 class HomeViewController: UIViewController {
     
     // closer pattern
-    private let horizontalScrollView: UIScrollView = {
+    let horizontalScrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.bounces = false
-        scrollView.isPagingEnabled = true
         scrollView.showsHorizontalScrollIndicator = false
+        scrollView.isPagingEnabled = true
         return scrollView
     }()
     
     let control: UISegmentedControl = {
         // left : following, right : for you
         let titles = ["Following", "For You"]
-        // segment title color이 검정색으로 바뀌지 않아 stackoverflow 에서 참고하여 만든 코드 -> titleTextAttributes
+        //        MARK: - make own code for segment title color
+        // segment title color이 검정색으로 바뀌지 않아 stackoverflow 에서 참고하여 만든 코드 -> let titleTextAttributes
         let titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
         let control = UISegmentedControl(items: titles)
         /*
@@ -53,12 +54,12 @@ class HomeViewController: UIViewController {
         options: [:]
     )
     
-    private var forYouPost: [PostModel] = PostModel.mockModel()
-    private var followingPosts: [PostModel] = PostModel.mockModel()
+    private var forYouPost = PostModel.mockModel()
+    private var followingPosts = PostModel.mockModel()
     
     
     
-    // MARK : -Lifecycle
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -166,13 +167,13 @@ extension HomeViewController: UIPageViewControllerDataSource {
             return nil
         }
         
+        // where is post comming from: 포스트가 어디서 왔는지 알기위해서
         guard let index = currentPosts.firstIndex(where: {
             $0.identifier == fromPost.identifier
         }) else {
             return nil
         }
         
-        // where is index comming from
         if index == 0 {
             return nil
         }
@@ -188,6 +189,7 @@ extension HomeViewController: UIPageViewControllerDataSource {
         
         // 17:15 부터
         // RandomViewController가 아닌 실제 Posting ViewController이 swipe시 보일 수 있도록 하기 위해
+        // fromPost: post가 어디서 왔는지 알기위해
         guard let fromPost = (viewController as? PostViewController)?.model else {
             return nil
         }
@@ -199,10 +201,9 @@ extension HomeViewController: UIPageViewControllerDataSource {
             return nil
         }
         
+        // 실제 Array에서 out of bounds(배열의 요소수 보다 적은 경우) crush가 나는데 그것에 관한 코드?
         // index less than currentPost
         // 마지막 인덱스에 대한 crush 관련 코드
-        // 무엇인지 아직 잘 모르겠네,,,,
-        // 코드의 로직이 무엇인지 이해가 필요함.
         guard index < (currentPosts.count - 1) else {
             return nil
         }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UIKit.UIGestureRecognizerSubclass
 
 class PostViewController: UIViewController {
     
@@ -86,12 +87,12 @@ class PostViewController: UIViewController {
         view.addSubview(commentButton)
         view.addSubview(shareButton)
         
-        likeButton.addTarget(self, action: #selector(didTappedLikeButton(_:)), for: .touchUpInside)
-        commentButton.addTarget(self, action: #selector(didTappedCommentButton(_:)), for: .touchUpInside)
-        shareButton.addTarget(self, action: #selector(didTappedShareButton(_:)), for: .touchUpInside)
+        likeButton.addTarget(self, action: #selector(didTappedLikeButton), for: .touchUpInside)
+        commentButton.addTarget(self, action: #selector(didTappedCommentButton), for: .touchUpInside)
+        shareButton.addTarget(self, action: #selector(didTappedShareButton), for: .touchUpInside)
     }
     
-    @objc private func didTappedLikeButton(_ sender: UIButton) {
+    @objc private func didTappedLikeButton() {
         // when like button touched
         // default value 인 false에서 true로 바뀜
         // this code like toggle logic
@@ -102,12 +103,12 @@ class PostViewController: UIViewController {
         likeButton.tintColor = model.isLikedByCurrentUsers ? .systemRed : .white
     }
     
-    @objc private func didTappedCommentButton(_ sender: UIButton) {
+    @objc private func didTappedCommentButton() {
         // Present comment tray
         
     }
     
-    @objc private func didTappedShareButton(_ sender: UIButton) {
+    @objc private func didTappedShareButton() {
         // when share button tapped, share 관련 UIActivityViewController를 이용하여 method 띄우기.
         guard let url = URL(string: "https://www.tiktok.com") else {
             return
@@ -130,10 +131,14 @@ class PostViewController: UIViewController {
         view.addGestureRecognizer(tap)
         // isUserInteractionEnabled 어떤 기능인지 알아보자.
         view.isUserInteractionEnabled = true
+        
+        
     }
     
     // UITapGestureRecognizer를 사용하므로 그에 맞는 parameter와 parameter type인 UITapGestureRecognizer를 준다.
     @objc private func didDoubleTapped(_ gesture: UITapGestureRecognizer) {
+        
+        print("🛑 : Double Tapped is Worked")
         if !model.isLikedByCurrentUsers {
             model.isLikedByCurrentUsers = true
         }
@@ -158,7 +163,7 @@ class PostViewController: UIViewController {
             imageView.alpha = 1
         } completion: { done in
             if done {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                DispatchQueue.main.asyncAfter(deadline: .now()+0.2) {
                     // 실제 Fade out 코드
                     UIView.animate(withDuration: 0.3) {
                         imageView.alpha = 0
@@ -172,3 +177,4 @@ class PostViewController: UIViewController {
         }
     }
 }
+

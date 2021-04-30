@@ -22,8 +22,8 @@ class CommentsViewController: UIViewController {
     private let tableView: UITableView = {
         let tableView: UITableView = UITableView()
         tableView.register(
-            UITableViewCell.self,
-            forCellReuseIdentifier: "cell"
+            CommentTableViewCell.self,
+            forCellReuseIdentifier: CommentTableViewCell.identifier
         )
         return tableView
     }()
@@ -90,11 +90,25 @@ extension CommentsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let comments = self.comments[indexPath.row]
-        let cell = tableView.dequeueReusableCell(
-            withIdentifier: "cell",
+        
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: CommentTableViewCell.identifier,
             for: indexPath
-        )
-        cell.textLabel?.text = comments.text
+        ) as? CommentTableViewCell else {
+            return UITableViewCell()
+        }
+        
+        cell.configure(with: comments)
+        
         return cell
+    }
+    
+    // 실제 테이블 뷰의 셀 높이를 조절하기 위한 method
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

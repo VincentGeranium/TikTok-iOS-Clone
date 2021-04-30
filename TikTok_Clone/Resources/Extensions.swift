@@ -40,3 +40,22 @@ extension UIView {
     }
     
 }
+
+extension DateFormatter {
+    static let defaultFormatter: DateFormatter = {
+        let formatter: DateFormatter = DateFormatter()
+        // current users timezone, locale
+        formatter.timeZone = .current
+        formatter.locale = .current
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        return formatter
+    }()
+}
+
+extension String {
+    // Date를 String으로 format하기 위한 extension
+    static func date(with date: Date) -> String {
+        return DateFormatter.defaultFormatter.string(from: date)        
+    }
+}

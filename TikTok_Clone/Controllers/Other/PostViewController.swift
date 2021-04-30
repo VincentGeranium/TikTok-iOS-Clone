@@ -8,7 +8,13 @@
 import UIKit
 import UIKit.UIGestureRecognizerSubclass
 
+protocol PostViewControllerDelegate: AnyObject {
+    func postViewController(_ vc: PostViewController, didTapCommentButtonFor post: PostModel)
+}
+
 class PostViewController: UIViewController {
+    
+    weak var delegate: PostViewControllerDelegate?
     
     var model: PostModel
     
@@ -107,8 +113,6 @@ class PostViewController: UIViewController {
     }
     
     
-    
-    
     func setupButtons() {
         view.addSubview(likeButton)
         view.addSubview(commentButton)
@@ -134,8 +138,17 @@ class PostViewController: UIViewController {
     }
     
     @objc private func didTapCommentButton() {
-        // Present comment tray
-        
+//        (parent as? UIPageViewController)?.view?.isUserInteractionEnabled = false
+//        let vc = CommentsViewController(post: model)
+//        addChild(vc)
+//        vc.didMove(toParent: self)
+//        view.addSubview(vc.view)
+//        let frame = CGRect(x: 0, y: view.height, width: view.width, height: view.height * 0.76)
+//        vc.view.frame =  frame
+//        UIView.animate(withDuration: 0.2) {
+//            vc.view.frame = CGRect(x: 0, y: self.view.height - frame.height, width: frame.width, height: frame.height)
+//        }
+        delegate?.postViewController(self, didTapCommentButtonFor: model)
     }
     
     @objc private func didTapShareButton() {

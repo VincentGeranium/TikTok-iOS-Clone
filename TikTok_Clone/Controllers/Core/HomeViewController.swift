@@ -112,11 +112,12 @@ class HomeViewController: UIViewController {
         guard let model = followingPosts.first else {
             return
         }
-        
+        let vc = PostViewController(model: model)
+        vc.delegate = self
         // set primary view controller
         // c.f : primary = 일 순위
         followingPagingController.setViewControllers(
-            [PostViewController(model: model)],
+            [vc],
             direction: .forward,
             animated: false,
             completion: nil
@@ -137,10 +138,12 @@ class HomeViewController: UIViewController {
         guard let model = forYouPost.first else {
             return
         }
+        let vc = PostViewController(model: model)
+        vc.delegate = self
         // set primary view controller
         // c.f : primary = 일 순위
         forYouPagingController.setViewControllers(
-            [PostViewController(model: model)],
+            [vc],
             direction: .forward,
             animated: false,
             completion: nil
@@ -182,6 +185,7 @@ extension HomeViewController: UIPageViewControllerDataSource {
         let priorIndex = index - 1
         let model = currentPosts[priorIndex]
         let vc = PostViewController(model: model)
+        vc.delegate = self
         return vc
     }
     
@@ -211,6 +215,7 @@ extension HomeViewController: UIPageViewControllerDataSource {
         let nextIndex = index + 1
         let model = currentPosts[nextIndex]
         let vc = PostViewController(model: model)
+        vc.delegate = self
         return vc
     }
     
@@ -242,3 +247,60 @@ extension HomeViewController: UIScrollViewDelegate {
         }
     }
 }
+
+extension HomeViewController: PostViewControllerDelegate {
+    func postViewController(_ vc: PostViewController, didTapCommentButtonFor post: PostModel) {
+        /*
+         horizontalScrollView.contentOffset.x == 0
+            => this code means following page
+         */
+        
+        /*
+         from horizontalScrollView.isScrollEnabled = false to end of else statement code mean
+         when tapped commment button the comment vc is present and user can't scroll any view
+         */
+        horizontalScrollView.isScrollEnabled = false
+        if horizontalScrollView.contentOffset.x == 0 {
+            // following
+            followingPagingController.dataSource = nil
+        } else {
+            forYouPagingController.dataSource = nil
+        }
+        
+        let vc = CommentsViewController(post: post)
+        vc.delegate = self
+        addChild(vc)
+        vc.didMove(toParent: self)
+        view.addSubview(vc.view)
+        let frame = CGRect(x: 0, y: view.height, width: view.width, height: view.height * 0.76)
+        vc.view.frame =  frame
+        UIView.animate(withDuration: 0.2) {
+            vc.view.frame = CGRect(x: 0, y: self.view.height - frame.height, width: frame.width, height: frame.height)
+        }
+        
+    }
+}
+
+extension HomeViewController: CommentsViewControllerDelegate {
+    func didCloseForComments(with viewController: CommentsViewController) {
+        // 1. close comments with animation
+        let frame = viewController.view.frame
+        UIView.animate(withDuration: 0.2) {
+            viewController.view.frame = CGRect(x: 0, y: self.view.height, width: frame.width, height: frame.height)
+        } completion: { [weak self] done in
+            if done {
+                // ui 관련 코드는 main thread 애서 관리하고 처리한다
+                DispatchQueue.main.async {
+                    // 2. remove comment vc as child
+                    viewController.view.removeFromSuperview()
+                    viewController.removeFromParent()
+                    // 3. allow horizontal and vertical scroll
+                    self?.horizontalScrollView.isScrollEnabled = true
+                    self?.forYouPagingController.dataSource = self
+                    self?.followingPagingController.dataSource = self
+                }
+            }
+        }
+    }
+}
+

@@ -21,7 +21,9 @@ class TabBarViewController: UITabBarController {
         let explore = ExploreViewController()
         let camera = CameraViewController()
         let notification = NotificationsViewController()
-        let profile = ProfileViewController()
+        let profile = ProfileViewController(user: User(userName: "self",
+                                                       profilePictureURL: nil,
+                                                       identifier: "abc123"))
         
         
         explore.title = "Explore"

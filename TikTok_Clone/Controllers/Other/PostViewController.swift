@@ -10,6 +10,7 @@ import UIKit.UIGestureRecognizerSubclass
 
 protocol PostViewControllerDelegate: AnyObject {
     func postViewController(_ vc: PostViewController, didTapCommentButtonFor post: PostModel)
+    func postViewController(_ vc: PostViewController, didTapProfileButtonFor post: PostModel)
 }
 
 class PostViewController: UIViewController {
@@ -21,7 +22,7 @@ class PostViewController: UIViewController {
     private let likeButton: UIButton = {
         let button = UIButton()
         button.setBackgroundImage(UIImage(systemName: "heart.fill"), for: .normal)
-        // button의 image가 들어갔을 때 이미지가 이상하게 변하지 않도록
+        // button의 image가 들어갔을 때 이미지가 이상하게 변하지 않도록 상황에 따라 다른 contentMode 값을 줘야 함
         button.imageView?.contentMode = .scaleAspectFit
         button.tintColor = .white
         return button
@@ -30,7 +31,7 @@ class PostViewController: UIViewController {
     private let commentButton: UIButton = {
         let button = UIButton()
         button.setBackgroundImage(UIImage(systemName: "text.bubble.fill"), for: .normal)
-        // button의 image가 들어갔을 때 이미지가 이상하게 변하지 않도록
+        // button의 image가 들어갔을 때 이미지가 이상하게 변하지 않도록 상황에 따라 다른 contentMode 값을 줘야 함
         button.imageView?.contentMode = .scaleAspectFit
         button.tintColor = .white
         return button
@@ -39,11 +40,23 @@ class PostViewController: UIViewController {
     private let shareButton: UIButton = {
         let button = UIButton()
         button.setBackgroundImage(UIImage(systemName: "square.and.arrow.up"), for: .normal)
-        // button의 image가 들어갔을 때 이미지가 이상하게 변하지 않도록
+        // button의 image가 들어갔을 때 이미지가 이상하게 변하지 않도록 상황에 따라 다른 contentMode 값을 줘야 함
         button.imageView?.contentMode = .scaleAspectFit
         button.tintColor = .white
         return button
     }()
+    
+    private let profileButton: UIButton = {
+        let button = UIButton()
+        button.setBackgroundImage(UIImage(named: "test"), for: .normal)
+        button.layer.masksToBounds = true
+        // button의 image가 들어갔을 때 이미지가 이상하게 변하지 않도록 상황에 따라 다른 contentMode 값을 줘야 함
+        button.imageView?.contentMode = .scaleAspectFill
+        button.tintColor = .white
+        return button
+    }()
+    
+    
     
     // 모든 post는 caption이다
     private let captionLabel: UILabel = {
@@ -79,9 +92,12 @@ class PostViewController: UIViewController {
         view.backgroundColor = colors.randomElement()
         
         setupButtons()
-        // MARK: - Start Video at 15:00
         setupDoubleTapToLikeButton()
         view.addSubview(captionLabel)
+        view.addSubview(profileButton)
+        
+        // actuall profileButton Action Method
+        profileButton.addTarget(self, action: #selector(didTapProfileButton), for: .touchUpInside)
     }
     
     override func viewDidLayoutSubviews() {
@@ -109,7 +125,24 @@ class PostViewController: UIViewController {
         captionLabel.frame = CGRect(x: 5,
                                     y: view.height - 10 - view.safeAreaInsets.bottom - labelSize.height - (tabBarController?.tabBar.height ?? 0),
                                     width: view.width - size - 12,
-                                    height: labelSize.height)
+                                    height: labelSize.height
+        )
+        
+        // setup profile button frame
+        profileButton.frame = CGRect(x: likeButton.left,
+                                     y: likeButton.top - 10 - size,
+                                     width: size,
+                                     height: size
+        )
+        
+        // for make profile circular shape button
+        profileButton.layer.cornerRadius = size / 2
+    }
+    
+    // profile vc를 call 하는 것은 comment tray를 call 하는 것과 비슷하다 => protocol을 이용한다
+    @objc func didTapProfileButton() {
+        // delegate, 즉 이 프로토콜을 confirming 하려면 HomeViewController의 extension에서 protocol을 받아줘야 한다.
+        delegate?.postViewController(self, didTapProfileButtonFor: model)
     }
     
     

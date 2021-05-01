@@ -15,6 +15,7 @@
 		6A33FE47262C107D00ABE5A7 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A33FE46262C107D00ABE5A7 /* HomeViewController.swift */; };
 		6A33FE4C262C107D00ABE5A7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A33FE4B262C107D00ABE5A7 /* Assets.xcassets */; };
 		6A33FE4F262C107D00ABE5A7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A33FE4D262C107D00ABE5A7 /* LaunchScreen.storyboard */; };
+		6A4F2C14263D42B4002508E3 /* mockVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 6A4F2C13263D42B4002508E3 /* mockVideo.mp4 */; };
 		6A4FBFAC263BF986006B8E21 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4FBFAB263BF986006B8E21 /* CommentTableViewCell.swift */; };
 		6AAA2A3E262C16FF003D463E /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAA2A3D262C16FF003D463E /* ExploreViewController.swift */; };
 		6AAA2A41262C1715003D463E /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAA2A40262C1715003D463E /* CameraViewController.swift */; };
@@ -49,6 +50,7 @@
 		6A33FE4B262C107D00ABE5A7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6A33FE4E262C107D00ABE5A7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6A33FE50262C107D00ABE5A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6A4F2C13263D42B4002508E3 /* mockVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = mockVideo.mp4; sourceTree = "<group>"; };
 		6A4FBFAB263BF986006B8E21 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 		6AAA2A3D262C16FF003D463E /* ExploreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
 		6AAA2A40262C1715003D463E /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
@@ -126,6 +128,7 @@
 			isa = PBXGroup;
 			children = (
 				6A33FE4B262C107D00ABE5A7 /* Assets.xcassets */,
+				6A4F2C13263D42B4002508E3 /* mockVideo.mp4 */,
 				6AFA39ED262D7ABD002C958E /* GoogleService-Info.plist */,
 				6A33FE42262C107D00ABE5A7 /* AppDelegate.swift */,
 				6A33FE44262C107D00ABE5A7 /* SceneDelegate.swift */,
@@ -292,6 +295,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A33FE4F262C107D00ABE5A7 /* LaunchScreen.storyboard in Resources */,
+				6A4F2C14263D42B4002508E3 /* mockVideo.mp4 in Resources */,
 				6A33FE4C262C107D00ABE5A7 /* Assets.xcassets in Resources */,
 				6AFA39EE262D7ABD002C958E /* GoogleService-Info.plist in Resources */,
 			);

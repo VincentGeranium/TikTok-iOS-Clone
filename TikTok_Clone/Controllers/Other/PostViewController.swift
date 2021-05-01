@@ -5,6 +5,10 @@
 //  Created by 김광준 on 2021/04/18.
 //
 
+// AVFoudation : Apple audio and video handling framework
+// Work with audiovisual assets, control device cameras, process audio, and configure system audio interactions.
+
+import AVFoundation
 import UIKit
 import UIKit.UIGestureRecognizerSubclass
 
@@ -56,8 +60,6 @@ class PostViewController: UIViewController {
         return button
     }()
     
-    
-    
     // 모든 post는 caption이다
     private let captionLabel: UILabel = {
         let label: UILabel = UILabel()
@@ -71,6 +73,9 @@ class PostViewController: UIViewController {
         return label
     }()
     
+    // avplayer
+    var player: AVPlayer?
+    
     // MARK: - Init
     init(model: PostModel) {
         self.model = model
@@ -83,6 +88,11 @@ class PostViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // about video method
+        // configureVideo 메소드가 view.addSubview 메소드보다 아래에 있을 경우 만들어진 모든 button들이 가려진다.
+        // 그러므로 configureVideo method가 먼저 올라가야 한다.
+        // about layer
+        configureVideo()
         
         // make random background color for test
         let colors: [UIColor] = [
@@ -98,16 +108,26 @@ class PostViewController: UIViewController {
         
         // actuall profileButton Action Method
         profileButton.addTarget(self, action: #selector(didTapProfileButton), for: .touchUpInside)
+        
+        // about video method
+//        configureVideo()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        /*
+         실제 autolayout에서 긴 computation을 code로 작업 할 경우 error이 일어나는 경우가 있다
+         그래서 너무 긴 computation은 따로 property로 만들어 작업하는 것이 좋다.
+         */
         
         // button size
         let size: CGFloat = 40
         
+        // tabBarHeight
+        let tabBarHeight: CGFloat = (tabBarController?.tabBar.height ?? 0)
+        
         // y축을 기준으로 버튼들이 움직여야 하므로 다음과 같은 yStart property를 만들고 사용한다.
-        let yStart: CGFloat = view.height - (size * 4) - 30 - view.safeAreaInsets.bottom - (tabBarController?.tabBar.height ?? 0)
+        let yStart: CGFloat = view.height - (size * 4.0) - 30 - view.safeAreaInsets.bottom - tabBarHeight
         
         // x좌표의 -10는 padding
         // y좌표의 + (), 괄호 안에 들어가는 것은 giving postion이다
@@ -137,6 +157,30 @@ class PostViewController: UIViewController {
         
         // for make profile circular shape button
         profileButton.layer.cornerRadius = size / 2
+    }
+    
+    //
+    
+    private func configureVideo() {
+        // 1. 비디오의 path 찾아가기
+        // path는 nil일 경우가 있으므로 unwrap 해야 함 그래서 guard let으로 가져온다.
+        guard let path = Bundle.main.path(forResource: "mockVideo", ofType: "mp4") else {
+            return
+        }
+        
+        // 2. path를 url로 바꾸기.
+        let url = URL(fileURLWithPath: path)
+        
+        // player에 url로 바뀐 video path 넣어서 video 준비
+        player = AVPlayer(url: url)
+        
+        // 3. 준비 된 비디오를 포스팅하는 코드 and video player frame setup
+        let playerLayer = AVPlayerLayer(player: player)
+        playerLayer.frame = view.bounds
+        playerLayer.videoGravity = .resizeAspectFill
+        view.layer.addSublayer(playerLayer)
+        player?.volume = 0
+        player?.play()
     }
     
     // profile vc를 call 하는 것은 comment tray를 call 하는 것과 비슷하다 => protocol을 이용한다

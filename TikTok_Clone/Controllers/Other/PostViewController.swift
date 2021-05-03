@@ -76,6 +76,9 @@ class PostViewController: UIViewController {
     // avplayer
     var player: AVPlayer?
     
+    // Make Video Auto play infinitly, Make Observer pattern
+    private var playDidFinishObserver: NSObjectProtocol?
+    
     // MARK: - Init
     init(model: PostModel) {
         self.model = model
@@ -181,6 +184,22 @@ class PostViewController: UIViewController {
         view.layer.addSublayer(playerLayer)
         player?.volume = 0
         player?.play()
+        
+        // player가 optional 이므로 unwrapping 해준다
+        guard let player = player  else {
+            return
+        }
+        
+        // setup observer for auto video play
+        playDidFinishObserver = NotificationCenter.default.addObserver(
+            forName: .AVPlayerItemDidPlayToEndTime,
+            object: player.currentItem,
+            queue: OperationQueue.main) { _ in
+            // trailing closure
+            // actually notification handling, complition handle
+            player.seek(to: .zero)
+            player.play()
+        }
     }
     
     // profile vc를 call 하는 것은 comment tray를 call 하는 것과 비슷하다 => protocol을 이용한다

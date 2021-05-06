@@ -1,0 +1,258 @@
+{
+  "banners": [
+    {
+      "id": "nature",
+      "image": "1",
+      "title": "Nature",
+      "action": "hashtag"
+    },
+    {
+      "id": "road",
+      "image": "2",
+      "title": "Road",
+      "action": "user"
+    },
+    {
+      "id": "seoulcity",
+      "image": "3",
+      "title": "Seoul City",
+      "action": "hashtag"
+    },
+    {
+      "id": "paris",
+      "image": "4",
+      "title": "Paris",
+      "action": "post"
+    },
+    {
+      "id": "rome",
+      "image": "5",
+      "title": "Rome",
+      "action": "post"
+    },
+    {
+      "id": "heartjun",
+      "image": "6",
+      "title": "heart",
+      "action": "post"
+    },
+    {
+      "id": "room",
+      "image": "7",
+      "title": "Room",
+      "action": "post"
+    },
+  ],
+  "trendingPosts": [
+    {
+      "id": "1",
+      "image": "trending1",
+      "caption": "2020 has been crazy!",
+    },
+    {
+      "id": "2",
+      "image": "trending2",
+      "caption": "Australia trip 2020!",
+    },
+    {
+      "id": "3",
+      "image": "trending3",
+      "caption": "What do you actually want!",
+    },
+    {
+      "id": "4",
+      "image": "trending4",
+      "caption": "Follow on instagram!",
+    },
+    {
+      "id": "5",
+      "image": "trending5",
+      "caption": "Finding more friends!",
+    },
+    {
+      "id": "6",
+      "image": "trending6",
+      "caption": "Day trip to the beach!",
+    },
+    {
+      "id": "7",
+      "image": "trending7",
+      "caption": "Merry Christmas to all!",
+    },
+    {
+      "id": "8",
+      "image": "trending8",
+      "caption": "This tiktok app course is amazing!",
+    },
+    {
+      "id": "9",
+      "image": "trending9",
+      "caption": "For you page is rigged!",
+    },
+    {
+      "id": "10",
+      "image": "trending10",
+      "caption": "Try the WAP dance!",
+    },
+    {
+      "id": "11",
+      "image": "trending10",
+      "caption": "Try the WAP dance!",
+    },
+    {
+      "id": "12",
+      "image": "trending10",
+      "caption": "Try the WAP dance!",
+    },
+  ],
+  "creators": [
+    {
+      "id": "user1",
+      "image": "creator1",
+      "username": "kanyewest",
+      "followers_count": 1200
+    },
+    {
+      "id": "user2",
+      "image": "creator2",
+      "username": "kimkardashian",
+      "followers_count": 1200
+    },
+    {
+      "id": "user3",
+      "image": "creator3",
+      "username": "toiley",
+      "followers_count": 1200
+    },
+    {
+      "id": "user4",
+      "image": "creator4",
+      "username": "charlidamelio",
+      "followers_count": 1200
+    },
+    {
+      "id": "user5",
+      "image": "creator5",
+      "username": "addisonrae",
+      "followers_count": 1200
+    }
+  ],
+  "recentPosts": [
+    {
+      "id": "1",
+      "image": "trending1",
+      "caption": "2020 has been crazy!",
+    },
+    {
+      "id": "2",
+      "image": "trending2",
+      "caption": "Australia trip 2020!",
+    },
+    {
+      "id": "3",
+      "image": "trending4",
+      "caption": "What do you actually want!",
+    },
+    {
+      "id": "4",
+      "image": "trending5",
+      "caption": "Follow on instagram!",
+    },
+    {
+      "id": "5",
+      "image": "trending6",
+      "caption": "Finding more friends!",
+    },
+    {
+      "id": "6",
+      "image": "trending8",
+      "caption": "Day trip to the beach!",
+    }
+  ],
+  "hashtags": [
+    {
+      "image": "tag.circle",
+      "tag": "foryoupage",
+      "count": 24000
+    },
+    {
+      "image": "tag.circle",
+      "tag": "yearInReview",
+      "count": 1000
+    },
+    {
+      "image": "tag.circle",
+      "tag": "2020bestnine",
+      "count": 2000
+    },
+    {
+      "image": "tag.circle",
+      "tag": "summertime",
+      "count": 400
+    }
+  ],
+  "popular": [
+    {
+      "id": "1",
+      "image": "trending10",
+      "caption": "2020 has been crazy!",
+    },
+    {
+      "id": "2",
+      "image": "trending8",
+      "caption": "Australia trip 2020!",
+    },
+    {
+      "id": "3",
+      "image": "trending4",
+      "caption": "What do you actually want!",
+    },
+    {
+      "id": "4",
+      "image": "trending3",
+      "caption": "Follow on instagram!",
+    },
+    {
+      "id": "5",
+      "image": "trending1",
+      "caption": "Finding more friends!",
+    },
+    {
+      "id": "6",
+      "image": "trending2",
+      "caption": "Day trip to the beach!",
+    }
+  ],
+  "recommended": [
+    {
+      "id": "1",
+      "image": "trending1",
+      "caption": "2020 has been crazy!",
+    },
+    {
+      "id": "2",
+      "image": "trending2",
+      "caption": "Australia trip 2020!",
+    },
+    {
+      "id": "3",
+      "image": "trending3",
+      "caption": "What do you actually want!",
+    },
+    {
+      "id": "4",
+      "image": "trending4",
+      "caption": "Follow on instagram!",
+    },
+    {
+      "id": "5",
+      "image": "trending5",
+      "caption": "Finding more friends!",
+    },
+    {
+      "id": "6",
+      "image": "trending10",
+      "caption": "Day trip to the beach!",
+    }
+  ]
+}

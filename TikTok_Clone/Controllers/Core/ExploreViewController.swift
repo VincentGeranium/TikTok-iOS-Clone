@@ -58,27 +58,19 @@ class ExploreViewController: UIViewController {
     }
     
     // MARK:- Configure Models // 29:30
-    func configureModels() {
+    private func configureModels() {
         // configure the each sections
-        var cells = [ExploreCell]()
-        
-        for _ in 0...1000 {
-            let cell = ExploreCell.banner(
-                viewModel: ExploreBannerViewModel(
-                    image: nil,
-                    title: "Foo",
-                    handler: {
-                    }
-                )
-            )
-            cells.append(cell)
-        }
+//15:30
         // MARK:- Creat all model of cases
         // Banner
         sections.append(
             ExploreSection(
                 type: .banner,
-                cells: cells
+                // to convert them to ExploreCell.banner(viewModel: $0) -> cell type of banner passing in the element which each viewModel
+                cells: ExploreManager.shared.getExploreBanners().compactMap({
+                    // return all viewModel
+                    return ExploreCell.banner(viewModel: $0)
+                })
             )
         )
         

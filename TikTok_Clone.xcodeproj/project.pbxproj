@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6A104FFC2643D6AD00C93AE7 /* explore.json in Resources */ = {isa = PBXBuildFile; fileRef = 6A104FFB2643D6AD00C93AE7 /* explore.json */; };
 		6A1BE5C4263BD15A00728793 /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BE5C3263BD15A00728793 /* CommentsViewController.swift */; };
 		6A1BE5DC263BEC0300728793 /* PostComment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BE5DB263BEC0300728793 /* PostComment.swift */; };
 		6A1BE5DF263BEC3600728793 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1BE5DE263BEC3600728793 /* User.swift */; };
@@ -18,6 +17,7 @@
 		6A33FE4F262C107D00ABE5A7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A33FE4D262C107D00ABE5A7 /* LaunchScreen.storyboard */; };
 		6A4F2C14263D42B4002508E3 /* mockVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 6A4F2C13263D42B4002508E3 /* mockVideo.mp4 */; };
 		6A4FBFAC263BF986006B8E21 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4FBFAB263BF986006B8E21 /* CommentTableViewCell.swift */; };
+		6A59A60D264525D80067A4DC /* explore.json in Resources */ = {isa = PBXBuildFile; fileRef = 6A59A60C264525D80067A4DC /* explore.json */; };
 		6A949065263E8EAA0017D584 /* ExploreSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A949064263E8EAA0017D584 /* ExploreSection.swift */; };
 		6A949068263E8EE00017D584 /* ExploreCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A949067263E8EE00017D584 /* ExploreCell.swift */; };
 		6A94906B263E8F1B0017D584 /* ExploreSectionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A94906A263E8F1B0017D584 /* ExploreSectionType.swift */; };
@@ -49,7 +49,6 @@
 /* Begin PBXFileReference section */
 		118FB7E0137244D0A05EB204 /* Pods_TikTok_Clone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TikTok_Clone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E8D877CF932677DA393560E /* Pods-TikTok_Clone.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TikTok_Clone.release.xcconfig"; path = "Target Support Files/Pods-TikTok_Clone/Pods-TikTok_Clone.release.xcconfig"; sourceTree = "<group>"; };
-		6A104FFB2643D6AD00C93AE7 /* explore.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = explore.json; sourceTree = "<group>"; };
 		6A1BE5C3263BD15A00728793 /* CommentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
 		6A1BE5DB263BEC0300728793 /* PostComment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostComment.swift; sourceTree = "<group>"; };
 		6A1BE5DE263BEC3600728793 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
@@ -62,6 +61,7 @@
 		6A33FE50262C107D00ABE5A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6A4F2C13263D42B4002508E3 /* mockVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = mockVideo.mp4; sourceTree = "<group>"; };
 		6A4FBFAB263BF986006B8E21 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
+		6A59A60C264525D80067A4DC /* explore.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = explore.json; sourceTree = "<group>"; };
 		6A949064263E8EAA0017D584 /* ExploreSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreSection.swift; sourceTree = "<group>"; };
 		6A949067263E8EE00017D584 /* ExploreCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreCell.swift; sourceTree = "<group>"; };
 		6A94906A263E8F1B0017D584 /* ExploreSectionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreSectionType.swift; sourceTree = "<group>"; };
@@ -145,8 +145,8 @@
 		6AAA2A34262C1568003D463E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6A59A60C264525D80067A4DC /* explore.json */,
 				6A33FE4B262C107D00ABE5A7 /* Assets.xcassets */,
-				6A104FFB2643D6AD00C93AE7 /* explore.json */,
 				6A4F2C13263D42B4002508E3 /* mockVideo.mp4 */,
 				6AFA39ED262D7ABD002C958E /* GoogleService-Info.plist */,
 				6A33FE42262C107D00ABE5A7 /* AppDelegate.swift */,
@@ -321,7 +321,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6A104FFC2643D6AD00C93AE7 /* explore.json in Resources */,
+				6A59A60D264525D80067A4DC /* explore.json in Resources */,
 				6A33FE4F262C107D00ABE5A7 /* LaunchScreen.storyboard in Resources */,
 				6A4F2C14263D42B4002508E3 /* mockVideo.mp4 in Resources */,
 				6A33FE4C262C107D00ABE5A7 /* Assets.xcassets in Resources */,

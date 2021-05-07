@@ -2,46 +2,28 @@
   "banners": [
     {
       "id": "nature",
-      "image": "1",
+      "image": "banner1",
       "title": "Nature",
       "action": "hashtag"
     },
     {
-      "id": "road",
-      "image": "2",
-      "title": "Road",
+      "id": "jason_derulo",
+      "image": "banner2",
+      "title": "Jason Derulo",
       "action": "user"
     },
     {
-      "id": "seoulcity",
-      "image": "3",
-      "title": "Seoul City",
+      "id": "newyorkcity",
+      "image": "banner3",
+      "title": "New York City",
       "action": "hashtag"
     },
     {
-      "id": "paris",
-      "image": "4",
-      "title": "Paris",
+      "id": "2131224214",
+      "image": "banner4",
+      "title": "Savage Love Dance",
       "action": "post"
-    },
-    {
-      "id": "rome",
-      "image": "5",
-      "title": "Rome",
-      "action": "post"
-    },
-    {
-      "id": "heartjun",
-      "image": "6",
-      "title": "heart",
-      "action": "post"
-    },
-    {
-      "id": "room",
-      "image": "7",
-      "title": "Room",
-      "action": "post"
-    },
+    }
   ],
   "trendingPosts": [
     {
@@ -93,17 +75,7 @@
       "id": "10",
       "image": "trending10",
       "caption": "Try the WAP dance!",
-    },
-    {
-      "id": "11",
-      "image": "trending10",
-      "caption": "Try the WAP dance!",
-    },
-    {
-      "id": "12",
-      "image": "trending10",
-      "caption": "Try the WAP dance!",
-    },
+    }
   ],
   "creators": [
     {

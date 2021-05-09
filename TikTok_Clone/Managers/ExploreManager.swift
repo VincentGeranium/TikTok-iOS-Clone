@@ -69,6 +69,23 @@ final class ExploreManager {
         return result
     }
     
+    public func getExploreTrendingPosts() -> [ExplorePostViewModel] {
+        guard let exploreData = parseExploreData() else {
+            print("⭕️ : getExploreTrendingPosts not working")
+            return []
+        }
+        
+        let result = exploreData.trendingPosts.compactMap({
+            ExplorePostViewModel(
+                thumbnailImage: UIImage(named: $0.image),
+                caption: $0.caption) {
+                // empty now
+            }
+        })
+        print("⭕️ExplorePostViewModel Result⭕️ : \(result)")
+        return result
+    }
+    
     // MARK: - Private
     private func parseExploreData() -> ExploreResponse? {
         guard let path = Bundle.main.path(forResource: "explore", ofType: "json") else {

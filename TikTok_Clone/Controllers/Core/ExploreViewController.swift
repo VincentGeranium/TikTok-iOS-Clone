@@ -62,7 +62,7 @@ class ExploreViewController: UIViewController {
         // configure the each sections
 //15:30        // configure the each sections
         
-        // MARK:- Creat all model of cases
+// MARK:- Creat all model of cases
         // Banner
         sections.append(
             ExploreSection(
@@ -75,19 +75,21 @@ class ExploreViewController: UIViewController {
         )
         
         // Trending Posts
-        var posts = [ExploreCell]()
-        for _ in 0...40 {
-            posts.append(
-                ExploreCell.post(viewModel: ExplorePostViewModel(thumbnailImage: nil, caption: "", handler: {
-                    
-                }))
-            )
-        }
+//        var posts = [ExploreCell]()
+//        for _ in 0...40 {
+//            posts.append(
+//                ExploreCell.post(viewModel: ExplorePostViewModel(thumbnailImage: nil, caption: "", handler: {
+//
+//                }))
+//            )
+//        }
         
         sections.append(
             ExploreSection(
                 type: .trendingPosts,
-                cells: posts
+                cells: ExploreManager.shared.getExploreTrendingPosts().compactMap({
+                    return ExploreCell.post(viewModel: $0)
+                })
             )
         )
         
@@ -220,6 +222,12 @@ class ExploreViewController: UIViewController {
         collectionView.register(
             ExploreHashtagCollectionViewCell.self,
             forCellWithReuseIdentifier: ExploreHashtagCollectionViewCell.idetifier
+        )
+        
+        // collectionView regist the ExplorePostCollectionViewCell
+        collectionView.register(
+            ExplorePostCollectionViewCell.self,
+            forCellWithReuseIdentifier: ExplorePostCollectionViewCell.identifier
         )
         
         
@@ -430,6 +438,7 @@ class ExploreViewController: UIViewController {
     
 }
 
+// MARK:- extension
 // colletcionView를 위한 extenstion
 extension ExploreViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -473,7 +482,17 @@ extension ExploreViewController: UICollectionViewDelegate, UICollectionViewDataS
             cell.configure(with: viewModel)
             return cell
         case .post(let viewModel):
-            break
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ExplorePostCollectionViewCell.identifier,
+                    for: indexPath
+            ) as? ExplorePostCollectionViewCell else {
+                return collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "cell",
+                    for: indexPath
+                )
+            }
+            cell.configure(with: viewModel)
+            return cell
         case .hashtag(let viewModel):
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ExploreHashtagCollectionViewCell.idetifier,

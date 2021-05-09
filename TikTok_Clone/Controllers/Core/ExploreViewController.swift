@@ -105,23 +105,9 @@ class ExploreViewController: UIViewController {
         sections.append(
             ExploreSection(
                 type: .trendingHashtags,
-                cells: [
-                    .hashtag(viewModel: ExploreHashtagViewModel(text: "#foryou", icon: nil, count: 1, handler: {
-        
-                    })),
-                    .hashtag(viewModel: ExploreHashtagViewModel(text: "#foryou", icon: nil, count: 1, handler: {
-        
-                    })),
-                    .hashtag(viewModel: ExploreHashtagViewModel(text: "#foryou", icon: nil, count: 1, handler: {
-        
-                    })),
-                    .hashtag(viewModel: ExploreHashtagViewModel(text: "#foryou", icon: nil, count: 1, handler: {
-        
-                    })),
-                    .hashtag(viewModel: ExploreHashtagViewModel(text: "#foryou", icon: nil, count: 1, handler: {
-        
-                    })),
-                ]
+                cells: ExploreManager.shared.getExploreHashtags().compactMap({
+                    return ExploreCell.hashtag(viewModel: $0)
+                })
             )
         )
         
@@ -198,7 +184,7 @@ class ExploreViewController: UIViewController {
         )
     }
     
-// MARK:- SetUp CollectionViewLayout, setUpCollectionView method
+    // MARK:- SetUp CollectionViewLayout, setUpCollectionView method
     func setUpCollectionView() {
         let layout: UICollectionViewCompositionalLayout = UICollectionViewCompositionalLayout { section, _ -> NSCollectionLayoutSection? in
             // return layout each every section
@@ -228,6 +214,12 @@ class ExploreViewController: UIViewController {
         collectionView.register(
             ExploreUserCollectionViewCell.self,
             forCellWithReuseIdentifier: ExploreUserCollectionViewCell.identifier
+        )
+        
+        // collectionView regist the ExploreHashtagCollectionViewCell.
+        collectionView.register(
+            ExploreHashtagCollectionViewCell.self,
+            forCellWithReuseIdentifier: ExploreHashtagCollectionViewCell.idetifier
         )
         
         
@@ -483,7 +475,17 @@ extension ExploreViewController: UICollectionViewDelegate, UICollectionViewDataS
         case .post(let viewModel):
             break
         case .hashtag(let viewModel):
-            break
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ExploreHashtagCollectionViewCell.idetifier,
+                    for: indexPath
+            ) as? ExploreHashtagCollectionViewCell else {
+                return collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "cell",
+                    for: indexPath
+                )
+            }
+            cell.configure(with: viewModel)
+            return cell
         case .user(let viewModel):
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ExploreUserCollectionViewCell.identifier,

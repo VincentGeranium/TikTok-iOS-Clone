@@ -12,10 +12,10 @@ import Foundation
 import UIKit
 
 final class ExploreManager {
+    // MARK: - Public
     static let shared = ExploreManager()
     
-    
-// MARK:- getExploreBanners
+    // getExploreBanners method
     public func getExploreBanners() -> [ExploreBannerViewModel] {
         guard let exploreData = parseExploreData() else {
             print("⭕️ : getExploreCreators not working")
@@ -32,12 +32,13 @@ final class ExploreManager {
         return result
     }
     
-// MARK:- getExploreCreators
+    // getExploreCreators method
     public func getExploreCreators() -> [ExploreUserViewModel] {
         guard let exploreData = parseExploreData() else {
             print("⭕️ : getExploreCreators not working")
             return []
         }
+        
         let result = exploreData.creators.compactMap({
             ExploreUserViewModel(
                 profilePicture: UIImage(named: $0.image),
@@ -50,7 +51,25 @@ final class ExploreManager {
         return result
     }
     
+    public func getExploreHashtags() -> [ExploreHashtagViewModel] {
+        guard let exploreData = parseExploreData() else {
+            print("⭕️ : getExploreHashtags not working")
+            return []
+        }
+        
+        let result = exploreData.hashtags.compactMap({
+            ExploreHashtagViewModel(
+                text: $0.tag,
+                icon: UIImage(systemName: $0.image),
+                count: $0.count) {
+                // empty now
+            }
+        })
+        print("⭕️ExploreHashtagViewModel Result⭕️ : \(result)")
+        return result
+    }
     
+    // MARK: - Private
     private func parseExploreData() -> ExploreResponse? {
         guard let path = Bundle.main.path(forResource: "explore", ofType: "json") else {
             return nil

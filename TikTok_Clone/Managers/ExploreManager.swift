@@ -16,6 +16,7 @@ final class ExploreManager {
     
     public func getExploreBanners() -> [ExploreBannerViewModel] {
         guard let exploreData = parseExploreData() else {
+            print("⭕️ : not working")
             return []
         }
         return exploreData.banners.compactMap({
@@ -25,6 +26,25 @@ final class ExploreManager {
                 // empty
             }
         })
+//        print("⭕️⭕️ : \(result)")
+//        return result
+    }
+    
+    public func getExploreCreators() -> [ExploreUserViewModel] {
+        guard let exploreData = parseExploreData() else {
+            print("⭕️ : not working")
+            return []
+        }
+        return exploreData.creators.compactMap({
+            ExploreUserViewModel(
+                profilePicture: UIImage(named: $0.image),
+                userName: $0.username,
+                followerCount: $0.followers_count) {
+                //
+            }
+        })
+//        print("⭕️⭕️ : \(result)")
+//        return result
     }
     
     
@@ -40,7 +60,8 @@ final class ExploreManager {
                 ExploreResponse.self,
                 from: data
             )
-            
+//            print("⭕️ : \(result.banners)")
+//            return result
         }
         catch {
             print(error)
@@ -52,7 +73,7 @@ final class ExploreManager {
 // top level keys of json data
 // have to match with top level key with json data
 struct ExploreResponse: Codable {
-    let banners: [Banner]
+    let banners: [Banners]
     let trendingPosts: [Post]
     let creators: [Creator]
     let recentPosts: [Post]
@@ -63,7 +84,7 @@ struct ExploreResponse: Codable {
 
 // It's not exactly same with each viewModels structure but have to match with json data
 // banners's sub model structure
-struct Banner: Codable {
+struct Banners: Codable {
     let id: String
     let image: String
     let title: String

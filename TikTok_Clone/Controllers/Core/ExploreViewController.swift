@@ -61,26 +61,16 @@ class ExploreViewController: UIViewController {
     private func configureModels() {
         // configure the each sections
 //15:30        // configure the each sections
-        var cells = [ExploreCell]()
         
-        for _ in 0...1000 {
-            let cell = ExploreCell.banner(
-                viewModel: ExploreBannerViewModel(
-                    image: nil,
-                    title: "Foo",
-                    handler: {
-                    }
-                )
-            )
-            cells.append(cell)
-        }
         // MARK:- Creat all model of cases
         // Banner
         sections.append(
             ExploreSection(
                 type: .banner,
                 // to convert them to ExploreCell.banner(viewModel: $0) -> cell type of banner passing in the element which each viewModel
-                cells: cells
+                cells: ExploreManager.shared.getExploreBanners().compactMap({
+                    return ExploreCell.banner(viewModel: $0)
+                })
             )
         )
         
@@ -105,43 +95,9 @@ class ExploreViewController: UIViewController {
         sections.append(
             ExploreSection(
                 type: .users,
-                cells: [
-                    .user(viewModel: ExploreUserViewModel(profilePictureURL: nil,
-                                                          userName: "",
-                                                          followerCount: 0,
-                                                          handler: {
-                                                            
-                                                          }
-                    )),
-                    .user(viewModel: ExploreUserViewModel(profilePictureURL: nil,
-                                                          userName: "",
-                                                          followerCount: 0,
-                                                          handler: {
-                                                            
-                                                          }
-                    )),
-                    .user(viewModel: ExploreUserViewModel(profilePictureURL: nil,
-                                                          userName: "",
-                                                          followerCount: 0,
-                                                          handler: {
-                                                            
-                                                          }
-                    )),
-                    .user(viewModel: ExploreUserViewModel(profilePictureURL: nil,
-                                                          userName: "",
-                                                          followerCount: 0,
-                                                          handler: {
-                                                            
-                                                          }
-                    )),
-                    .user(viewModel: ExploreUserViewModel(profilePictureURL: nil,
-                                                          userName: "",
-                                                          followerCount: 0,
-                                                          handler: {
-                                                            
-                                                          }
-                    )),
-                ]
+                cells: ExploreManager.shared.getExploreCreators().compactMap({
+                    return ExploreCell.user(viewModel: $0)
+                })
             )
         )
         
@@ -242,7 +198,7 @@ class ExploreViewController: UIViewController {
         )
     }
     
-    // MARK:- SetUp CollectionViewLayout
+// MARK:- SetUp CollectionViewLayout, setUpCollectionView method
     func setUpCollectionView() {
         let layout: UICollectionViewCompositionalLayout = UICollectionViewCompositionalLayout { section, _ -> NSCollectionLayoutSection? in
             // return layout each every section
@@ -256,11 +212,18 @@ class ExploreViewController: UIViewController {
             // collectionViewLayout에서 가장 중요한 parameter
             collectionViewLayout: layout
         )
-        // collectionView register
+        // basic collectionView register
         collectionView.register(
             UICollectionViewCell.self,
             forCellWithReuseIdentifier: "cell"
         )
+        
+        // collectionView regist the ExploreBannerCollectionViewCell.
+        collectionView.register(
+            ExploreBannerCollectionViewCell.self,
+            forCellWithReuseIdentifier: ExploreBannerCollectionViewCell.identifier
+        )
+        collectionView.backgroundColor = .systemBackground
         collectionView.delegate = self
         collectionView.dataSource = self
         
@@ -269,7 +232,7 @@ class ExploreViewController: UIViewController {
         self.colletcionView = collectionView
     }
     
-    // MARK:- layout(for section:)
+// MARK:- layout(for section:) method
     // layout argument is most important pices this
     // make model for which section in and how to layout
     // this function is make different each of section layout and return it
@@ -498,7 +461,17 @@ extension ExploreViewController: UICollectionViewDelegate, UICollectionViewDataS
         // bring all differents types here (banner, post, hashtag, user)
         // dequeue all this differents cells
         case .banner(let viewModel):
-            break
+            guard let cell = collectionView.dequeueReusableCell(
+                    withReuseIdentifier: ExploreBannerCollectionViewCell.identifier,
+                    for: indexPath
+            ) as? ExploreBannerCollectionViewCell else {
+                return collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "cell",
+                    for: indexPath
+                )
+            }
+            cell.configure(with: viewModel)
+            return cell
         case .post(let viewModel):
             break
         case .hashtag(let viewModel):

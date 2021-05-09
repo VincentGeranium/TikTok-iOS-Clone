@@ -10,7 +10,7 @@ import UIKit
 
 // ExploreCell 각각의 case 별로 필수적 요소를 property로 만들어 담아 structure로 만든다.
 struct ExploreUserViewModel {
-    let profilePictureURL: URL?
+    let profilePicture: UIImage?
     let userName: String
     let followerCount: Int
     // cell을 tap했을 때 생기는 일을 위한 handler

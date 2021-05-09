@@ -14,28 +14,31 @@ import UIKit
 final class ExploreManager {
     static let shared = ExploreManager()
     
+    
+// MARK:- getExploreBanners
     public func getExploreBanners() -> [ExploreBannerViewModel] {
         guard let exploreData = parseExploreData() else {
-            print("⭕️ : not working")
+            print("⭕️ : getExploreCreators not working")
             return []
         }
-        return exploreData.banners.compactMap({
+        let result = exploreData.banners.compactMap({
             ExploreBannerViewModel(
                 image: UIImage(named: $0.image),
                 title: $0.title) {
                 // empty
             }
         })
-//        print("⭕️⭕️ : \(result)")
-//        return result
+        print("⭕️ExploreBannerViewModel Result⭕️ : \(result)")
+        return result
     }
     
+// MARK:- getExploreCreators
     public func getExploreCreators() -> [ExploreUserViewModel] {
         guard let exploreData = parseExploreData() else {
-            print("⭕️ : not working")
+            print("⭕️ : getExploreCreators not working")
             return []
         }
-        return exploreData.creators.compactMap({
+        let result = exploreData.creators.compactMap({
             ExploreUserViewModel(
                 profilePicture: UIImage(named: $0.image),
                 userName: $0.username,
@@ -43,8 +46,8 @@ final class ExploreManager {
                 //
             }
         })
-//        print("⭕️⭕️ : \(result)")
-//        return result
+        print("⭕️ExploreUserViewModel Result⭕️ : \(result)")
+        return result
     }
     
     
@@ -56,12 +59,12 @@ final class ExploreManager {
         do {
             let url = URL(fileURLWithPath: path)
             let data = try Data(contentsOf: url)
-            return try JSONDecoder().decode(
+            let decodeResult = try JSONDecoder().decode(
                 ExploreResponse.self,
                 from: data
             )
-//            print("⭕️ : \(result.banners)")
-//            return result
+            print("⭕️decodeResult of parseExploreData(JSON)⭕️ : \(decodeResult)")
+            return decodeResult
         }
         catch {
             print(error)

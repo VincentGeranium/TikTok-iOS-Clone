@@ -223,6 +223,14 @@ class ExploreViewController: UIViewController {
             ExploreBannerCollectionViewCell.self,
             forCellWithReuseIdentifier: ExploreBannerCollectionViewCell.identifier
         )
+        
+        // collectionView regist the ExploreUserCollectionViewCell
+        collectionView.register(
+            ExploreUserCollectionViewCell.self,
+            forCellWithReuseIdentifier: ExploreUserCollectionViewCell.identifier
+        )
+        
+        
         collectionView.backgroundColor = .systemBackground
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -477,9 +485,19 @@ extension ExploreViewController: UICollectionViewDelegate, UICollectionViewDataS
         case .hashtag(let viewModel):
             break
         case .user(let viewModel):
-            break
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: ExploreUserCollectionViewCell.identifier,
+                for: indexPath
+            ) as? ExploreUserCollectionViewCell else {
+                return collectionView.dequeueReusableCell(
+                    withReuseIdentifier: "cell",
+                    for: indexPath
+                )
+            }
+            cell.configure(with: viewModel)
+            return cell
         }
-    
+        
         
         // actual return the colletcion view item
         let cell = collectionView.dequeueReusableCell(

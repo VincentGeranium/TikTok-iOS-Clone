@@ -101,8 +101,8 @@ class PostViewController: UIViewController {
         let colors: [UIColor] = [
             .red, .blue, .systemYellow, .systemPink, .gray, .orange, .green
         ]
-        
-        view.backgroundColor = colors.randomElement()
+        // MARK:- setup view's random color background for develop
+//        view.backgroundColor = colors.randomElement()
         
         setupButtons()
         setupDoubleTapToLikeButton()

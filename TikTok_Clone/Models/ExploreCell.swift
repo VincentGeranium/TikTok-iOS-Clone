@@ -14,4 +14,5 @@ enum ExploreCell {
     case post(viewModel: ExplorePostViewModel)
     case hashtag(viewModel: ExploreHashtagViewModel)
     case user(viewModel: ExploreUserViewModel)
+//    case recommand(viewModel: ExplorePostViewModel)
 }

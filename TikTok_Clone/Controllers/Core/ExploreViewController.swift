@@ -39,6 +39,7 @@ class ExploreViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = .systemBackground
+        ExploreManager.shared.delegate = self
         configureModels()
         setUpSearchBar()
         setUpCollectionView()
@@ -75,15 +76,6 @@ class ExploreViewController: UIViewController {
         )
         
         // Trending Posts
-//        var posts = [ExploreCell]()
-//        for _ in 0...40 {
-//            posts.append(
-//                ExploreCell.post(viewModel: ExplorePostViewModel(thumbnailImage: nil, caption: "", handler: {
-//
-//                }))
-//            )
-//        }
-        
         sections.append(
             ExploreSection(
                 type: .trendingPosts,
@@ -113,51 +105,13 @@ class ExploreViewController: UIViewController {
             )
         )
         
-        // Recommanded
-        sections.append(
-            ExploreSection(
-                type: .recommended,
-                cells: [
-                    .post(viewModel: ExplorePostViewModel(thumbnailImage: nil, caption: "", handler: {
-
-                    })),
-                    .post(viewModel: ExplorePostViewModel(thumbnailImage: nil, caption: "", handler: {
-
-                    })),
-                    .post(viewModel: ExplorePostViewModel(thumbnailImage: nil, caption: "", handler: {
-
-                    })),
-                    .post(viewModel: ExplorePostViewModel(thumbnailImage: nil, caption: "", handler: {
-
-                    })),
-                    .post(viewModel: ExplorePostViewModel(thumbnailImage: nil, caption: "", handler: {
-
-                    })),
-                ]
-            )
-        )
-        
         // Popular
         sections.append(
             ExploreSection(
                 type: .popular,
-                cells: [
-                    .post(viewModel: ExplorePostViewModel(thumbnailImage: nil, caption: "", handler: {
-
-                    })),
-                    .post(viewModel: ExplorePostViewModel(thumbnailImage: nil, caption: "", handler: {
-
-                    })),
-                    .post(viewModel: ExplorePostViewModel(thumbnailImage: nil, caption: "", handler: {
-
-                    })),
-                    .post(viewModel: ExplorePostViewModel(thumbnailImage: nil, caption: "", handler: {
-
-                    })),
-                    .post(viewModel: ExplorePostViewModel(thumbnailImage: nil, caption: "", handler: {
-
-                    })),
-                ]
+                cells: ExploreManager.shared.getExplorePopularPosts().compactMap({
+                    return ExploreCell.post(viewModel: $0)
+                })
             )
         )
         
@@ -165,23 +119,9 @@ class ExploreViewController: UIViewController {
         sections.append(
             ExploreSection(
                 type: .new,
-                cells: [
-                    .post(viewModel: ExplorePostViewModel(thumbnailImage: nil, caption: "", handler: {
-
-                    })),
-                    .post(viewModel: ExplorePostViewModel(thumbnailImage: nil, caption: "", handler: {
-
-                    })),
-                    .post(viewModel: ExplorePostViewModel(thumbnailImage: nil, caption: "", handler: {
-
-                    })),
-                    .post(viewModel: ExplorePostViewModel(thumbnailImage: nil, caption: "", handler: {
-
-                    })),
-                    .post(viewModel: ExplorePostViewModel(thumbnailImage: nil, caption: "", handler: {
-
-                    })),
-                ]
+                cells: ExploreManager.shared.getExploreRecentPosts().compactMap({
+                    return ExploreCell.post(viewModel: $0)
+                })
             )
         )
     }
@@ -481,6 +421,7 @@ extension ExploreViewController: UICollectionViewDelegate, UICollectionViewDataS
             }
             cell.configure(with: viewModel)
             return cell
+            
         case .post(let viewModel):
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ExplorePostCollectionViewCell.identifier,
@@ -493,6 +434,7 @@ extension ExploreViewController: UICollectionViewDelegate, UICollectionViewDataS
             }
             cell.configure(with: viewModel)
             return cell
+            
         case .hashtag(let viewModel):
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ExploreHashtagCollectionViewCell.idetifier,
@@ -505,6 +447,7 @@ extension ExploreViewController: UICollectionViewDelegate, UICollectionViewDataS
             }
             cell.configure(with: viewModel)
             return cell
+            
         case .user(let viewModel):
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ExploreUserCollectionViewCell.identifier,
@@ -531,10 +474,63 @@ extension ExploreViewController: UICollectionViewDelegate, UICollectionViewDataS
         return cell
     }
     
+    // collectionView의 cell을 선택시 진행되는 코드.
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        HapticsManager.shared.vibrateForSelection()
+        
+        let model = sections[indexPath.section].cells[indexPath.row]
+        
+        // handler는 viewController 가 push 된 뒤에 실행이된다.
+        switch model {
+        case .banner(viewModel: let viewModel):
+            viewModel.handler()
+        case .post(viewModel: let viewModel):
+            viewModel.handler()
+        case .hashtag(viewModel: let viewModel):
+            viewModel.handler()
+        case .user(viewModel: let viewModel):
+            viewModel.handler()
+        }
+    }
+    
     
 }
 
 // serchBar를 위한 extension
 extension ExploreViewController: UISearchBarDelegate {
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        // make Cancel button and keyboard dismissed + all text is deleted
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(didTapCancel))
+    }
+    
+    @objc private func didTapCancel() {
+        // Cancel button delete code
+        navigationItem.rightBarButtonItem = nil
+        
+        searchBar.text = nil
+        searchBar.resignFirstResponder()
+    }
+    
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        // Cancel button delete code
+        navigationItem.rightBarButtonItem = nil
+        // keyboard is missing, dismiss
+        searchBar.resignFirstResponder()
+    }
+}
+
+extension ExploreViewController: ExploreManagerDelegate {
+    func pushViewController(_ vc: UIViewController) {
+        //
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func didTapHashtag(_ hashtag: String) {
+        // update used by search bar text
+        searchBar.text = hashtag
+        searchBar.becomeFirstResponder()
+    }
     
 }

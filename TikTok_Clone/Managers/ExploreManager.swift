@@ -11,78 +11,217 @@
 import Foundation
 import UIKit
 
+protocol ExploreManagerDelegate: AnyObject {
+    func pushViewController(_ vc: UIViewController)
+    func didTapHashtag(_ hashtag: String)
+}
+
 final class ExploreManager {
     // MARK: - Public
     static let shared = ExploreManager()
     
+    weak var delegate: ExploreManagerDelegate?
+    
+    enum BannerAction: String {
+        case post
+        case hashtag
+        case user
+    }
+    
     // getExploreBanners method
     public func getExploreBanners() -> [ExploreBannerViewModel] {
         guard let exploreData = parseExploreData() else {
-            print("⭕️ : getExploreCreators not working")
+            print("⭕️ : exploreData is not working in getExploreBanners")
             return []
         }
-        let result = exploreData.banners.compactMap({
+        /*
+         exploreData.banners.compactMap 내부에 print문으로 이미지가 어떤 것들이 들어가는 지 debugging을 원한다면 다음과 같은 코드로 해야한다.
+         
+         return exploreData.banners.compactMap({
+         print($0.image)
+         return ExploreBannerViewModel(
+         image: UIImage(named: $0.image),
+         title: $0.title) {
+         }
+         })
+         
+         그러면 print문으로 banner의 image들의 name이 나타난다.
+         
+         c.f : Explore 섹션의 Parsing JSON Data 강의 중 27:00 초 부터 보면 이미지가 나타나지 않고 debugging 하는 내용이 나타난다 참고하길.
+         */
+        
+        let result = exploreData.banners.compactMap({ model in
             ExploreBannerViewModel(
-                image: UIImage(named: $0.image),
-                title: $0.title) {
-                // empty
+                image: UIImage(named: model.image),
+                title: model.title) {
+                // [weak self] 사용 이유 : don't want retain cycle
+                [weak self] in
+                guard let action = BannerAction(rawValue: model.action) else {
+                    return
+                }
+                // UI 관련 코드는 항상 Main thread 에서 처리한다.
+                DispatchQueue.main.async {
+                    // for test during developing
+                    let vc: UIViewController = UIViewController()
+                    vc.view.backgroundColor = .systemBackground
+                    vc.title = action.rawValue.uppercased()
+                    self?.delegate?.pushViewController(vc)
+                }
+                
+                switch action {
+                case .user:
+                    // profile
+                    break
+                case .hashtag:
+                    // search for hashtag
+                break
+                case .post:
+                    // post
+                break
+                }
             }
         })
-        print("⭕️ExploreBannerViewModel Result⭕️ : \(result)")
+        print("⭕️getExploreBanners Result⭕️ : \(result)")
         return result
     }
     
     // getExploreCreators method
     public func getExploreCreators() -> [ExploreUserViewModel] {
         guard let exploreData = parseExploreData() else {
-            print("⭕️ : getExploreCreators not working")
+            print("⭕️ : exploreData is not working in getExploreCreators")
             return []
         }
         
-        let result = exploreData.creators.compactMap({
+        let result = exploreData.creators.compactMap({ model in
             ExploreUserViewModel(
-                profilePicture: UIImage(named: $0.image),
-                userName: $0.username,
-                followerCount: $0.followers_count) {
-                //
+                profilePicture: UIImage(named: model.image),
+                userName: model.username,
+                followerCount: model.followers_count
+            ) { [weak self] in
+                DispatchQueue.main.async {
+                    let userId = model.id
+                    //Fetch user object from firebase
+                    let vc = ProfileViewController(user: User(userName: "jun", profilePictureURL: nil, identifier: userId))
+                    self?.delegate?.pushViewController(vc)
+                }
             }
         })
-        print("⭕️ExploreUserViewModel Result⭕️ : \(result)")
+        print("⭕️getExploreCreators Result⭕️ : \(result)")
         return result
     }
     
     public func getExploreHashtags() -> [ExploreHashtagViewModel] {
         guard let exploreData = parseExploreData() else {
-            print("⭕️ : getExploreHashtags not working")
+            print("⭕️ : exploreData is not working in getExploreHashtags")
             return []
         }
         
-        let result = exploreData.hashtags.compactMap({
+        /*
+         result 내의 compactMap을 사용하는데 $0가 아닌 model을 사용하는 이유 : compactMap과 ExploreHashtagViewModel 클로저는 각기 다른 클로저이므로
+         같은 object를 가리키기 위해서는 아래와 같이 해야 한다.
+         */
+        
+        let result = exploreData.hashtags.compactMap({ model in
             ExploreHashtagViewModel(
-                text: $0.tag,
-                icon: UIImage(systemName: $0.image),
-                count: $0.count) {
-                // empty now
+                text: model.tag,
+                icon: UIImage(systemName: model.image),
+                count: model.count
+            ) { [weak self] in
+                DispatchQueue.main.async {
+                    self?.delegate?.didTapHashtag(model.tag)
+                }
             }
         })
-        print("⭕️ExploreHashtagViewModel Result⭕️ : \(result)")
+        print("⭕️getExploreHashtags Result⭕️ : \(result)")
         return result
     }
     
     public func getExploreTrendingPosts() -> [ExplorePostViewModel] {
         guard let exploreData = parseExploreData() else {
-            print("⭕️ : getExploreTrendingPosts not working")
+            print("⭕️ : exploreData is not working in getExploreTrendingPosts")
             return []
         }
         
-        let result = exploreData.trendingPosts.compactMap({
+        let result = exploreData.trendingPosts.compactMap({ model in
             ExplorePostViewModel(
-                thumbnailImage: UIImage(named: $0.image),
-                caption: $0.caption) {
-                // empty now
+                thumbnailImage: UIImage(named: model.image),
+                caption: model.caption
+            ) { [weak self] in
+                DispatchQueue.main.async {
+                    let postID = model.id
+                    let vc = PostViewController(model: PostModel(identifier: postID))
+                    self?.delegate?.pushViewController(vc)
+                }
             }
         })
-        print("⭕️ExplorePostViewModel Result⭕️ : \(result)")
+        print("⭕️getExploreTrendingPosts Result⭕️ : \(result)")
+        return result
+    }
+    
+    public func getExploreRecentPosts() -> [ExplorePostViewModel] {
+        guard let exploreData = parseExploreData() else {
+            print("⭕️ : exploreData is not working in getExploreRecentPosts")
+            return []
+        }
+        
+        let result = exploreData.recentPosts.compactMap({ model in
+            ExplorePostViewModel(
+                thumbnailImage: UIImage(named: model.image),
+                caption: model.caption
+            ) { [weak self] in
+                DispatchQueue.main.async {
+                    let postID = model.id
+                    let vc = PostViewController(model: PostModel(identifier: postID))
+                    self?.delegate?.pushViewController(vc)
+                }
+            }
+        })
+        print("⭕️getExploreRecentPosts Result⭕️ : \(result)")
+        return result
+    }
+    
+    public func getExplorePopularPosts() -> [ExplorePostViewModel] {
+        guard let exploreData = parseExploreData() else {
+            print("⭕️ : exploreData is not working in getPopularPosts")
+            return []
+        }
+        
+        let result = exploreData.popular.compactMap({ model in
+            ExplorePostViewModel(
+                thumbnailImage: UIImage(named: model.image),
+                caption: model.caption
+            ) { [weak self] in
+                DispatchQueue.main.async {
+                    let postID = model.id
+                    let vc = PostViewController(model: PostModel(identifier: postID))
+                    self?.delegate?.pushViewController(vc)
+                }
+            }
+        })
+        print("⭕️getPopularPosts Result⭕️ : \(result)")
+        return result
+    }
+    
+    public func getExploreRecommended() -> [ExplorePostViewModel] {
+        guard let exploreData = parseExploreData() else {
+            print("⭕️ : exploreData is not working in getExploreRecommended")
+            return []
+        }
+        
+        let result = exploreData.recommended.compactMap({ model in
+            ExplorePostViewModel(
+                thumbnailImage: UIImage(named: model.image),
+                caption: model.caption
+            ) { [weak self] in
+                DispatchQueue.main.async {
+                    let postID = model.id
+                    let vc = PostViewController(model: PostModel(identifier: postID))
+                    self?.delegate?.pushViewController(vc)
+                }
+            }
+        })
+        
+        print("⭕️getExploreRecommended Result⭕️ : \(result)")
         return result
     }
     

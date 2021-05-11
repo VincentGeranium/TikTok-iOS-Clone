@@ -67,6 +67,8 @@ class HomeViewController: UIViewController {
         view.addSubview(horizontalScrollView)
         horizontalScrollView.delegate = self
         setupFeed()
+        // 조절된 content offset을 한정할 것인지에 대한 method
+        horizontalScrollView.contentInsetAdjustmentBehavior = .never
         // tiktok에서 앱이 lunch 후 swipe시 처음 left side애서 swipe 되어야 하므로
         horizontalScrollView.contentOffset = CGPoint(x: view.width, y: 0)
         

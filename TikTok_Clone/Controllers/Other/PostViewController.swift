@@ -127,10 +127,19 @@ class PostViewController: UIViewController {
         let size: CGFloat = 40
         
         // tabBarHeight
-        let tabBarHeight: CGFloat = (tabBarController?.tabBar.height ?? 0)
+        /* tabBarHeight를 없앰으로 인해 HomeViewController의 viewDidLoad 안에 만든
+         horizontalScrollView.contentInsetAdjustmentBehavior = .never 메소드가 동작하여 이전의 맞지 않았던 scrollView 관련
+         bug를 잡을 수 있다.
+         
+         tabBarHeight을 없애는 이유는 이미 bottom inset이 있어 크기를 조절하는 것을 담당하기 때문에 tabBarHeight를 없애서ui 사이즈가 맞지 않는 것을 해결 할 수 있다.
+         
+         c.f : tabBarHeight와 묶여 사이즈를 조절하고 담당하던 코드들을 모두 수정해야 한다.
+         */
+//        let tabBarHeight: CGFloat = (tabBarController?.tabBar.height ?? 0)
+//        let tabBarHeight: CGFloat = 0
         
         // y축을 기준으로 버튼들이 움직여야 하므로 다음과 같은 yStart property를 만들고 사용한다.
-        let yStart: CGFloat = view.height - (size * 4.0) - 30 - view.safeAreaInsets.bottom - tabBarHeight
+        let yStart: CGFloat = view.height - (size * 4.0) - 30 - view.safeAreaInsets.bottom
         
         // x좌표의 -10는 padding
         // y좌표의 + (), 괄호 안에 들어가는 것은 giving postion이다
@@ -145,8 +154,13 @@ class PostViewController: UIViewController {
         let labelSize = captionLabel.sizeThatFits(CGSize(width: view.width - size - 12, height: view.height))
         // height is dynamic format
         // width is basically entire screen width(view.width) and subtract size of button(size), -12 is padding
+        
+        /*
+         captionLabel.frame에서 y를 view.height - 10 - view.safeAreaInsets.bottom - labelSize.height - (tabBarController?.tabBar.height ?? 0)로
+         만들었었으나 tabBarHeight가 있으면 Bottom Inset과 함께 동작하여 captionLabel이 위로 떠 있는 듯한 UI가 만들어지므로 tabBarHeight에 관련된 코드를 지워 수정한다.
+         */
         captionLabel.frame = CGRect(x: 5,
-                                    y: view.height - 10 - view.safeAreaInsets.bottom - labelSize.height - (tabBarController?.tabBar.height ?? 0),
+                                    y: view.height - 10 - view.safeAreaInsets.bottom - labelSize.height,
                                     width: view.width - size - 12,
                                     height: labelSize.height
         )

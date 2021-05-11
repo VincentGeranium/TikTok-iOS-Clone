@@ -150,6 +150,15 @@
 			path = TikTok_Clone;
 			sourceTree = "<group>";
 		};
+		6A59CA6A264A7B52004D9EEB /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				6AAA2A4F262C17C6003D463E /* SignInViewController.swift */,
+				6AAA2A52262C17D2003D463E /* SignUpViewController.swift */,
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
 		6AAA2A34262C1568003D463E /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -234,9 +243,8 @@
 		6AAA2A3C262C16A0003D463E /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				6A59CA6A264A7B52004D9EEB /* Authentication */,
 				6AAA2A4C262C17BA003D463E /* UserListViewController.swift */,
-				6AAA2A4F262C17C6003D463E /* SignInViewController.swift */,
-				6AAA2A52262C17D2003D463E /* SignUpViewController.swift */,
 				6AAA2A55262C17DE003D463E /* SettingViewController.swift */,
 				6AAA2A5A262C1851003D463E /* PostViewController.swift */,
 				6A1BE5C3263BD15A00728793 /* CommentsViewController.swift */,

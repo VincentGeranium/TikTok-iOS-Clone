@@ -4,7 +4,9 @@
 //
 //  Created by 김광준 on 2021/04/18.
 //
+// this framework(SafariServices) is open webView directly in the app
 
+import SafariServices
 import UIKit
 
 class SignInViewController: UIViewController, UITextFieldDelegate {
@@ -15,7 +17,7 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         imageView.contentMode = .scaleAspectFit
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = 10
-        imageView.image = UIImage(named: "loge")
+        imageView.image = UIImage(named: "logo")
         return imageView
     }()
     
@@ -35,11 +37,10 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         title = "Sign In"
+        // add all views in SignInViewController by subViews
         addSubViews()
-        
-        emailField.delegate = self
-        passwordField.delegate = self
-        
+        // configures fields
+        configureFields()
         // configures actions of buttons method
         configureButtons()
     }
@@ -51,6 +52,28 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         view.addSubview(signInButton)
         view.addSubview(signUpButton)
         view.addSubview(forgotPassword)
+    }
+    
+    func configureFields() {
+        emailField.delegate = self
+        passwordField.delegate = self
+        
+        // make keyboard toolBar -> this toolBar in the top of the keyboard
+        let toolBar = UIToolbar(frame: CGRect(x: 0, y: 0, width: view.width, height: 50))
+        toolBar.items = [
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil),
+            UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(didTapKeyboardDone))
+        ]
+        toolBar.sizeToFit()
+        // 이 텍스트필드가 firstResponder시 custom accessory view가 display 시키는 instance property.
+        emailField.inputAccessoryView = toolBar
+        passwordField.inputAccessoryView = toolBar
+    }
+    
+    @objc private func didTapKeyboardDone() {
+        // make all the textfields are resignFirstResponder
+        emailField.resignFirstResponder()
+        passwordField.resignFirstResponder()
     }
     
     func configureButtons() {
@@ -76,15 +99,47 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: - Actions of Buttons
     @objc private func didTapSignInButton() {
+        didTapKeyboardDone()
+        guard let email = emailField.text,
+              let password = passwordField.text,
+              !email.trimmingCharacters(in: .whitespaces).isEmpty,
+              !password.trimmingCharacters(in: .whitespaces).isEmpty,
+              password.count >= 6
+        else {
+            // when email and password is empty present alert
+            let alert = UIAlertController(title: "Woops", message: "Plz enter a vaild email and password to sign in", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+            present(alert, animated: true, completion: nil)
+            return
+        }
         
+        // Action logic
+        AuthManager.shared.signIn(with: email, password: password) { loggedIn in
+            if loggedIn {
+                // success logged in action -> dismiss sign in
+            } else {
+                // fail logged in action -> error
+            }
+        }
     }
     
     @objc private func didTapSignUpButton() {
+        didTapKeyboardDone()
+        let vc = SignUpViewController()
+        vc.title = "Create Account"
+        navigationController?.pushViewController(vc, animated: true)
+        
         
     }
     
     @objc private func didTapForgotPasswordButton() {
-        
+        didTapKeyboardDone()
+        guard let url = URL(string: "https://www.tiktok.com") else {
+            return
+        }
+        let vc = SFSafariViewController(url: url)
+        present(vc, animated: true, completion: nil)
+        // safariService로 webView를 띄울 경우 push 하면 안되고 present 해야한다. -> why??
     }
 
 }

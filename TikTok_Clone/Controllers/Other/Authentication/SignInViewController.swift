@@ -44,6 +44,13 @@ class SignInViewController: UIViewController, UITextFieldDelegate {
         // configures actions of buttons method
         configureButtons()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // view가 붙여지고나서 email field가 first responder가 되어 keyboard가 바로 popup 되게 한다.
+        emailField.becomeFirstResponder()
+    }
+    
     // organize of view addSubviews method
     func addSubViews() {
         view.addSubview(logoImageView)

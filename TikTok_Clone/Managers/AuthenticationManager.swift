@@ -28,8 +28,21 @@ final class AuthManager {
         return Auth.auth().currentUser != nil
     }
     
-    public func signIn(with email: String, password: String, completion: @escaping (Bool) -> Void) {
-        
+    public func signIn(
+        with email: String,
+        password: String,
+        completion: @escaping (Bool) -> Void
+    ) {
+        // implement body
+    }
+    
+    public func signUp(
+        with userName: String,
+        email: String,
+        password: String,
+        completion: @escaping (Bool) -> Void
+    ) {
+        // implement body
     }
     
     // completion is why bool??

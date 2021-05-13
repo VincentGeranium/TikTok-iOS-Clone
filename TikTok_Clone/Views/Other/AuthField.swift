@@ -16,12 +16,14 @@ class AuthField: UITextField {
     
     //enum is for textfield make differently by each of types
     enum FieldType {
+        case userName
         case email
         case password
         
         // computed property must have accessors specified
         var title: String {
             switch self {
+            case .userName: return "User Name"
             case .email: return "Email Address"
             case .password: return "Password"
             }
@@ -45,6 +47,9 @@ class AuthField: UITextField {
     }
     
     private func configureUI() {
+        // don't auto capitalize
+        autocapitalizationType = .none
+        
         // make field dynamically. so, make Placeholder code like "placeholder = type.title"
         backgroundColor = .secondarySystemBackground
         layer.cornerRadius = 8

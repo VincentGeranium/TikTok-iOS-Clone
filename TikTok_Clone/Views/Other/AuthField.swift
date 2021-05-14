@@ -65,10 +65,13 @@ class AuthField: UITextField {
         
         // organize between each field type(password and email)
         if type == .password {
+            // password textfield에 password를 user가 입력시 어떤 content type으로 configure 할 것인지 정하는 code
+            textContentType = .oneTimeCode
             // 텍스트 필드에 쓰이는 텍스트를 가리는 인스턴스 메소드.
             isSecureTextEntry = true
         } else if type == .email {
             keyboardType = .emailAddress
+            textContentType = .emailAddress
         }
     }
     

@@ -144,6 +144,43 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         // call this regist function
         AuthManager.shared.signUp(with: userName, email: email, password: password) { success in
             //
+            DispatchQueue.main.async {
+                if success {
+                    print("Signed Up is Success")
+                    
+                    // dismiss when is success
+                    self.dismiss(animated: true, completion: nil)
+                    
+                    // MARK:- Strat own my code about alert when sign up success.
+                    // if u want to delete the code u can do that.
+//                    let alert = UIAlertController(
+//                        title: "Sign Up Success",
+//                        message: "Welecome to Tiktok!!",
+//                        preferredStyle: .alert
+//                    )
+//
+//                    let alertAction = UIAlertAction(title: "Dismiss", style: .cancel) { _ in
+//                        self.emailField.text = nil
+//                        self.userNameField.text = nil
+//                        self.passwordField.text = nil
+//
+//                    }
+//                    alert.addAction(alertAction)
+//                    self.present(alert, animated: true, completion: nil)
+                    // <- end of own my code
+                }
+                else {
+                    let alert = UIAlertController(
+                        title: "Sign Up Failed",
+                        message: "Something went wrong when trying to register. Please try again",
+                        preferredStyle: .alert
+                    )
+                    
+                    let alertAction = UIAlertAction(title: "Dismiss", style: .cancel, handler: nil)
+                    alert.addAction(alertAction)
+                    self.present(alert, animated: true, completion: nil)
+                }
+            }
         }
 
     }

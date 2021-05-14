@@ -19,6 +19,10 @@ final class AuthManager {
         case google
     }
     
+    enum AuthError: Error {
+        case signInFailed
+    }
+    
     //MARK:- Public
     
     // user가 가입 되어 있는지 없는지 확인하기 위한 bool (User Sign-in Vaildation)
@@ -31,9 +35,23 @@ final class AuthManager {
     public func signIn(
         with email: String,
         password: String,
-        completion: @escaping (Bool) -> Void
+        completion: @escaping (Result<String, Error>) -> Void
     ) {
         // implement body
+        Auth.auth().signIn(withEmail: email, password: password) { result, error in
+            guard result != nil, error == nil else {
+                if let error = error {
+                    completion(.failure(error))
+                }
+                else {
+                    completion(.failure(AuthError.signInFailed))
+                }
+                return
+            }
+            
+            // Successful sign in
+            completion(.success(email))
+        }
     }
     
     public func signUp(
@@ -43,6 +61,22 @@ final class AuthManager {
         completion: @escaping (Bool) -> Void
     ) {
         // implement body
+        // user's data를 authentication libray 뿐만 아니라 우리의 database 내에도 저장하기 위한 logic과 code
+        // c.f : user data -> user name, user email but not password because not secure
+        
+        // Make sure entered user name is available
+        
+        // User regist code
+        // c.f : guard statement is same function with if statement (not a "guard let")
+        Auth.auth().createUser(withEmail: email, password: password) { result, error in
+            guard result != nil, error == nil else {
+                completion(false)
+                return
+            }
+            // success sign up, saved to user data in database
+            DatabaseManager.shared.insertUser(with: email, userName: userName, completion: completion)
+        }
+        
     }
     
     // completion is why bool??

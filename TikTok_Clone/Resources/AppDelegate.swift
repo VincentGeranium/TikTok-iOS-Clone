@@ -19,6 +19,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window?.makeKeyAndVisible()
         
         FirebaseApp.configure()
+        
+        // when u want to debugging which sign in and sign out
+        
+//        AuthManager.shared.signOut { _ in
+//
+//        }
+        
+        
         return true
     }
 

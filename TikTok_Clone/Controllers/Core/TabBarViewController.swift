@@ -61,11 +61,18 @@ class TabBarViewController: UITabBarController {
         let nav2 = UINavigationController(rootViewController: explore)
         let nav3 = UINavigationController(rootViewController: notification)
         let nav4 = UINavigationController(rootViewController: profile)
+        let cameraNav = UINavigationController(rootViewController: camera)
+        
         
         // segmentcontrol이 있는 상단 부분을 약간의 트릭으로 투명하게 만드는 로직.
         nav1.navigationBar.backgroundColor = .clear
         nav1.navigationBar.setBackgroundImage(UIImage(), for: .default)
         nav1.navigationBar.shadowImage = UIImage()
+        
+        // setup cameraNav
+        cameraNav.navigationBar.backgroundColor = .clear
+        cameraNav.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        cameraNav.navigationBar.shadowImage = UIImage()
         
         nav1.tabBarItem = UITabBarItem(title: nil, image: UIImage.init(systemName: "house"), tag: 1)
         nav2.tabBarItem = UITabBarItem(title: nil, image: UIImage.init(systemName: "network"), tag: 2)
@@ -73,7 +80,7 @@ class TabBarViewController: UITabBarController {
         nav3.tabBarItem = UITabBarItem(title: nil, image: UIImage.init(systemName: "bell"), tag: 4)
         nav4.tabBarItem = UITabBarItem(title: nil, image: UIImage.init(systemName: "person.circle"), tag: 5)
         
-        setViewControllers([nav1, nav2, camera, nav3, nav4], animated: false)
+        setViewControllers([nav1, nav2, cameraNav, nav3, nav4], animated: false)
     }
     
 }

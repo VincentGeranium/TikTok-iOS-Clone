@@ -30,6 +30,10 @@ class CameraViewController: UIViewController {
     // Capture Session이 모두 만들어지면 Capture Preview에 전달하므로 Capture Preview는 Optional?
     var capturePreviewLayer: AVCaptureVideoPreviewLayer?
     
+    // make "outputFileURL" globaly
+    
+    var recordedVideoURL: URL?
+    
     // Create view for hole the camera
     // isolate views for down side is recode button and up side is cancel button.
     private let cameraView: UIView = {
@@ -39,13 +43,24 @@ class CameraViewController: UIViewController {
         return view
     }()
     
-    // configure camera
+    // previewLayer를 global 하게 만드는 이유는 user가 video를 after recoding, tapped x button
+    // that is not wanna close hole camera, just want to reset recording(take the camera back)
+    // so for that reset recording is reson of why are we make "previewLayer" globaly
+    private var previewLayer: AVPlayerLayer?
+    
+    // Recording Custom Button
+        // when initialize recordingBtn, give not fram init parameter
+            // why? because make own custom size and ui
+            // so, make btn frame in viewDidLayoutSubviews() func.
+    private let recordButton: RecordButton = RecordButton()
 
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        // addSubviews
         view.addSubview(cameraView)
+        
         self.view.backgroundColor = .systemBackground
         setUpCamera()
         // for stop capture video, close camera
@@ -54,12 +69,25 @@ class CameraViewController: UIViewController {
             target: self,
             action: #selector(didTapClose)
         )
+        
+        // setup record button Action func
+        view.addSubview(recordButton)
+        recordButton.addTarget(self, action: #selector(didTapRecord), for: .touchUpInside)
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         // make view frame is entire screen
         cameraView.frame = view.bounds
+        
+        // make recording button frame
+        let size: CGFloat = 75
+        recordButton.frame = CGRect(
+            x: (view.width - size)/2,
+            y: view.height - view.safeAreaInsets.bottom - size - 5,
+            width: size,
+            height: size
+        )
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -70,15 +98,78 @@ class CameraViewController: UIViewController {
         tabBarController?.tabBar.isHidden = true
     }
     
+    
+    // MARK:- Functions
+    
+    @objc private func didTapRecord() {
+        if captureOutput.isRecording {
+            // toggle recording button for update UI
+            recordButton.toggle(for: .notRecording)
+            // stop recording
+            captureOutput.stopRecording()
+        }
+        else {
+            // this url is path of video?
+            // url is array?
+            guard var url = FileManager.default.urls(
+                for: .documentDirectory,
+                in: .userDomainMask
+            ).first else {
+                return
+            }
+            
+            url.appendPathComponent("video.mov")
+            
+            // toggle recording button for update UI
+            recordButton.toggle(for: .recording)
+            
+            // delete primary video file
+            // if user take multiple video, writting url over and over.
+            // if didn't delete video url override the file over and over.
+            // so delete prior url
+            
+            // traget url이 써지기 전이므로 굳이 throw를 do - catch나 error handling 할 필요가 없으므로 try? oprional로 간단하게 처리한다.
+            try? FileManager.default.removeItem(at: url)
+            
+            captureOutput.startRecording(to: url,
+                                         recordingDelegate: self
+            )
+        }
+        
+    }
+    
     @objc private func didTapClose() {
-        captureSession.stopRunning()
-        tabBarController?.tabBar.isHidden = false
+        // rightBarButtonItem is if user like recording video and befor uploaded
+        // but didTapCloser method is user doesn't like video.
+        // so rightBarButtonItem is nil and
+        navigationItem.rightBarButtonItem = nil
+        recordButton.isHidden = false
         
-        // switch back to the primary tab
-        tabBarController?.selectedIndex = 0
-        
-        // if tab the close button
-            // brings the first tab screen
+        if previewLayer != nil {
+            // actually lecture code is blow
+            /*
+             previewLayer?.removeFromSuperlayer()
+             previewLayer = nil
+             */
+            
+            // but i made func
+            reset()
+        }
+        else {
+            captureSession.stopRunning()
+            tabBarController?.tabBar.isHidden = false
+            
+            // switch back to the primary tab
+            tabBarController?.selectedIndex = 0
+            
+            // if tab the close button
+                // brings the first tab screen
+        }
+    }
+    
+    private func reset() {
+        previewLayer?.removeFromSuperlayer()
+        previewLayer = nil
     }
     
     // ❗️❗️ camera 관련된 코드를 만들고 test 할 때 simulator에서는 정상 작동하지만 실제 device에서는 작동하지 않고 error이 날 수 있다(or crush)
@@ -142,11 +233,47 @@ extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
         
         // error
         guard error == nil else {
+            // if not recording video
+            // give the alert to user
+            let alert = UIAlertController(
+                title: "Woops",
+                message: "Something went wrong when recording your video",
+                preferredStyle: .alert
+            )
+            
+            alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+            present(alert, animated: true, completion: nil)
             return
         }
         
-        // success recording
+        // whem success recording print log
         print("Finished recording to url : \(outputFileURL.absoluteString)")
+        
+        recordedVideoURL = outputFileURL
+        
+        // caption for if user like recording video
+        // and make next btn for the move to another stage
+        // before uploaded post
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Next", style: .done, target: self, action: #selector(didTapNext))
+        
+        // whem success recording, show preview video
+        // pop on the camera view
+        let player = AVPlayer(url: outputFileURL)
+        previewLayer = AVPlayerLayer(player: player)
+        previewLayer?.videoGravity = .resizeAspectFill
+        previewLayer?.frame = cameraView.bounds
+        
+        guard let previewLayer = previewLayer  else {
+            return
+        }
+        // after recording stop(user is tapped recording button)
+        recordButton.isHidden = true
+        cameraView.layer.addSublayer(previewLayer)
+        previewLayer.player?.play()
+    }
+    
+    @objc private func didTapNext() {
+        // push caption controller
     }
     
     

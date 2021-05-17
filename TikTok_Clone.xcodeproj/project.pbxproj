@@ -30,6 +30,8 @@
 		6A949071263E95700017D584 /* ExplorePostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A949070263E95700017D584 /* ExplorePostViewModel.swift */; };
 		6A949074263E95940017D584 /* ExploreHashtagViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A949073263E95940017D584 /* ExploreHashtagViewModel.swift */; };
 		6A949077263E95B50017D584 /* ExploreUserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A949076263E95B50017D584 /* ExploreUserViewModel.swift */; };
+		6AA8C53F26524D26005D9EBC /* RecordButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA8C53E26524D26005D9EBC /* RecordButton.swift */; };
+		6AA8C54126525FB7005D9EBC /* CaptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA8C54026525FB7005D9EBC /* CaptionViewController.swift */; };
 		6AAA2A3E262C16FF003D463E /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAA2A3D262C16FF003D463E /* ExploreViewController.swift */; };
 		6AAA2A41262C1715003D463E /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAA2A40262C1715003D463E /* CameraViewController.swift */; };
 		6AAA2A44262C1728003D463E /* NotificationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAA2A43262C1728003D463E /* NotificationsViewController.swift */; };
@@ -80,6 +82,8 @@
 		6A949070263E95700017D584 /* ExplorePostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExplorePostViewModel.swift; sourceTree = "<group>"; };
 		6A949073263E95940017D584 /* ExploreHashtagViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreHashtagViewModel.swift; sourceTree = "<group>"; };
 		6A949076263E95B50017D584 /* ExploreUserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreUserViewModel.swift; sourceTree = "<group>"; };
+		6AA8C53E26524D26005D9EBC /* RecordButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordButton.swift; sourceTree = "<group>"; };
+		6AA8C54026525FB7005D9EBC /* CaptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionViewController.swift; sourceTree = "<group>"; };
 		6AAA2A3D262C16FF003D463E /* ExploreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
 		6AAA2A40262C1715003D463E /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		6AAA2A43262C1728003D463E /* NotificationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsViewController.swift; sourceTree = "<group>"; };
@@ -252,6 +256,7 @@
 				6AAA2A55262C17DE003D463E /* SettingViewController.swift */,
 				6AAA2A5A262C1851003D463E /* PostViewController.swift */,
 				6A1BE5C3263BD15A00728793 /* CommentsViewController.swift */,
+				6AA8C54026525FB7005D9EBC /* CaptionViewController.swift */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -274,6 +279,7 @@
 				6A5821642647BBE800B84C01 /* ExplorePostCollectionViewCell.swift */,
 				6A7A76D2264B9735002A5A66 /* AuthField.swift */,
 				6A7A76D4264B97A5002A5A66 /* AuthButton.swift */,
+				6AA8C53E26524D26005D9EBC /* RecordButton.swift */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -437,6 +443,7 @@
 				6AAA2A3E262C16FF003D463E /* ExploreViewController.swift in Sources */,
 				6AAA2A5B262C1851003D463E /* PostViewController.swift in Sources */,
 				6AAA2A41262C1715003D463E /* CameraViewController.swift in Sources */,
+				6AA8C54126525FB7005D9EBC /* CaptionViewController.swift in Sources */,
 				6A949071263E95700017D584 /* ExplorePostViewModel.swift in Sources */,
 				6A949068263E8EE00017D584 /* ExploreCell.swift in Sources */,
 				6A1BE5C4263BD15A00728793 /* CommentsViewController.swift in Sources */,
@@ -447,6 +454,7 @@
 				6A1BE5DF263BEC3600728793 /* User.swift in Sources */,
 				6AAA2A44262C1728003D463E /* NotificationsViewController.swift in Sources */,
 				6AAA2A4D262C17BA003D463E /* UserListViewController.swift in Sources */,
+				6AA8C53F26524D26005D9EBC /* RecordButton.swift in Sources */,
 				6AAA2A68262C1906003D463E /* AuthenticationManager.swift in Sources */,
 				6AAA2A47262C1733003D463E /* ProfileViewController.swift in Sources */,
 				6A1BE5DC263BEC0300728793 /* PostComment.swift in Sources */,

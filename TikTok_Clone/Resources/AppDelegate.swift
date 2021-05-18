@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         
         // when u want to debugging which sign in and sign out
-        
+        // this code is like log-out
 //        AuthManager.shared.signOut { _ in
 //
 //        }

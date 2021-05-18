@@ -32,6 +32,7 @@ final class AuthManager {
         return Auth.auth().currentUser != nil
     }
     
+    // when user sign-in, the info is cashing.
     public func signIn(
         with email: String,
         password: String,
@@ -47,6 +48,18 @@ final class AuthManager {
                     completion(.failure(AuthError.signInFailed))
                 }
                 return
+            }
+            
+            // to get current user name from database, with giving url, email
+            // when every time users sign - in
+            DatabaseManager.shared.getUserName(for: email) { userName in
+                if let userName = userName {
+                    // important things, if u make "UserDefaults.standard.setValue(userName, forKey: "userName")" code at sign in
+                    // is same things write at sign out
+                    UserDefaults.standard.setValue(userName, forKey: "userName")
+                    // cashing
+                    print("Got user name: \(userName)")
+                }
             }
             
             // Successful sign in
@@ -73,6 +86,8 @@ final class AuthManager {
                 completion(false)
                 return
             }
+            // setValue of UserDefaults standard
+            UserDefaults.standard.setValue(userName, forKey: "userName")
             // success sign up, saved to user data in database
             DatabaseManager.shared.insertUser(with: email, userName: userName, completion: completion)
         }

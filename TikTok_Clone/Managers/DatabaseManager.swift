@@ -72,6 +72,72 @@ final class DatabaseManager {
         
     }
     
+    public func getUserName(for email: String, completion: @escaping (String?) -> Void) {
+        // from database get child "users"
+        // "users" is dictionary, so have to casting
+        database.child("users").observeSingleEvent(of: .value) { snapshot in
+            guard let users = snapshot.value as? [String : [String : Any]] else {
+                completion(nil)
+                return
+            }
+            // key: user name, value: email
+            for (userName, value) in users {
+                if value["email"] as? String == email {
+                    completion(userName)
+                    break
+                }
+            }
+        }
+    }
+    
+    public func insertPost(fileName: String, completion: @escaping (Bool) -> Void) {
+        guard let userName = UserDefaults.standard.string(forKey: "userName") else {
+            completion(false)
+            return
+        }
+        
+        // get user name from database directly
+        // not using for loop
+        database.child("users").child(userName).observeSingleEvent(of: .value) { [weak self] snapshot in
+            // add our post
+            // c.f : user name is pointing dictionary
+            
+            guard var value = snapshot.value as? [String : Any] else {
+                // failed
+                completion(false)
+                return
+            }
+            
+            // validating of posts, is same name or not
+            // if is not in posts Array -> Append
+            // if not -> create new posts
+            if var posts = value["posts"] as? [String] {
+                posts.append(fileName)
+                
+                // update at database
+                value["posts"] = posts
+                self?.database.child("users").child(userName).setValue(value) { error, _ in
+                    guard error == nil else {
+                        completion(false)
+                        return
+                    }
+                    completion(true)
+                }
+            }
+            else {
+                // create new posts, basically array
+                value["posts"] = [fileName]
+                self?.database.child("users").child(userName).setValue(value) {error, _ in
+                    guard error == nil else {
+                        completion(false)
+                        return
+                    }
+                    completion(true)
+                }
+            }
+        }
+    }
+    
     public func getAllUsers(completion: ([String]) -> Void) {
         
     }

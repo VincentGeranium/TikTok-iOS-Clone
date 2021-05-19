@@ -90,7 +90,7 @@ final class DatabaseManager {
         }
     }
     
-    public func insertPost(fileName: String, completion: @escaping (Bool) -> Void) {
+    public func insertPost(fileName: String, caption: String, completion: @escaping (Bool) -> Void) {
         guard let userName = UserDefaults.standard.string(forKey: "userName") else {
             completion(false)
             return
@@ -108,11 +108,16 @@ final class DatabaseManager {
                 return
             }
             
+            let newEntry = [
+                "name" : fileName,
+                "caption" : caption,
+            ]
+            
             // validating of posts, is same name or not
             // if is not in posts Array -> Append
             // if not -> create new posts
-            if var posts = value["posts"] as? [String] {
-                posts.append(fileName)
+            if var posts = value["posts"] as? [[String : Any]] {
+                posts.append(newEntry)
                 
                 // update at database
                 value["posts"] = posts
@@ -126,7 +131,7 @@ final class DatabaseManager {
             }
             else {
                 // create new posts, basically array
-                value["posts"] = [fileName]
+                value["posts"] = [newEntry]
                 self?.database.child("users").child(userName).setValue(value) {error, _ in
                     guard error == nil else {
                         completion(false)

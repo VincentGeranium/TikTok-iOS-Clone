@@ -25,8 +25,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        AuthManager.shared.signOut { _ in
 //
 //        }
-        
-        
         return true
     }
 

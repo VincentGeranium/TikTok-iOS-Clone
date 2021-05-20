@@ -143,6 +143,10 @@ final class DatabaseManager {
         }
     }
     
+    public func getNotification(completion: @escaping([Notification]) -> Void) {
+        completion(Notification.mockData())
+    }
+    
     public func getAllUsers(completion: ([String]) -> Void) {
         
     }

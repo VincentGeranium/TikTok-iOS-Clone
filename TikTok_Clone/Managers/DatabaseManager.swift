@@ -147,6 +147,10 @@ final class DatabaseManager {
         completion(Notification.mockData())
     }
     
+    public func markNotification(notificationID: String, completion: @escaping (Bool) -> Void) {
+        completion(true)
+    }
+    
     public func getAllUsers(completion: ([String]) -> Void) {
         
     }

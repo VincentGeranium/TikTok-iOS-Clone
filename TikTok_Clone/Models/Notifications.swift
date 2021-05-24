@@ -25,10 +25,20 @@ enum NotificationType {
     }
 }
 
-struct Notification {
+// can make mutating method but more simple way is make class
+// so, structure Notification changed by class
+class Notification {
+    var identifier = UUID().uuidString
+    var isHidden = false
     let text: String
     let type: NotificationType
     let date: Date
+    
+    init(text: String, type: NotificationType, date: Date) {
+        self.text = text
+        self.type = type
+        self.date = date
+    }
     
     static func mockData() -> [Notification] {
         let first = Array(0...5).compactMap({

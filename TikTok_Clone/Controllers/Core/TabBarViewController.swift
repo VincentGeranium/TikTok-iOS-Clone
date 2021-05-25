@@ -75,11 +75,21 @@ class TabBarViewController: UITabBarController {
         cameraNav.navigationBar.shadowImage = UIImage()
         cameraNav.navigationBar.tintColor = .white
         
+        nav3.navigationBar.tintColor = .label
+        
         nav1.tabBarItem = UITabBarItem(title: nil, image: UIImage.init(systemName: "house"), tag: 1)
         nav2.tabBarItem = UITabBarItem(title: nil, image: UIImage.init(systemName: "network"), tag: 2)
         camera.tabBarItem = UITabBarItem(title: nil, image: UIImage.init(systemName: "camera"), tag: 3)
         nav3.tabBarItem = UITabBarItem(title: nil, image: UIImage.init(systemName: "bell"), tag: 4)
         nav4.tabBarItem = UITabBarItem(title: nil, image: UIImage.init(systemName: "person.circle"), tag: 5)
+        
+        if #available(iOS 14.0, *) {
+            nav1.navigationItem.backButtonDisplayMode = .minimal
+            nav2.navigationItem.backButtonDisplayMode = .minimal
+            nav3.navigationItem.backButtonDisplayMode = .minimal
+            nav4.navigationItem.backButtonDisplayMode = .minimal
+            cameraNav.navigationItem.backButtonDisplayMode = .minimal
+        }
         
         setViewControllers([nav1, nav2, cameraNav, nav3, nav4], animated: false)
     }

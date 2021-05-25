@@ -67,8 +67,27 @@ class NotificationsViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         
+        // make refreshControl for pull to refresh
+        let control = UIRefreshControl()
+        control.addTarget(self, action: #selector(didPullToRefresh(_:)), for: .valueChanged)
+        tableView.refreshControl = control
+        
         // get all result(label and tableview)
         fetchNotifications()
+    }
+    
+    @objc func didPullToRefresh(_ sender: UIRefreshControl) {
+        // actual tableview refresh data code
+        sender.beginRefreshing()
+        
+        // reset data
+        DatabaseManager.shared.getNotification { [weak self] notification in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                self?.notifications = notification
+                self?.tableView.reloadData()
+                sender.endRefreshing()
+            }
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -145,6 +164,7 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
                     for: indexPath
                 )
             }
+            cell.delegate = self
             cell.configure(with: postName, model: model)
             return cell
         case .userFollow(let userName):
@@ -157,6 +177,7 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
                     for: indexPath
                 )
             }
+            cell.delegate = self
             cell.configure(with: userName, model: model)
             return cell
         case .postComment(let postName):
@@ -169,6 +190,7 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
                     for: indexPath
                 )
             }
+            cell.delegate = self
             cell.configure(with: postName, model: model)
             return cell
         }
@@ -206,5 +228,58 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
+    }
+}
+
+// extension for notificationsUserFollowDelegate
+extension NotificationsViewController: NotificationsUserFollowTableViewCellDelegate {
+    func notificationsUserFollowTableViewCell(_ cell: NotificationsUserFollowTableViewCell, didTapFollowFor userName: String) {
+        DatabaseManager.shared.follow(userName: userName) { success in
+            if !success {
+                print("Someting wrong and failed")
+            }
+        }
+    }
+    
+    func notificationsUserFollowTableViewCell(_ cell: NotificationsUserFollowTableViewCell, didTapAvatarFor userName: String) {
+        // get user object from database and push that profileViewController
+        let vc = ProfileViewController(
+            user: User(userName: userName,
+                       profilePictureURL: nil,
+                       identifier: "123"
+            ))
+        vc.title = userName.uppercased()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+
+// extension for notificationsPostLikeTableViewCellDelegate
+extension NotificationsViewController: NotificationsPostLikeTableViewCellDelegate {
+    func notificationsPostLikeTableViewCell(_ cell: NotificationsPostLikeTableViewCell, didTapPostWith identifier: String) {
+        openPost(with: identifier)
+    }
+}
+
+// extension for notificationsPostCommentTableViewCell
+extension NotificationsViewController: NotificationsPostCommentTableViewCellDelegate {
+    func notificationsPostCommentTableViewCell(_ cell: NotificationsPostCommentTableViewCell, didTapPostWith identifier: String) {
+        openPost(with: identifier)
+    }
+}
+
+// this extension is for notificationsPostCommentTableViewCell and notificationsPostLikeTableViewCell
+// two delegates(notificationsPostCommentTableViewCell and notificationsPostLikeTableViewCell) are used same logical code
+// used user identifier so, it can't be make two time if used this function
+// if make like below code doesn't write code multiple times
+extension NotificationsViewController {
+    func openPost(with identifier: String) {
+        // resolve the post from database
+        let vc = PostViewController(model: PostModel(identifier: identifier))
+        // this is mock data
+        vc.title = "Video"
+        // push this VC on to the Stack
+        navigationController?.pushViewController(vc, animated: true)
+        
     }
 }

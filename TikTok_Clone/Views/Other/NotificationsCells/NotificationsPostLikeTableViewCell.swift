@@ -7,8 +7,19 @@
 
 import UIKit
 
+// make protocol for NotificationsPostLikeTableViewCellDelegate
+protocol NotificationsPostLikeTableViewCellDelegate: AnyObject {
+    func notificationsPostLikeTableViewCell(_ cell: NotificationsPostLikeTableViewCell,
+                                            didTapPostWith identifier: String)
+}
+
 class NotificationsPostLikeTableViewCell: UITableViewCell {
     static let identifier: String = "NotificationsPostLikeTableViewCell"
+    
+    weak var delegate: NotificationsPostLikeTableViewCellDelegate?
+    
+    // This property for in the configure function save the post id
+    var postID: String?
     
     // MARK:- Properties
     private let postThumbnailImageView: UIImageView = {
@@ -40,6 +51,20 @@ class NotificationsPostLikeTableViewCell: UITableViewCell {
         contentView.addSubview(label)
         contentView.addSubview(dateLabel)
         selectionStyle = .none
+        
+        // make custom tap gesture, added at postThumbnailImageView
+        postThumbnailImageView.isUserInteractionEnabled = true
+        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapPost))
+        postThumbnailImageView.addGestureRecognizer(tap)
+    }
+    
+    @objc private func didTapPost() {
+        guard let id = postID else {
+            return
+        }
+        delegate?.notificationsPostLikeTableViewCell(self,
+                                                     didTapPostWith: id)
+        print("‼️in postLike - didTapPost is working‼️")
     }
     
     required init?(coder: NSCoder) {
@@ -94,5 +119,7 @@ class NotificationsPostLikeTableViewCell: UITableViewCell {
         postThumbnailImageView.image = UIImage(named: "test")
         label.text = model.text
         dateLabel.text = .date(with: model.date)
+        // this is how actually gonna do reserve the post from the database
+        postID = postFileName
     }
 }

@@ -51,7 +51,7 @@ class NotificationsPostCommentTableViewCell: UITableViewCell {
         
         // make custom tap gesture
         postThumbnailImageView.isUserInteractionEnabled = true
-        let tap = UIGestureRecognizer(target: self, action: #selector(didTapPost))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapPost))
         postThumbnailImageView.addGestureRecognizer(tap)
     }
     

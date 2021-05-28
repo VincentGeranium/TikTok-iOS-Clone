@@ -54,6 +54,7 @@
 		6AD35F7D2657983300C9D937 /* NotificationsUserFollowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD35F7C2657983300C9D937 /* NotificationsUserFollowTableViewCell.swift */; };
 		6AD35F8126579A0700C9D937 /* NotificationsPostLikeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD35F8026579A0700C9D937 /* NotificationsPostLikeTableViewCell.swift */; };
 		6AD35F8326579A2B00C9D937 /* NotificationsPostCommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD35F8226579A2B00C9D937 /* NotificationsPostCommentTableViewCell.swift */; };
+		6AD951452660C90B0058D07D /* ProfileHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AD951442660C90B0058D07D /* ProfileHeaderViewModel.swift */; };
 		6ADE980B2647989500809A23 /* ExploreBannerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADE980A2647989500809A23 /* ExploreBannerCollectionViewCell.swift */; };
 		6AFA39EE262D7ABD002C958E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6AFA39ED262D7ABD002C958E /* GoogleService-Info.plist */; };
 		F95670C8A70A52B892BC72A0 /* Pods_TikTok_Clone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118FB7E0137244D0A05EB204 /* Pods_TikTok_Clone.framework */; };
@@ -111,6 +112,7 @@
 		6AD35F7C2657983300C9D937 /* NotificationsUserFollowTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsUserFollowTableViewCell.swift; sourceTree = "<group>"; };
 		6AD35F8026579A0700C9D937 /* NotificationsPostLikeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsPostLikeTableViewCell.swift; sourceTree = "<group>"; };
 		6AD35F8226579A2B00C9D937 /* NotificationsPostCommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsPostCommentTableViewCell.swift; sourceTree = "<group>"; };
+		6AD951442660C90B0058D07D /* ProfileHeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderViewModel.swift; sourceTree = "<group>"; };
 		6ADE980A2647989500809A23 /* ExploreBannerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreBannerCollectionViewCell.swift; sourceTree = "<group>"; };
 		6AFA39ED262D7ABD002C958E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F94DB877476CB2A06806B6B5 /* Pods-TikTok_Clone.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TikTok_Clone.debug.xcconfig"; path = "Target Support Files/Pods-TikTok_Clone/Pods-TikTok_Clone.debug.xcconfig"; sourceTree = "<group>"; };
@@ -231,6 +233,7 @@
 				6A949070263E95700017D584 /* ExplorePostViewModel.swift */,
 				6A949073263E95940017D584 /* ExploreHashtagViewModel.swift */,
 				6A949076263E95B50017D584 /* ExploreUserViewModel.swift */,
+				6AD951442660C90B0058D07D /* ProfileHeaderViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -486,6 +489,7 @@
 				6AAA2A41262C1715003D463E /* CameraViewController.swift in Sources */,
 				6AD35F7D2657983300C9D937 /* NotificationsUserFollowTableViewCell.swift in Sources */,
 				6AA8C54126525FB7005D9EBC /* CaptionViewController.swift in Sources */,
+				6AD951452660C90B0058D07D /* ProfileHeaderViewModel.swift in Sources */,
 				6A949071263E95700017D584 /* ExplorePostViewModel.swift in Sources */,
 				6A949068263E8EE00017D584 /* ExploreCell.swift in Sources */,
 				6A1BE5C4263BD15A00728793 /* CommentsViewController.swift in Sources */,

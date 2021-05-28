@@ -130,6 +130,15 @@ extension ProfileViewController: UICollectionViewDataSource {
               ) as? ProfileHeaderCollectionReusableView else {
             return UICollectionReusableView()
         }
+        header.delegate = self
+        // passing one of the viewModel
+        let viewModel = ProfileHeaderViewModel(
+            avatarImageURL: nil,
+            followerCount: 120,
+            followeingCount: 200,
+            isFollowing: false
+        )
+        header.configure(with: viewModel)
         return header
     }
     
@@ -140,5 +149,31 @@ extension ProfileViewController: UICollectionViewDataSource {
 }
 
 extension ProfileViewController: UICollectionViewDelegateFlowLayout {
+    
+}
+
+// confirm the protocol
+extension ProfileViewController: ProfileHeaderCollectionReusableViewDelegate {
+    func profileHeaderCollectionReusableView(_ header: ProfileHeaderCollectionReusableView, didTapPrimaryButtonWith viewModel: ProfileHeaderViewModel) {
+        guard let currentUserName = UserDefaults.standard.string(forKey: "userName") else {
+            return
+        }
+        
+        if self.user.userName == currentUserName {
+            // open Edit Profile
+        }
+        else {
+            // Follow or unfollow current users profile that we are viewing
+        }
+    }
+    
+    func profileHeaderCollectionReusableView(_ header: ProfileHeaderCollectionReusableView, didTapfollowersButtonWith viewModel: ProfileHeaderViewModel) {
+        
+    }
+    
+    func profileHeaderCollectionReusableView(_ header: ProfileHeaderCollectionReusableView, didTapfollowingButtonWith viewModel: ProfileHeaderViewModel) {
+        
+    }
+    
     
 }

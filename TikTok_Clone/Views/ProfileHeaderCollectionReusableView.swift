@@ -15,6 +15,8 @@ protocol ProfileHeaderCollectionReusableViewDelegate: AnyObject {
                                              didTapfollowersButtonWith viewModel: ProfileHeaderViewModel)
     func profileHeaderCollectionReusableView(_ header: ProfileHeaderCollectionReusableView,
                                              didTapfollowingButtonWith viewModel: ProfileHeaderViewModel)
+    func profileHeaderCollectionReusableView(_ header: ProfileHeaderCollectionReusableView,
+                                             didTapAvatarFor viewModel: ProfileHeaderViewModel)
 }
 
 class ProfileHeaderCollectionReusableView: UICollectionReusableView {
@@ -79,10 +81,26 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
         // add SubViews
         addedSubviews()
         configureButtons()
+        
+        // MARK:- UITapGestureRecognize
+        // give the tap gesture to avatarImageView
+        // c.f : two methods are different, between "UIGestureRecognizer" and "UITapGestureRecognizer"
+        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapAvatar))
+        avatarImageView.isUserInteractionEnabled = true
+        avatarImageView.addGestureRecognizer(tap)
+        
     }
     
     required init?(coder: NSCoder) {
         fatalError()
+    }
+    
+    @objc private func didTapAvatar() {
+        guard let viewModel = viewModel else {
+            return
+        }
+        delegate?.profileHeaderCollectionReusableView(self,
+                                                      didTapAvatarFor: viewModel)
     }
     
     // MARK:- addSubviews function
@@ -187,10 +205,13 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
         }
         
         if let isFollowing = viewModel.isFollowing {
+            // isFollowing valuse is not nil
             primaryButton.backgroundColor = isFollowing ? .secondarySystemBackground : .systemPink
+            // if isFollowing value is true title is "Unfollow" else false "Follow"
             primaryButton.setTitle(isFollowing ? "Unfollow" : "Follow", for: .normal)
         }
         else {
+            // isFollowing valuse is nil
             primaryButton.backgroundColor = .secondarySystemBackground
             primaryButton.setTitle("Edit Profile", for: .normal)
         }

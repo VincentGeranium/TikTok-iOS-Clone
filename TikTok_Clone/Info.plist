@@ -60,5 +60,7 @@
 	<string>Please allow access to record Video.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Please allow access to record Audio.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Please allow access to profile picture from library</string>
 </dict>
 </plist>

@@ -10,9 +10,30 @@
  각기 다른 유저마가 계속 새로운 profile vc를 만들 필요가 없다.
  */
 
+import ProgressHUD
 import UIKit
 
 class ProfileViewController: UIViewController {
+    
+    // two type of picker
+    // make by enum
+    enum PicturePickerType {
+        case camera
+        case photoLibrary
+    }
+    
+    // this property for user is current user confirm
+    // when checked the user who sign into that function is used over and over(one of the base)
+    // so make computed property
+    var isCurrentUserProfile: Bool {
+        if let userName = UserDefaults.standard.string(forKey: "userName") {
+            // user name을 가져올 때 uppper case로 되어있어서 didTapAvatarFor 메소드의 isCurrentUserProfile이후 코드 진행이 안되는 bug가 발생
+            // lowercase로 fix
+            return user.userName.lowercased() == userName.lowercased()
+        }
+        return false
+    }
+    
     
     // local property
     let user: User
@@ -130,15 +151,18 @@ extension ProfileViewController: UICollectionViewDataSource {
               ) as? ProfileHeaderCollectionReusableView else {
             return UICollectionReusableView()
         }
+        
         header.delegate = self
-        // passing one of the viewModel
+        
         let viewModel = ProfileHeaderViewModel(
             avatarImageURL: nil,
-            followerCount: 120,
-            followeingCount: 200,
-            isFollowing: false
+            followerCount: 100,
+            followeingCount: 120,
+            isFollowing: isCurrentUserProfile ? nil : false
         )
+        
         header.configure(with: viewModel)
+        
         return header
     }
     
@@ -175,5 +199,49 @@ extension ProfileViewController: ProfileHeaderCollectionReusableViewDelegate {
         
     }
     
+    func profileHeaderCollectionReusableView(_ header: ProfileHeaderCollectionReusableView, didTapAvatarFor viewModel: ProfileHeaderViewModel) {
+        guard isCurrentUserProfile else {
+            return
+        }
+        
+        let actionSheet = UIAlertController(title: "Profile Picture", message: nil, preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
+            DispatchQueue.main.async {
+                self.presentProfilePicturePicker(type: .camera)
+            }
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { _ in
+            self.presentProfilePicturePicker(type: .photoLibrary)
+        }))
+        
+        present(actionSheet, animated: true, completion: nil)
+    }
     
+    func presentProfilePicturePicker(type: PicturePickerType) {
+        let picker = UIImagePickerController()
+        picker.sourceType = type == .camera ? .camera : .photoLibrary
+        picker.delegate = self
+        // info dictionary에서 가져온 이미지를 편집하기 위해
+        // c.f : info dic은 extension내에 method에서 찾을 수 있다
+            //  didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]
+        picker.allowsEditing = true
+        present(picker, animated: true, completion: nil)
+    }
+}
+
+extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true, completion: nil)
+        guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else {
+            return
+        }
+        
+        ProgressHUD.show("Uploading")
+        // upload and uopdate UI
+    }
 }

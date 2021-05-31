@@ -32,7 +32,7 @@ final class AuthManager {
         return Auth.auth().currentUser != nil
     }
     
-    // when user sign-in, the info is cashing.
+    // when user sign-in, the info is cacheing.
     public func signIn(
         with email: String,
         password: String,

@@ -158,4 +158,33 @@ final class DatabaseManager {
     public func getAllUsers(completion: ([String]) -> Void) {
         
     }
+    
+    // highly reuseable function
+    public func getPosts(for user: User, completion: @escaping ([PostModel]) -> Void) {
+        // path가 정확한지 항상 firebase와 비교해야함.
+        let path = "users/\(user.userName.lowercased())/posts"
+        
+        database.child(path).observeSingleEvent(of: .value) { snapshot in
+            // dictionary is caption and name
+            guard let posts = snapshot.value as? [[String : String]] else {
+                completion([])
+                return
+            }
+            
+            // otherwise take all the post, convert into a postModel
+            let models: [PostModel] = posts.compactMap({
+                // return postModel
+                // construct
+               var model = PostModel(identifier: UUID().uuidString, user: user)
+                // whatever reason if value is nil, give to default value ""
+                // asign "fileName"
+                model.fileName = $0["name"] ?? ""
+                // asign "caption"
+                model.caption = $0["caption"] ?? ""
+                return model
+            })
+            completion(models)
+        }
+        
+    }
 }

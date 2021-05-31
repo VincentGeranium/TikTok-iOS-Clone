@@ -275,7 +275,8 @@ extension NotificationsViewController: NotificationsPostCommentTableViewCellDele
 extension NotificationsViewController {
     func openPost(with identifier: String) {
         // resolve the post from database
-        let vc = PostViewController(model: PostModel(identifier: identifier))
+        // user is dummy data
+        let vc = PostViewController(model: PostModel(identifier: identifier, user: User(userName: "Jun", profilePictureURL: nil, identifier: UUID().uuidString)))
         // this is mock data
         vc.title = "Video"
         // push this VC on to the Stack

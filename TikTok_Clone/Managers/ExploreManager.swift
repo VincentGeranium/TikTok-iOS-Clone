@@ -149,7 +149,8 @@ final class ExploreManager {
             ) { [weak self] in
                 DispatchQueue.main.async {
                     let postID = model.id
-                    let vc = PostViewController(model: PostModel(identifier: postID))
+                    // user is dummy data
+                    let vc = PostViewController(model: PostModel(identifier: postID, user: User(userName: "Jun", profilePictureURL: nil, identifier: UUID().uuidString)))
                     self?.delegate?.pushViewController(vc)
                 }
             }
@@ -171,7 +172,8 @@ final class ExploreManager {
             ) { [weak self] in
                 DispatchQueue.main.async {
                     let postID = model.id
-                    let vc = PostViewController(model: PostModel(identifier: postID))
+                    // user is dummy data
+                    let vc = PostViewController(model: PostModel(identifier: postID, user: User(userName: "Jun", profilePictureURL: nil, identifier: UUID().uuidString)))
                     self?.delegate?.pushViewController(vc)
                 }
             }
@@ -193,7 +195,8 @@ final class ExploreManager {
             ) { [weak self] in
                 DispatchQueue.main.async {
                     let postID = model.id
-                    let vc = PostViewController(model: PostModel(identifier: postID))
+                    // user is dummy data
+                    let vc = PostViewController(model: PostModel(identifier: postID, user: User(userName: "Jun", profilePictureURL: nil, identifier: UUID().uuidString)))
                     self?.delegate?.pushViewController(vc)
                 }
             }
@@ -215,7 +218,8 @@ final class ExploreManager {
             ) { [weak self] in
                 DispatchQueue.main.async {
                     let postID = model.id
-                    let vc = PostViewController(model: PostModel(identifier: postID))
+                    // user is dummy data
+                    let vc = PostViewController(model: PostModel(identifier: postID, user: User(userName: "Jun", profilePictureURL: nil, identifier: UUID().uuidString)))
                     self?.delegate?.pushViewController(vc)
                 }
             }

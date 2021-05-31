@@ -17,10 +17,6 @@ final class StorageManager {
     
     // Public
     
-    public func getVideoURL(with identifier: String, completion: (URL) -> Void) {
-        
-    }
-    
     public func uploadVideo(from url: URL, fileName: String, completion: @escaping (Bool) -> Void) {
         // get user name
         guard let userName = UserDefaults.standard.string(forKey: "userName") else {
@@ -33,8 +29,42 @@ final class StorageManager {
             // completion(error == nil) this code means is not error, is success.
             completion(error == nil)
         }
-        
     }
+    
+    // this function is upload actual image
+    // URL is point to the actual download url that new uploaded image
+    public func uploadProfilePicture(with image: UIImage, completion: @escaping (Result<URL, Error>) -> Void) {
+        guard let userName = UserDefaults.standard.string(forKey: "userName") else {
+            return
+        }
+        
+        // convert to png format
+        // c.f : UIImage.pngData() -> "Returns a data object that contains the specified image in PNG format."
+        guard let imageData = image.pngData() else {
+            return
+        }
+        
+        let path = "profile_pictures/\(userName)/picture.png"
+        
+        // child("profile_pictures/") -> root directory create
+        storageBucket.child(path).putData(imageData, metadata: nil) { _, error in
+            if let error = error {
+                completion(.failure(error))
+            }
+            else {
+                self.storageBucket.child(path).downloadURL { url, error in
+                    guard let url = url else {
+                        if let error = error {
+                            completion(.failure(error))
+                        }
+                        return
+                    }
+                    completion(.success(url))
+                }
+            }
+        }
+    }
+    
     
     // this function is make uniquew video name
     public func generateVideoName() -> String {

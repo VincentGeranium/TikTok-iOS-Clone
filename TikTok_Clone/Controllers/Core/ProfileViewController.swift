@@ -36,7 +36,7 @@ class ProfileViewController: UIViewController {
     
     
     // local property
-    let user: User
+    var user: User
     
     // Primary view is collectionView
     private let collectionView: UICollectionView = {
@@ -56,6 +56,8 @@ class ProfileViewController: UIViewController {
         )
         return collection
     }()
+    
+    private var posts = [PostModel]()
     
     // MARK:- Init
     // 각기 다른 유저의 데이터마다 새로운 vc가 아닌 재사용 vc를 위한 logic
@@ -86,6 +88,19 @@ class ProfileViewController: UIViewController {
                 action: #selector(didTapSettings)
             )
         }
+        // fetchPost method
+        fetchPosts()
+    }
+    
+    func fetchPosts() {
+        // get current user
+    
+        DatabaseManager.shared.getPosts(for: user) { [weak self] postsModel in
+            DispatchQueue.main.async {
+                self?.posts = postsModel
+                self?.collectionView.reloadData()
+            }
+        }
     }
     
     @objc private func didTapSettings() {
@@ -101,20 +116,23 @@ class ProfileViewController: UIViewController {
 }
 
 extension ProfileViewController: UICollectionViewDelegate {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // one profile
-        return 1
-    }
-    
+    // delete numberOfSections() -> because 1 by default value
+//    func numberOfSections(in collectionView: UICollectionView) -> Int {
+//        // one profile
+//        return 1
+//    }
+
 }
 
 extension ProfileViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // number of post
-        return 30
+        return posts.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        // enth
+        let postModel = posts[indexPath.row]
         // dequeue cell
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
         cell.backgroundColor = .systemBlue
@@ -155,7 +173,7 @@ extension ProfileViewController: UICollectionViewDataSource {
         header.delegate = self
         
         let viewModel = ProfileHeaderViewModel(
-            avatarImageURL: nil,
+            avatarImageURL: user.profilePictureURL,
             followerCount: 100,
             followeingCount: 120,
             isFollowing: isCurrentUserProfile ? nil : false
@@ -241,7 +259,35 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
             return
         }
         
+        // progress show, this is not apple own framework
         ProgressHUD.show("Uploading")
         // upload and uopdate UI
+        StorageManager.shared.uploadProfilePicture(with: image) { [weak self] result in
+            DispatchQueue.main.async {
+                // unwrap weak self
+                guard let strongSelf = self else {
+                    return
+                }
+                switch result {
+                case .success(let downloadURL):
+                    //cacheing the downlodUrl for userDefault
+                    UserDefaults.standard.setValue(downloadURL.absoluteString, forKey: "profile_picture_url")
+                    
+                    // reasign the user
+                    // reload the actual collectionView for reasign the user
+                    // recreate the header -> show new uploaded picture
+                    strongSelf.user = User(
+                        userName: strongSelf.user.userName,
+                        profilePictureURL: downloadURL,
+                        identifier: strongSelf.user.userName
+                    )
+                    strongSelf.collectionView.reloadData()
+                    ProgressHUD.showSuccess("Updated!")
+                case .failure:
+                    ProgressHUD.showError("Failed to upload profile image")
+                }
+            }
+            
+        }
     }
 }

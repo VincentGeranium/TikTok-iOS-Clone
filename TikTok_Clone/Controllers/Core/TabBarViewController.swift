@@ -47,10 +47,19 @@ class TabBarViewController: UITabBarController {
         let explore = ExploreViewController()
         let camera = CameraViewController()
         let notification = NotificationsViewController()
+    
+        // when the app lunched pass the profile url if does exsit
+        var urlString: String?
+        if let cachedUrlString = UserDefaults.standard.string(forKey: "profile_picture_url") {
+            // able to get it, update urlString
+            urlString = cachedUrlString
+        }
+        
         let profile = ProfileViewController(
-            user: User(userName: UserDefaults.standard.string(forKey: "userName")?.uppercased() ?? "ME",
-                       profilePictureURL: nil,
-                       identifier: UserDefaults.standard.string(forKey: "userName")?.lowercased() ?? ""
+            user: User(
+                userName: UserDefaults.standard.string(forKey: "userName")?.uppercased() ?? "ME",
+                profilePictureURL: URL(string: urlString ?? ""),
+                identifier: UserDefaults.standard.string(forKey: "userName")?.lowercased() ?? ""
             )
         )
         

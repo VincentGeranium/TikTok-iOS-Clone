@@ -197,7 +197,7 @@ class ProfileHeaderCollectionReusableView: UICollectionReusableView {
         
         if let avatarURL = viewModel.avatarImageURL {
             // downloaded image and asign it
-            // SDWebImage actually take care of all the cashing image, good stuff for us
+            // SDWebImage actually take care of all the cacheing image, good stuff for us
             avatarImageView.sd_setImage(with: avatarURL, completed: nil)
         }
         else {

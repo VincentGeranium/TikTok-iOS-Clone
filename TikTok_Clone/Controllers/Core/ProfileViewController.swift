@@ -57,6 +57,7 @@ class ProfileViewController: UIViewController {
         return collection
     }()
     
+    // MARK:- private [PostModel] property.
     private var posts = [PostModel]()
     
     // MARK:- Init
@@ -82,7 +83,12 @@ class ProfileViewController: UIViewController {
         let userName = UserDefaults.standard.string(forKey: "userName")?.uppercased() ?? "ME"
         if title == userName {
             navigationItem.rightBarButtonItem = UIBarButtonItem(
-                image: UIImage(named: "gear"),
+                /*
+                 ‼️ UIImage의 initializer 중 named와 systemName은 완전히 다르다
+                 "gear"를 named initializer로 만들었더니 계속 안보이는 bug가 발생했엇다.
+                 systemName으로 바꿔 bug를 fix함
+                 */
+                image: UIImage(systemName: "gear"),
                 style: .done,
                 target: self,
                 action: #selector(didTapSettings)
@@ -145,10 +151,18 @@ extension ProfileViewController: UICollectionViewDataSource {
         return cell
     }
     
-    // anonimous somebody tapping post
+    // anonymous somebody tapping post
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         // open the post
+            // get the post out of post collection here
+        let post = posts[indexPath.row]
+        
+        // create postVC and passing in the Model for the post
+        let vc = PostViewController(model: post)
+        vc.delegate = self
+        vc.title = "Video"
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -296,4 +310,17 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
             
         }
     }
+}
+
+// handel all the action
+extension ProfileViewController: PostViewControllerDelegate {
+    func postViewController(_ vc: PostViewController, didTapCommentButtonFor post: PostModel) {
+        // present comments
+    }
+    
+    func postViewController(_ vc: PostViewController, didTapProfileButtonFor post: PostModel) {
+        // push another profile
+    }
+    
+    
 }

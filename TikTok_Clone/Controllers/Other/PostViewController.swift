@@ -21,6 +21,7 @@ class PostViewController: UIViewController {
     
     weak var delegate: PostViewControllerDelegate?
     
+    // MARK:- PostModel property
     var model: PostModel
     
     private let likeButton: UIButton = {
@@ -79,6 +80,24 @@ class PostViewController: UIViewController {
     // Make Video Auto play infinitly, Make Observer pattern
     private var playDidFinishObserver: NSObjectProtocol?
     
+    // make hole video view
+    private let videoView: UIView = {
+        let view: UIView = UIView()
+        view.backgroundColor = .black
+        view.clipsToBounds = true
+        return view
+    }()
+    
+    // spinner
+    private let spinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.tintColor = .label
+        spinner.hidesWhenStopped = true
+        // reason of start animating in here, we want to start right away
+        spinner.startAnimating()
+        return spinner
+    }()
+    
     // MARK: - Init
     init(model: PostModel) {
         self.model = model
@@ -91,6 +110,13 @@ class PostViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .black
+        // added videoView on the top layer
+        view.addSubview(videoView)
+        
+        // added spinner in the videoView
+        videoView.addSubview(spinner)
+        
         // about video method
         // configureVideo 메소드가 view.addSubview 메소드보다 아래에 있을 경우 만들어진 모든 button들이 가려진다.
         // 그러므로 configureVideo method가 먼저 올라가야 한다.
@@ -98,9 +124,9 @@ class PostViewController: UIViewController {
         configureVideo()
         
         // make random background color for test
-        let colors: [UIColor] = [
-            .red, .blue, .systemYellow, .systemPink, .gray, .orange, .green
-        ]
+//        let colors: [UIColor] = [
+//            .red, .blue, .systemYellow, .systemPink, .gray, .orange, .green
+//        ]
         // MARK:- setup view's random color background for develop
 //        view.backgroundColor = colors.randomElement()
         
@@ -118,6 +144,14 @@ class PostViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        // give the same size as entire view
+        videoView.frame = view.bounds
+        
+        // wanna spinner show center and frame width and height 100
+        spinner.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+        spinner.center = videoView.center
+        
+        
         /*
          실제 autolayout에서 긴 computation을 code로 작업 할 경우 error이 일어나는 경우가 있다
          그래서 너무 긴 computation은 따로 property로 만들어 작업하는 것이 좋다.
@@ -176,28 +210,63 @@ class PostViewController: UIViewController {
         profileButton.layer.cornerRadius = size / 2
     }
     
+    // MARK:- configureVideo()
     //
-    
     private func configureVideo() {
-        // 1. 비디오의 path 찾아가기
-        // path는 nil일 경우가 있으므로 unwrap 해야 함 그래서 guard let으로 가져온다.
-        guard let path = Bundle.main.path(forResource: "mockVideo", ofType: "mp4") else {
-            return
+        // 1,2는 mock data
+        
+        // StorageManger에 만든 video url을 가져오는 method를 이용하여 url을 가져오게한다.
+        /*
+         ‼️ closure 안에 만든 property는 문법상 명확하게 그 property가 어떤 property인지 알 수 있도록 꼭 self.를 넣어줘야 한다.
+         그렇지 않을 경우 syntax error이 나온다.
+         */
+        
+        StorageManager.shared.getDownloadURL(for: model) { [weak self] result in
+            // unwrap self as strong self
+                // this pattern is fairly pattern
+            guard let strongSelf = self else {
+                return
+            }
+            
+            // get result back
+                // stop animating
+            strongSelf.spinner.stopAnimating()
+                // remove from hierarchy
+            strongSelf.spinner.removeFromSuperview()
+            
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let url):
+                    // player에 url로 바뀐 video path 넣어서 video 준비
+                    strongSelf.player = AVPlayer(url: url)
+                    
+                    // 3. 준비 된 비디오를 포스팅하는 코드 and video player frame setup
+                    let playerLayer = AVPlayerLayer(player: strongSelf.player)
+                    playerLayer.frame = strongSelf.view.bounds
+                    playerLayer.videoGravity = .resizeAspectFill
+                    // added video player
+                    // play back layer
+                    strongSelf.videoView.layer.addSublayer(playerLayer)
+                    strongSelf.player?.volume = 0
+                    strongSelf.player?.play()
+                case .failure:
+                    // this is mock data for first lunched app and show video
+                    guard let path = Bundle.main.path(forResource: "mockVideo", ofType: "mp4") else {
+                        return
+                    }
+                    let url = URL(fileURLWithPath: path)
+                    strongSelf.player = AVPlayer(url: url)
+                    
+                    let playerLayer = AVPlayerLayer(player: strongSelf.player)
+                    playerLayer.frame = strongSelf.view.bounds
+                    playerLayer.videoGravity = .resizeAspectFill
+                    strongSelf.videoView.layer.addSublayer(playerLayer)
+                    strongSelf.player?.volume = 0
+                    strongSelf.player?.play()
+                }
+            }
         }
         
-        // 2. path를 url로 바꾸기.
-        let url = URL(fileURLWithPath: path)
-        
-        // player에 url로 바뀐 video path 넣어서 video 준비
-        player = AVPlayer(url: url)
-        
-        // 3. 준비 된 비디오를 포스팅하는 코드 and video player frame setup
-        let playerLayer = AVPlayerLayer(player: player)
-        playerLayer.frame = view.bounds
-        playerLayer.videoGravity = .resizeAspectFill
-        view.layer.addSublayer(playerLayer)
-        player?.volume = 0
-        player?.play()
         
         // player가 optional 이므로 unwrapping 해준다
         guard let player = player  else {

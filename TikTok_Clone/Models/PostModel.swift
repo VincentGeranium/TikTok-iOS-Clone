@@ -34,4 +34,11 @@ struct PostModel {
         }
         return posts
     }
+    
+    // This Computed property is Derive child path
+    var videoChildPath: String {
+        // path is actual from storage bucket that a child resign
+        // return value is bring in the fileName(video)
+        return "videos/\(user.userName.lowercased())/\(fileName)"
+    }
 }

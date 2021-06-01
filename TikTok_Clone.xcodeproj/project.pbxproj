@@ -31,6 +31,7 @@
 		6A949071263E95700017D584 /* ExplorePostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A949070263E95700017D584 /* ExplorePostViewModel.swift */; };
 		6A949074263E95940017D584 /* ExploreHashtagViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A949073263E95940017D584 /* ExploreHashtagViewModel.swift */; };
 		6A949077263E95B50017D584 /* ExploreUserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A949076263E95B50017D584 /* ExploreUserViewModel.swift */; };
+		6A982EB126660BC60081CEDF /* PostCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A982EB026660BC60081CEDF /* PostCollectionViewCell.swift */; };
 		6AA8C53F26524D26005D9EBC /* RecordButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA8C53E26524D26005D9EBC /* RecordButton.swift */; };
 		6AA8C54126525FB7005D9EBC /* CaptionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AA8C54026525FB7005D9EBC /* CaptionViewController.swift */; };
 		6AAA2A3E262C16FF003D463E /* ExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AAA2A3D262C16FF003D463E /* ExploreViewController.swift */; };
@@ -89,6 +90,7 @@
 		6A949070263E95700017D584 /* ExplorePostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExplorePostViewModel.swift; sourceTree = "<group>"; };
 		6A949073263E95940017D584 /* ExploreHashtagViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreHashtagViewModel.swift; sourceTree = "<group>"; };
 		6A949076263E95B50017D584 /* ExploreUserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreUserViewModel.swift; sourceTree = "<group>"; };
+		6A982EB026660BC60081CEDF /* PostCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCollectionViewCell.swift; sourceTree = "<group>"; };
 		6AA8C53E26524D26005D9EBC /* RecordButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordButton.swift; sourceTree = "<group>"; };
 		6AA8C54026525FB7005D9EBC /* CaptionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptionViewController.swift; sourceTree = "<group>"; };
 		6AAA2A3D262C16FF003D463E /* ExploreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreViewController.swift; sourceTree = "<group>"; };
@@ -292,6 +294,7 @@
 				6AD35F7E265798BF00C9D937 /* Auth */,
 				6AA8C53E26524D26005D9EBC /* RecordButton.swift */,
 				6AD35F8426579A6700C9D937 /* NotificationsCells */,
+				6A982EB026660BC60081CEDF /* PostCollectionViewCell.swift */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -469,6 +472,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6A982EB126660BC60081CEDF /* PostCollectionViewCell.swift in Sources */,
 				6A7D4E982656411300F8EA34 /* Notifications.swift in Sources */,
 				6A7A76D5264B97A5002A5A66 /* AuthButton.swift in Sources */,
 				6A7A76D3264B9735002A5A66 /* AuthField.swift in Sources */,

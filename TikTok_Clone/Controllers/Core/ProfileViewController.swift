@@ -51,8 +51,8 @@ class ProfileViewController: UIViewController {
             withReuseIdentifier: ProfileHeaderCollectionReusableView.identifier
         )
         collection.register(
-            UICollectionViewCell.self,
-            forCellWithReuseIdentifier: "cell"
+            PostCollectionViewCell.self,
+            forCellWithReuseIdentifier: PostCollectionViewCell.identifier
         )
         return collection
     }()
@@ -134,8 +134,14 @@ extension ProfileViewController: UICollectionViewDataSource {
         // enth
         let postModel = posts[indexPath.row]
         // dequeue cell
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
-        cell.backgroundColor = .systemBlue
+        // c.f : reason of cast PostCollectionViewCell, want used configure function add on to it
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: PostCollectionViewCell.identifier,
+            for: indexPath
+        ) as? PostCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        cell.configure(with: postModel)
         return cell
     }
     

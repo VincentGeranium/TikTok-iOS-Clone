@@ -65,7 +65,6 @@ final class StorageManager {
         }
     }
     
-    
     // this function is make uniquew video name
     public func generateVideoName() -> String {
         let uuidString = UUID().uuidString
@@ -75,5 +74,16 @@ final class StorageManager {
         return uuidString + "_\(number)_" + "\(unixTimestamp)" + ".mov"
     }
     
+    // this function is download video fileName from the firebase storage
+    public func getDownloadURL(for post: PostModel, completion: @escaping (Result<URL, Error>) -> Void) {
+        storageBucket.child(post.videoChildPath).downloadURL { url, error in
+            if let error = error {
+                completion(.failure(error))
+            }
+            else if let url = url {
+                completion(.success(url))
+            }
+        }
+    }
 }
 

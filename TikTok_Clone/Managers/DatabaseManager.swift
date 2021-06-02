@@ -155,10 +155,6 @@ final class DatabaseManager {
         completion(true)
     }
     
-    public func getAllUsers(completion: ([String]) -> Void) {
-        
-    }
-    
     // highly reuseable function
     public func getPosts(for user: User, completion: @escaping ([PostModel]) -> Void) {
         // path가 정확한지 항상 firebase와 비교해야함.
@@ -185,6 +181,26 @@ final class DatabaseManager {
             })
             completion(models)
         }
+    }
+    
+    public func getRelationships(
+        for user: User,
+        type: UserListViewController.ListType,
+        completion: @escaping ([String]) -> Void
+    ) {
+        // make follwers and following path
+        let path = "users/\(user.userName.lowercased())/\(type.rawValue)"
         
+        // for debugging
+        print("Fetching path : \(path)")
+        
+        database.child(path).observeSingleEvent(of: .value) { snapshot in
+            guard let userNameColletion = snapshot.value as? [String] else {
+                completion([])
+                return
+            }
+            
+            completion(userNameColletion)
+        }
     }
 }

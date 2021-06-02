@@ -57,9 +57,14 @@ class ProfileViewController: UIViewController {
         return collection
     }()
     
-    // MARK:- private [PostModel] property.
+    // MARK:- initialize posts property.
+        // init by [PostModel] -> PostModel array
     private var posts = [PostModel]()
     
+    // MARK:- initialize followers and following property.
+        // init by [String] -> String array
+    private var following = [String]()
+    private var followers = [String]()
     // MARK:- Init
     // 각기 다른 유저의 데이터마다 새로운 vc가 아닌 재사용 vc를 위한 logic
     init(user: User) {
@@ -192,14 +197,51 @@ extension ProfileViewController: UICollectionViewDataSource {
         
         header.delegate = self
         
-        let viewModel = ProfileHeaderViewModel(
-            avatarImageURL: user.profilePictureURL,
-            followerCount: 100,
-            followeingCount: 120,
-            isFollowing: isCurrentUserProfile ? nil : false
-        )
+        // MARK:- DispatchGroup
+            // concurrent, make two request by notify block -> network call, syncronized
+        let group = DispatchGroup()
         
-        header.configure(with: viewModel)
+        // action twice (followers and following)
+        group.enter()
+        group.enter()
+        
+        // setup getRelationships function call to the databaseManager
+            // [weak self] is for retain cycle (don't want leak memory)
+            // c.f : all of object have default value by strong.
+        DatabaseManager.shared.getRelationships(for: user, type: .followers) { [weak self] followers in
+            // defer is closure
+                // defer is acting when before finished function
+            defer {
+                group.leave()
+            }
+            // retain these users
+            self?.followers = followers
+        }
+        
+        DatabaseManager.shared.getRelationships(for: user, type: .following) { [weak self] following in
+            // defer is closure
+                // defer is acting when before finished function
+            defer {
+                group.leave()
+            }
+            // retain these users
+            self?.following = following
+        }
+        
+        // most important part of dispatch group is notify
+        group.notify(queue: .main) {
+            // excute after all this closure done?
+            let viewModel = ProfileHeaderViewModel(
+                avatarImageURL: self.user.profilePictureURL,
+                followerCount: self.followers.count,
+                followeingCount: self.following.count,
+                isFollowing: self.isCurrentUserProfile ? nil : false
+            )
+            
+            header.configure(with: viewModel)
+            
+        }
+
         
         return header
     }
@@ -230,10 +272,23 @@ extension ProfileViewController: ProfileHeaderCollectionReusableViewDelegate {
     }
     
     func profileHeaderCollectionReusableView(_ header: ProfileHeaderCollectionReusableView, didTapfollowersButtonWith viewModel: ProfileHeaderViewModel) {
+        // setup originaly UserListViewController
+        // type parameter is .followers and user parameter is give to current user of profile
+        let vc = UserListViewController(type: .followers, user: user)
+        vc.users = followers
+        // push viewcontroller on to the stack with push call
+        navigationController?.pushViewController(vc, animated: true)
+        
         
     }
     
     func profileHeaderCollectionReusableView(_ header: ProfileHeaderCollectionReusableView, didTapfollowingButtonWith viewModel: ProfileHeaderViewModel) {
+        // setup originaly UserListViewController
+        // type parameter is .following and user parameter is give to current user of profile
+        let vc = UserListViewController(type: .following, user: user)
+        vc.users = following
+        // push viewcontroller on to the stack with push call
+        navigationController?.pushViewController(vc, animated: true)
         
     }
     

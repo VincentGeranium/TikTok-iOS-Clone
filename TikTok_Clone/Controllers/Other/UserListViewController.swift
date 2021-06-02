@@ -16,14 +16,25 @@ class UserListViewController: UIViewController {
         return tableView
     }()
     
-    enum ListType {
+    // enumeration give to rawValue String
+    enum ListType: String {
         case followers
         case following
     }
     
+    private let noUserLabel: UILabel = {
+        let label: UILabel = UILabel()
+        label.text = "No User."
+        label.textAlignment = .center
+        label.textColor = .secondaryLabel
+        return label
+    }()
+    
     let user: User
     let type: ListType
+    public var users = [String]()
     
+    // MARK:- Init
     init(type: ListType, user: User) {
         self.type = type
         self.user = user
@@ -49,14 +60,28 @@ class UserListViewController: UIViewController {
         case .following: title = "Following"
         }
         
-        view.addSubview(tableView)
-        tableView.delegate = self
-        tableView.dataSource = self
+        // if users are empty
+        if users.isEmpty {
+            // show no user notify.
+            view.addSubview(noUserLabel)
+            noUserLabel.sizeToFit()
+        } else {
+            view.addSubview(tableView)
+            tableView.delegate = self
+            tableView.dataSource = self
+        }
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        tableView.frame = view.bounds
+        // lay this out conditionaly
+        // c.f : view -> current view
+        if tableView.superview == view {
+            tableView.frame = view.bounds
+        }
+        else {
+            noUserLabel.center = view.center
+        }
     }
 
 }
@@ -65,13 +90,17 @@ class UserListViewController: UIViewController {
 // confirm the tableview protocols
 extension UserListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 0
+        return users.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell",
-                                                 for: indexPath)
-        cell.textLabel?.text = "UserListVC Test"
+        // actual text each of cell
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: "cell",
+            for: indexPath
+        )
+        // users[indexPath.row] -> actual users name
+        cell.textLabel?.text = users[indexPath.row].lowercased()
         return cell
     }
     

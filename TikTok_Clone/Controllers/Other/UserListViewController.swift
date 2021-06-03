@@ -99,6 +99,10 @@ extension UserListViewController: UITableViewDelegate, UITableViewDataSource {
             withIdentifier: "cell",
             for: indexPath
         )
+    
+        // if u want to push profile that user's user name on it
+        cell.selectionStyle = .none
+        
         // users[indexPath.row] -> actual users name
         cell.textLabel?.text = users[indexPath.row].lowercased()
         return cell

@@ -65,6 +65,10 @@ class ProfileViewController: UIViewController {
         // init by [String] -> String array
     private var following = [String]()
     private var followers = [String]()
+    
+    private var isFollower: Bool = false
+    
+    
     // MARK:- Init
     // 각기 다른 유저의 데이터마다 새로운 vc가 아닌 재사용 vc를 위한 logic
     init(user: User) {
@@ -204,6 +208,7 @@ extension ProfileViewController: UICollectionViewDataSource {
         // action twice (followers and following)
         group.enter()
         group.enter()
+        group.enter()
         
         // setup getRelationships function call to the databaseManager
             // [weak self] is for retain cycle (don't want leak memory)
@@ -228,6 +233,19 @@ extension ProfileViewController: UICollectionViewDataSource {
             self?.following = following
         }
         
+        // Extend DispatchGroup here
+        
+        // user parameter value is who own this profile
+        DatabaseManager.shared.isValidRelationship(
+            for: user,
+            type: .followers
+        ) { [weak self] isFollower in
+            defer {
+                group.leave()
+            }
+            self?.isFollower = isFollower
+        }
+        
         // most important part of dispatch group is notify
         group.notify(queue: .main) {
             // excute after all this closure done?
@@ -235,7 +253,8 @@ extension ProfileViewController: UICollectionViewDataSource {
                 avatarImageURL: self.user.profilePictureURL,
                 followerCount: self.followers.count,
                 followeingCount: self.following.count,
-                isFollowing: self.isCurrentUserProfile ? nil : false
+                // if "isFollowing" is false show to follow button and if is true show unfollow button
+                isFollowing: self.isCurrentUserProfile ? nil : self.isFollower
             )
             
             header.configure(with: viewModel)
@@ -259,15 +278,49 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
 // confirm the protocol
 extension ProfileViewController: ProfileHeaderCollectionReusableViewDelegate {
     func profileHeaderCollectionReusableView(_ header: ProfileHeaderCollectionReusableView, didTapPrimaryButtonWith viewModel: ProfileHeaderViewModel) {
-        guard let currentUserName = UserDefaults.standard.string(forKey: "userName") else {
-            return
-        }
+//        guard let currentUserName = UserDefaults.standard.string(forKey: "userName") else {
+//            return
+//        }
         
-        if self.user.userName == currentUserName {
+        // ‼️ have to check user name is lowercase or uppercase
+        // when user name is lowercase or uppercae, different return value
+        if isCurrentUserProfile {
             // open Edit Profile
+            // present Edit Profile ViewController
+            let vc = EditProfileViewController()
+            let naviVC = UINavigationController(rootViewController: vc)
+            self.present(naviVC, animated: true, completion: nil)
         }
         else {
             // Follow or unfollow current users profile that we are viewing
+            if self.isFollower {
+                // Unfollower
+                DatabaseManager.shared.updateRelationship(for: user, follow: false) { [weak self] success in
+                    if success {
+                        DispatchQueue.main.async {
+                            self?.isFollower = false
+                            self?.collectionView.reloadData()
+                        }
+                    }
+                    else {
+                        // if not success
+                    }
+                }
+            }
+            else {
+                // Follower
+                DatabaseManager.shared.updateRelationship(for: user, follow: true) { [weak self] success in
+                    if success {
+                        DispatchQueue.main.async {
+                            self?.isFollower = true
+                            self?.collectionView.reloadData()
+                        }
+                    }
+                    else {
+                        // if not success
+                    }
+                }
+            }
         }
     }
     

@@ -64,6 +64,17 @@ class TabBarViewController: UITabBarController {
         )
         
         
+        /*
+         // for the test about follow and unfollow button and firebase real time
+        let profile = ProfileViewController(
+            user: User(
+                userName: "billevans".uppercased(),
+                profilePictureURL: nil,
+                identifier: "billevans"
+            )
+        )
+         */
+        
         notification.title = "Notifications"
         profile.title = "Profile"
         

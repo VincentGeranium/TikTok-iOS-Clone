@@ -203,4 +203,104 @@ final class DatabaseManager {
             completion(userNameColletion)
         }
     }
+    
+    public func isValidRelationship(
+        for user: User,
+        type: UserListViewController.ListType,
+        completion: @escaping (Bool) -> Void
+    ) {
+        guard let currentUserUserName = UserDefaults.standard.string(forKey: "userName")?.lowercased() else {
+            return
+        }
+        
+        let path = "users/\(user.userName.lowercased())/\(type.rawValue)"
+        
+        database.child(path).observeSingleEvent(of: .value) { snapshot in
+            guard let userNameCollection = snapshot.value as? [String] else {
+                completion(false)
+                return
+            }
+            
+            completion(userNameCollection.contains(currentUserUserName))
+        }
+    }
+    
+    public func updateRelationship(
+        for user: User,
+        follow: Bool,
+        completion: @escaping (Bool) -> Void
+    ) {
+        guard let currentUserUserName = UserDefaults.standard.string(forKey: "userName")?.lowercased() else {
+            return
+        }
+        
+        if follow {
+            // Follow
+            
+            // 1. insert in current user's following (cause we are folloing somebody else)
+            let followingPath = "users/\(currentUserUserName)/following"
+            database.child(followingPath).observeSingleEvent(of: .value) { (snapshot) in
+                let userNameToInsert = user.userName.lowercased()
+                if var current = snapshot.value as? [String] {
+                    current.append(userNameToInsert)
+                    self.database.child(followingPath).setValue(current) { error, _ in
+                        completion(error == nil)
+                    }
+                }
+                else {
+                    self.database.child(followingPath).setValue([userNameToInsert]) { error, _ in
+                        completion(error == nil)
+                    }
+                }
+            }
+            
+            // 2. insert in the target user's followers
+            let followersPath = "users/\(user.userName.lowercased())/followers"
+            database.child(followersPath).observeSingleEvent(of: .value) { (snapshot) in
+                let userNameToInsert = currentUserUserName.lowercased()
+                if var current = snapshot.value as? [String] {
+                    current.append(userNameToInsert)
+                    self.database.child(followersPath).setValue(current) { error, _ in
+                        completion(error == nil)
+                    }
+                }
+                else {
+                    self.database.child(followersPath).setValue([userNameToInsert]) { error, _ in
+                        completion(error == nil)
+                    }
+                }
+            }
+        }
+        else {
+            // Unfollow
+            
+            // reverse with follow
+            
+            // 1. Remove from current user following
+            let followingPath = "users/\(currentUserUserName)/following"
+            database.child(followingPath).observeSingleEvent(of: .value) { (snapshot) in
+                let userNameToRemove = user.userName.lowercased()
+                if var current = snapshot.value as? [String] {
+                    // $0 means => elements
+                    current.removeAll(where: {$0 == userNameToRemove})
+                    self.database.child(followingPath).setValue(current) { error, _ in
+                        completion(error == nil)
+                    }
+                }
+            }
+            
+            // 2. Remove in the target user's followers
+            let followersPath = "users/\(user.userName.lowercased())/followers"
+            database.child(followersPath).observeSingleEvent(of: .value) { (snapshot) in
+                let userNameToRemove = currentUserUserName.lowercased()
+                if var current = snapshot.value as? [String] {
+                    current.removeAll(where: {$0 == userNameToRemove})
+                    self.database.child(followersPath).setValue(current) { error, _ in
+                        completion(error == nil)
+                    }
+                }
+            }
+        }
+    }
+    
 }

@@ -5,8 +5,18 @@
 //  Created by 김광준 on 2021/04/18.
 //
 
-// make Sign out ui -> make table view and make sign out button at tableview footer
+struct SettingsSection {
+    let title: String
+    let options: [SettingsOption]
+}
 
+struct SettingsOption {
+    let title: String
+    let handler: (() -> Void)
+}
+
+// make Sign out ui -> make table view and make sign out button at tableview footer
+import SafariServices
 import UIKit
 
 class SettingViewController: UIViewController {
@@ -20,9 +30,38 @@ class SettingViewController: UIViewController {
         return table
     }()
     
+    var sections = [SettingsSection]()
+    
     // for configure
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        sections = [
+            SettingsSection(
+                title: "Information",
+                options: [
+                    SettingsOption(title: "Terms of Service", handler: { [weak self] in
+                        DispatchQueue.main.async {
+                            guard let url = URL(string: "https://www.tiktok.com/legal/terms-of-service") else {
+                                return
+                            }
+                            let vc = SFSafariViewController(url: url)
+                            self?.present(vc, animated: true, completion: nil)
+                        }
+                    }),
+                    SettingsOption(title: "Privacy Policy", handler: { [weak self] in
+                        DispatchQueue.main.async {
+                            guard let url = URL(string: "https://www.tiktok.com/legal/privacy-policy") else {
+                                return
+                            }
+                            let vc = SFSafariViewController(url: url)
+                            self?.present(vc, animated: true, completion: nil)
+                        }
+                    }),
+                ]
+            )
+        ]
+        
         title = "Settings"
         view.backgroundColor = .systemBackground
         view.addSubview(tableView)
@@ -109,14 +148,37 @@ class SettingViewController: UIViewController {
     
 }
 
+// MARK:- SettingViewController Extension about TableViewDelegate, TableViewDataSource
 extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    // return the number of section in the table view
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return sections.count
+    }
+    // return number of rows in a given section of a table view
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return sections[section].options.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = "Hello World"
+        let model = sections[indexPath.section].options[indexPath.row]
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: "cell",
+            for: indexPath
+        )
+        
+        cell.accessoryType = .disclosureIndicator
+        cell.textLabel?.text = model.title
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let model = sections[indexPath.section].options[indexPath.row]
+        model.handler()
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return sections[section].title
     }
 }

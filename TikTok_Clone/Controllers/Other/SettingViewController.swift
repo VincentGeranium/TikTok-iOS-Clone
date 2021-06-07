@@ -5,16 +5,6 @@
 //  Created by 김광준 on 2021/04/18.
 //
 
-struct SettingsSection {
-    let title: String
-    let options: [SettingsOption]
-}
-
-struct SettingsOption {
-    let title: String
-    let handler: (() -> Void)
-}
-
 // make Sign out ui -> make table view and make sign out button at tableview footer
 import SafariServices
 import UIKit
@@ -27,6 +17,10 @@ class SettingViewController: UIViewController {
             UITableViewCell.self,
             forCellReuseIdentifier: "cell"
         )
+        table.register(
+            SwitchTableViewCell.self,
+            forCellReuseIdentifier: SwitchTableViewCell.identifire
+        )
         return table
     }()
     
@@ -37,6 +31,12 @@ class SettingViewController: UIViewController {
         super.viewDidLoad()
         
         sections = [
+            SettingsSection(
+                title: "Preferences",
+                options: [
+                    SettingsOption(title: "Save Videos", handler: {})
+                ]
+            ),
             SettingsSection(
                 title: "Information",
                 options: [
@@ -162,6 +162,20 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let model = sections[indexPath.section].options[indexPath.row]
+        
+        // c.f : model title과 미리 만들어 둔 Setting Option's title이 다르면 원하는 Switch가 나타나지 않는다. 주의!!
+        if model.title == "Save Videos" {
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: SwitchTableViewCell.identifire,
+                for: indexPath
+            ) as? SwitchTableViewCell else {
+                return UITableViewCell()
+            }
+            cell.delegate = self
+            cell.configure(with: SwitchCellViewModel(title: model.title, isOn: UserDefaults.standard.bool(forKey: "save_video")))
+            return cell
+        }
+        
         let cell = tableView.dequeueReusableCell(
             withIdentifier: "cell",
             for: indexPath
@@ -181,4 +195,14 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sections[section].title
     }
+}
+
+extension SettingViewController: SwitchTableViewCellDelegate {
+    func switchTableViewCell(_ cell: SwitchTableViewCell, didUpdateSwitchTo isOn: Bool) {
+        print(isOn)
+        
+        UserDefaults.standard.setValue(isOn, forKey: "save_video")
+    }
+    
+    
 }

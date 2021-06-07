@@ -246,10 +246,15 @@ extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
             return
         }
         
-        // whem success recording print log
+        // when success recording print log
         print("Finished recording to url : \(outputFileURL.absoluteString)")
         
         recordedVideoURL = outputFileURL
+        
+        // save video code
+        if UserDefaults.standard.bool(forKey: "save_video") {
+            UISaveVideoAtPathToSavedPhotosAlbum(outputFileURL.path, nil, nil, nil)
+        }
         
         // caption for if user like recording video
         // and make next btn for the move to another stage

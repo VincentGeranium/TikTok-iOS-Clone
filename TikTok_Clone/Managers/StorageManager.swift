@@ -8,15 +8,24 @@
 import Foundation
 import FirebaseStorage
 
+/// Manager object that deals with firebase storage
 final class StorageManager {
+    /// Shared singleton instance
     public static let shared = StorageManager()
     
+    /// Storage bucket reference
     private let storageBucket = Storage.storage().reference()
     
+    /// Private constructor
     private init() {}
     
     // Public
     
+    /// Upload a new user video to firebase
+    /// - Parameters:
+    ///   - url: Local file url to video
+    ///   - fileName: Desired video file upload name
+    ///   - completion: Async callback result closure
     public func uploadVideo(from url: URL, fileName: String, completion: @escaping (Bool) -> Void) {
         // get user name
         guard let userName = UserDefaults.standard.string(forKey: "userName") else {
@@ -31,9 +40,13 @@ final class StorageManager {
         }
     }
     
-    // this function is upload actual image
-    // URL is point to the actual download url that new uploaded image
+    /// Upload new profile picture
+    /// - Parameters:
+    ///   - image: New image to upload
+    ///   - completion: Async callback of result
     public func uploadProfilePicture(with image: UIImage, completion: @escaping (Result<URL, Error>) -> Void) {
+        // this function is upload actual image
+        // URL is point to the actual download url that new uploaded image
         guard let userName = UserDefaults.standard.string(forKey: "userName") else {
             return
         }
@@ -65,7 +78,8 @@ final class StorageManager {
         }
     }
     
-    // this function is make uniquew video name
+    /// Generates a new file name, this function is make unique video name
+    /// - Returns: Return a unique generated file name
     public func generateVideoName() -> String {
         let uuidString = UUID().uuidString
         let number = Int.random(in: 0...1000)
@@ -74,7 +88,10 @@ final class StorageManager {
         return uuidString + "_\(number)_" + "\(unixTimestamp)" + ".mov"
     }
     
-    // this function is download video fileName from the firebase storage
+    /// Get download url of video post, this function is download video fileName from the firebase storage
+    /// - Parameters:
+    ///   - post: Post model to get url for
+    ///   - completion: Async callback resutl
     public func getDownloadURL(for post: PostModel, completion: @escaping (Result<URL, Error>) -> Void) {
         storageBucket.child(post.videoChildPath).downloadURL { url, error in
             if let error = error {

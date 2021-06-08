@@ -107,6 +107,9 @@ class CameraViewController: UIViewController {
             recordButton.toggle(for: .notRecording)
             // stop recording
             captureOutput.stopRecording()
+            // this haptic function is not aggressive vibration it's very common settle vibration
+            // when user done recording, play vibartion
+            HapticsManager.shared.vibrateForSelection()
         }
         else {
             // this url is path of video?
@@ -117,6 +120,9 @@ class CameraViewController: UIViewController {
             ).first else {
                 return
             }
+            // this haptic function is not aggressive vibration it's very common settle vibration
+            // when user not recording, play vibartion
+            HapticsManager.shared.vibrateForSelection()
             
             url.appendPathComponent("video.mov")
             
@@ -226,7 +232,7 @@ class CameraViewController: UIViewController {
     }
 }
 
-// extension for confirm AVCaptureFileOutputRecordingDelegate about video recording
+//MARK:- extension for confirm AVCaptureFileOutputRecordingDelegate about video recording
 extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
     func fileOutput(_ output: AVCaptureFileOutput, didFinishRecordingTo outputFileURL: URL, from connections: [AVCaptureConnection], error: Error?) {
         // ❗️ outputFileURL  = parameter mean's where the video from disk (The file URL of the file that is being written.)
@@ -281,6 +287,9 @@ extension CameraViewController: AVCaptureFileOutputRecordingDelegate {
         guard let url = recordedVideoURL else {
             return
         }
+        // this haptic function is not aggressive vibration it's very common settle vibration
+        // when user tap next button for write caption, play vibartion
+        HapticsManager.shared.vibrateForSelection()
         // push caption controller
         let vc = CaptionViewController(videoURL: url)
         navigationController?.pushViewController(vc, animated: true)

@@ -164,6 +164,10 @@ extension ProfileViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         // open the post
+        
+        // this haptic function is not aggressive vibration it's very common settle vibration
+        // when user tap post for open the post, play vibartion
+        HapticsManager.shared.vibrateForSelection()
             // get the post out of post collection here
         let post = posts[indexPath.row]
         
@@ -278,10 +282,10 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
 // confirm the protocol
 extension ProfileViewController: ProfileHeaderCollectionReusableViewDelegate {
     func profileHeaderCollectionReusableView(_ header: ProfileHeaderCollectionReusableView, didTapPrimaryButtonWith viewModel: ProfileHeaderViewModel) {
-//        guard let currentUserName = UserDefaults.standard.string(forKey: "userName") else {
-//            return
-//        }
-        
+
+        // this haptic function is not aggressive vibration it's very common settle vibration
+        // when user tap edit button, play vibartion
+        HapticsManager.shared.vibrateForSelection()
         // ‼️ have to check user name is lowercase or uppercase
         // when user name is lowercase or uppercae, different return value
         if isCurrentUserProfile {
@@ -325,6 +329,9 @@ extension ProfileViewController: ProfileHeaderCollectionReusableViewDelegate {
     }
     
     func profileHeaderCollectionReusableView(_ header: ProfileHeaderCollectionReusableView, didTapfollowersButtonWith viewModel: ProfileHeaderViewModel) {
+        // this haptic function is not aggressive vibration it's very common settle vibration
+        // when user tap follow button, play vibartion
+        HapticsManager.shared.vibrateForSelection()
         // setup originaly UserListViewController
         // type parameter is .followers and user parameter is give to current user of profile
         let vc = UserListViewController(type: .followers, user: user)
@@ -336,6 +343,9 @@ extension ProfileViewController: ProfileHeaderCollectionReusableViewDelegate {
     }
     
     func profileHeaderCollectionReusableView(_ header: ProfileHeaderCollectionReusableView, didTapfollowingButtonWith viewModel: ProfileHeaderViewModel) {
+        // this haptic function is not aggressive vibration it's very common settle vibration
+        // when user tap following button, play vibartion
+        HapticsManager.shared.vibrateForSelection()
         // setup originaly UserListViewController
         // type parameter is .following and user parameter is give to current user of profile
         let vc = UserListViewController(type: .following, user: user)
@@ -349,6 +359,9 @@ extension ProfileViewController: ProfileHeaderCollectionReusableViewDelegate {
         guard isCurrentUserProfile else {
             return
         }
+        // this haptic function is not aggressive vibration it's very common settle vibration
+        // did tap avatar function here
+        HapticsManager.shared.vibrateForSelection()
         
         let actionSheet = UIAlertController(title: "Profile Picture", message: nil, preferredStyle: .actionSheet)
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
@@ -400,6 +413,9 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
                 case .success(let downloadURL):
                     //cacheing the downlodUrl for userDefault
                     UserDefaults.standard.setValue(downloadURL.absoluteString, forKey: "profile_picture_url")
+                    // this haptic for success for update the profile image
+                        // this is success case haptic
+                    HapticsManager.shared.vibrate(for: .success)
                     
                     // reasign the user
                     // reload the actual collectionView for reasign the user
@@ -412,6 +428,9 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
                     strongSelf.collectionView.reloadData()
                     ProgressHUD.showSuccess("Updated!")
                 case .failure:
+                    // this haptic for failure for update the profile image
+                        // this is failure case haptic
+                    HapticsManager.shared.vibrate(for: .error)
                     ProgressHUD.showError("Failed to upload profile image")
                 }
             }

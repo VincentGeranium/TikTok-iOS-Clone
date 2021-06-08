@@ -324,22 +324,11 @@ extension ExploreViewController: UISearchBarDelegate {
     }
 }
 
-extension ExploreViewController: ExploreManagerDelegate {
-    func pushViewController(_ vc: UIViewController) {
-        //
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    func didTapHashtag(_ hashtag: String) {
-        // update used by search bar text
-        searchBar.text = hashtag
-        searchBar.becomeFirstResponder()
-    }
-}
 
-// MARK:- Section Layout
+
+// MARK:- extension about Section Layout
 extension ExploreViewController {
-    // MARK:- layout(for section:) method
+    // layout(for section:) method
     // layout argument is most important pices this
     // make model for which section in and how to layout
     // this function is make different each of section layout and return it
@@ -530,5 +519,25 @@ extension ExploreViewController {
             return sectionLayout
             
         }
+    }
+}
+
+// MARK:- extension about ExploreManagerDelegate
+extension ExploreViewController: ExploreManagerDelegate {
+    func pushViewController(_ vc: UIViewController) {
+        // this haptic function is not aggressive vibration it's very common settle vibration
+        // when user push viewController, play hpatic.
+        HapticsManager.shared.vibrateForSelection()
+        //
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    func didTapHashtag(_ hashtag: String) {
+        // this haptic function is not aggressive vibration it's very common settle vibration
+        // when user tap hashtag play haptic
+        HapticsManager.shared.vibrateForSelection()
+        // update used by search bar text
+        searchBar.text = hashtag
+        searchBar.becomeFirstResponder()
     }
 }

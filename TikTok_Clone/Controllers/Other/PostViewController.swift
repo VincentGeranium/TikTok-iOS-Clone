@@ -370,6 +370,9 @@ class PostViewController: UIViewController {
             model.isLikedByCurrentUsers = true
         }
         
+        // play vibrate when double tapped
+        HapticsManager.shared.vibrateForSelection()
+        
         // make animation when double tapped
         // .loction의 parameter인 uiview는 current view
         let touchPoint = gesture.location(in: view)

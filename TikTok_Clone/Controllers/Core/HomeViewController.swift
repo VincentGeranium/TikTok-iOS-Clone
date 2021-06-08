@@ -163,6 +163,7 @@ class HomeViewController: UIViewController {
     }
 }
 
+// MARK:- extension about UIPageViewControllerDataSource
 extension HomeViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         // get current user viewing
@@ -237,6 +238,7 @@ extension HomeViewController: UIPageViewControllerDataSource {
     
 }
 
+// MARK:- extension about UIScrollViewDelegate
 extension HomeViewController: UIScrollViewDelegate {
     // 유저가 segment를 눌러서 뷰를 change 하지 않고 스스로 view를 swipe하여 바꿀 경우 segment도 함께 변하개 하려는 code
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -250,6 +252,7 @@ extension HomeViewController: UIScrollViewDelegate {
     }
 }
 
+// MARK:- extension about PostViewControllerDelegate
 extension HomeViewController: PostViewControllerDelegate {
     func postViewController(_ vc: PostViewController, didTapCommentButtonFor post: PostModel) {
         /*
@@ -268,6 +271,9 @@ extension HomeViewController: PostViewControllerDelegate {
         } else {
             forYouPagingController.dataSource = nil
         }
+        
+        // this haptic function is not aggressive vibration it's very common settle vibration
+        HapticsManager.shared.vibrateForSelection()
         
         let vc = CommentsViewController(post: post)
         vc.delegate = self
@@ -289,6 +295,7 @@ extension HomeViewController: PostViewControllerDelegate {
     }
 }
 
+// MARK:- extension about CommentsViewControllerDelegate
 extension HomeViewController: CommentsViewControllerDelegate {
     func didCloseForComments(with viewController: CommentsViewController) {
         // 1. close comments with animation

@@ -146,6 +146,8 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
             //
             DispatchQueue.main.async {
                 if success {
+                    //‼️ c.f : haptic is UIView collection so make in the main thread.
+                    HapticsManager.shared.vibrate(for: .success)
                     print("Signed Up is Success")
                     
                     // dismiss when is success
@@ -170,6 +172,7 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
                     // <- end of own my code
                 }
                 else {
+                    HapticsManager.shared.vibrate(for: .error)
                     let alert = UIAlertController(
                         title: "Sign Up Failed",
                         message: "Something went wrong when trying to register. Please try again",

@@ -242,6 +242,9 @@ extension NotificationsViewController: NotificationsUserFollowTableViewCellDeleg
     }
     
     func notificationsUserFollowTableViewCell(_ cell: NotificationsUserFollowTableViewCell, didTapAvatarFor userName: String) {
+        // this haptic function is not aggressive vibration it's very common settle vibration
+        // when user tap avatar imageView for edit profile, play vibartion
+        HapticsManager.shared.vibrateForSelection()
         // get user object from database and push that profileViewController
         let vc = ProfileViewController(
             user: User(userName: userName,
@@ -274,6 +277,9 @@ extension NotificationsViewController: NotificationsPostCommentTableViewCellDele
 // if make like below code doesn't write code multiple times
 extension NotificationsViewController {
     func openPost(with identifier: String) {
+        // this haptic function is not aggressive vibration it's very common settle vibration
+        // when user open post, play vibartion
+        HapticsManager.shared.vibrateForSelection()
         // resolve the post from database
         // user is dummy data
         let vc = PostViewController(model: PostModel(identifier: identifier, user: User(userName: "Jun", profilePictureURL: nil, identifier: UUID().uuidString)))

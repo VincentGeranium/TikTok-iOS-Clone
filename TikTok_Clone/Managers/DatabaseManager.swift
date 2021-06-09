@@ -10,15 +10,24 @@
 import Foundation
 import FirebaseDatabase
 
+/// Manager to interact with Database
 final class DatabaseManager {
+    /// Singleton instance of DatabaseManager
     public static let shared = DatabaseManager()
     
+    /// Database reference
     private let database = Database.database().reference()
     
+    /// Private constructor
     private init() {}
     
     // Public
     
+    /// insert a new User
+    /// - Parameters:
+    ///   - email: User email
+    ///   - userName: User name
+    ///   - completion: Async result callback
     public func insertUser(with email: String, userName: String, completion: @escaping (Bool) -> Void) {
         /*
          schema of user data
@@ -72,6 +81,10 @@ final class DatabaseManager {
         
     }
     
+    /// Get User name for a given email
+    /// - Parameters:
+    ///   - email: Email to query
+    ///   - completion: Async result callback
     public func getUserName(for email: String, completion: @escaping (String?) -> Void) {
         // from database get child "users"
         // "users" is dictionary, so have to casting
@@ -90,6 +103,11 @@ final class DatabaseManager {
         }
     }
     
+    /// Insert new post
+    /// - Parameters:
+    ///   - fileName: File name to insert for
+    ///   - caption: Caption to insert for
+    ///   - completion: Async result callback
     public func insertPost(fileName: String, caption: String, completion: @escaping (Bool) -> Void) {
         guard let userName = UserDefaults.standard.string(forKey: "userName") else {
             completion(false)
@@ -143,19 +161,27 @@ final class DatabaseManager {
         }
     }
     
+    /// Get a current users notifications
+    /// - Parameter completion: Result callback of method
     public func getNotification(completion: @escaping([Notification]) -> Void) {
         completion(Notification.mockData())
     }
     
+    /// Mark a notification has hidden
+    /// - Parameters:
+    ///   - notificationID: Notification Indentifier
+    ///   - completion: Async result  callback
     public func markNotification(notificationID: String, completion: @escaping (Bool) -> Void) {
         completion(true)
     }
     
-    public func follow(userName: String, completion: @escaping (Bool) -> Void) {
-        completion(true)
-    }
+
     
     // highly reuseable function
+    /// Get posts for a given user
+    /// - Parameters:
+    ///   - user: User to get posts for
+    ///   - completion: Async result callback
     public func getPosts(for user: User, completion: @escaping ([PostModel]) -> Void) {
         // path가 정확한지 항상 firebase와 비교해야함.
         let path = "users/\(user.userName.lowercased())/posts"
@@ -183,6 +209,11 @@ final class DatabaseManager {
         }
     }
     
+    /// Get relationship status for current and target user
+    /// - Parameters:
+    ///   - user: Target user to check following status for
+    ///   - type: Type to be checked
+    ///   - completion: Async result callback
     public func getRelationships(
         for user: User,
         type: UserListViewController.ListType,
@@ -204,6 +235,11 @@ final class DatabaseManager {
         }
     }
     
+    /// Check if a relataionship is vaild
+    /// - Parameters:
+    ///   - user: Target user to check
+    ///   - type: Type to check
+    ///   - completion: Result callback
     public func isValidRelationship(
         for user: User,
         type: UserListViewController.ListType,
@@ -225,6 +261,11 @@ final class DatabaseManager {
         }
     }
     
+    /// Update follow status for user
+    /// - Parameters:
+    ///   - user: Target user
+    ///   - follow: Follow or Unfollow status
+    ///   - completion: Result callback
     public func updateRelationship(
         for user: User,
         follow: Bool,

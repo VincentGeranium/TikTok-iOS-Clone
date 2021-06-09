@@ -12,15 +12,15 @@ import UIKit
 
 /// Object that deals with haptic feeback
 final class HapticsManager {
-    
+
     /// Shared Singleton instance
     static let shared = HapticsManager()
-    
+
     /// Private constructor
     private init() {}
-    
-    //MARK:- Public
-    
+
+    // MARK: - Public
+
     /// Vibrate for light selection of items., this function is for when user select somthing.
     public func vibrateForSelection() {
         DispatchQueue.main.async {
@@ -29,8 +29,7 @@ final class HapticsManager {
             generator.selectionChanged()
         }
     }
-    
-    
+
     /// Trigger that feedback vibration based on event type, this function is for feedback to user
     /// - Parameter type: Success, Error, or Warning type
     public func vibrate(for type: UINotificationFeedbackGenerator.FeedbackType) {
@@ -40,5 +39,5 @@ final class HapticsManager {
             generator.notificationOccurred(type)
         }
     }
-    
+
 }

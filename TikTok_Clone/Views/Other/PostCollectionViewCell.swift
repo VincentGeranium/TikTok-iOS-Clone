@@ -10,14 +10,14 @@ import UIKit
 
 class PostCollectionViewCell: UICollectionViewCell {
     static let identifier = "PostCollectionViewCell"
-    
+
     private let imageView: UIImageView = {
         let imageView: UIImageView = UIImageView()
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
-    
+
     // The reason of the make init(frame: CGRect) gonna want override init with frame
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,43 +31,41 @@ class PostCollectionViewCell: UICollectionViewCell {
          The default value is false.
          */
         clipsToBounds = true
-        
+
         // added imageView in contentView
         contentView.addSubview(imageView)
-        
+
         contentView.backgroundColor = .secondarySystemBackground
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
-        //c.f : layoutSubviews() function is action to what subview we want on the cell
+        // c.f : layoutSubviews() function is action to what subview we want on the cell
         // in this PostCollectionViewCell we want subview on the cell is thumbnailImageView
-        
+
         // imageView as well as asign the cell
         imageView.frame = contentView.bounds
-        
+
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         // nil out the image
         imageView.image = nil
     }
-    
-    
-    // MARK:- func configure(with post: PostModel)
+
+    // MARK: - func configure(with post: PostModel)
     /*
      ‼️ this function is very heavy function
      if i can extend the app save a thumbnail at the time be upload
      that's more ideal
      so this function can be exceptable solution
      */
-    
+
     // configure function
     // this function configure with PostModel
     func configure(with post: PostModel) {
@@ -80,9 +78,9 @@ class PostCollectionViewCell: UICollectionViewCell {
                     // Generate thumbnail
                     // c.f : Generate thumbnail is happen through AVFoundation
                     let asset = AVAsset(url: url)
-                    
+
                     let generator = AVAssetImageGenerator(asset: asset)
-                    
+
                     do {
                         // cgImage pull out first Image from the video
                         // c.f : CG mean Core Graphic
@@ -90,7 +88,7 @@ class PostCollectionViewCell: UICollectionViewCell {
                         // generate actual thumbnail
                         self.imageView.image = UIImage(cgImage: cgImage)
                     } catch {
-                        
+
                     }
                 case .failure(let error):
                     print("failed to get download url : \(error)")

@@ -23,13 +23,13 @@ protocol ExploreManagerDelegate: AnyObject {
 
 /// Manager that handles explore view content
 final class ExploreManager {
-    
+
     /// Shared singleton instance
     static let shared = ExploreManager()
-    
+
     /// Delegate to notify of events
     weak var delegate: ExploreManagerDelegate?
-    
+
     /// Represents banner action type
     enum BannerAction: String {
         /// Post type
@@ -39,9 +39,9 @@ final class ExploreManager {
         /// Creator type
         case user
     }
-    
+
     // MARK: - Public
-    
+
     /// Gets explore data for banner
     /// - Returns: Return collection of models
     public func getExploreBanners() -> [ExploreBannerViewModel] {
@@ -64,7 +64,7 @@ final class ExploreManager {
          
          c.f : Explore 섹션의 Parsing JSON Data 강의 중 27:00 초 부터 보면 이미지가 나타나지 않고 debugging 하는 내용이 나타난다 참고하길.
          */
-        
+
         let result = exploreData.banners.compactMap({ model in
             ExploreBannerViewModel(
                 image: UIImage(named: model.image),
@@ -82,7 +82,7 @@ final class ExploreManager {
                     vc.title = action.rawValue.uppercased()
                     self?.delegate?.pushViewController(vc)
                 }
-                
+
                 switch action {
                 case .user:
                     // profile
@@ -99,7 +99,7 @@ final class ExploreManager {
         print("⭕️getExploreBanners Result⭕️ : \(result)")
         return result
     }
-    
+
     /// Gets explore data for creators
     /// - Returns: Resturn collection of models
     public func getExploreCreators() -> [ExploreUserViewModel] {
@@ -107,7 +107,7 @@ final class ExploreManager {
             print("⭕️ : exploreData is not working in getExploreCreators")
             return []
         }
-        
+
         let result = exploreData.creators.compactMap({ model in
             ExploreUserViewModel(
                 profilePicture: UIImage(named: model.image),
@@ -116,7 +116,7 @@ final class ExploreManager {
             ) { [weak self] in
                 DispatchQueue.main.async {
                     let userId = model.id
-                    //Fetch user object from firebase
+                    // Fetch user object from firebase
                     let vc = ProfileViewController(user: User(userName: "jun", profilePictureURL: nil, identifier: userId))
                     self?.delegate?.pushViewController(vc)
                 }
@@ -125,7 +125,7 @@ final class ExploreManager {
         print("⭕️getExploreCreators Result⭕️ : \(result)")
         return result
     }
-    
+
     /// Gets explore data for hastag
     /// - Returns: Resturn collection of models
     public func getExploreHashtags() -> [ExploreHashtagViewModel] {
@@ -133,12 +133,12 @@ final class ExploreManager {
             print("⭕️ : exploreData is not working in getExploreHashtags")
             return []
         }
-        
+
         /*
          result 내의 compactMap을 사용하는데 $0가 아닌 model을 사용하는 이유 : compactMap과 ExploreHashtagViewModel 클로저는 각기 다른 클로저이므로
          같은 object를 가리키기 위해서는 아래와 같이 해야 한다.
          */
-        
+
         let result = exploreData.hashtags.compactMap({ model in
             ExploreHashtagViewModel(
                 text: model.tag,
@@ -153,7 +153,7 @@ final class ExploreManager {
         print("⭕️getExploreHashtags Result⭕️ : \(result)")
         return result
     }
-    
+
     /// Gets explore data for trending posts
     /// - Returns: Return collection of models
     public func getExploreTrendingPosts() -> [ExplorePostViewModel] {
@@ -161,7 +161,7 @@ final class ExploreManager {
             print("⭕️ : exploreData is not working in getExploreTrendingPosts")
             return []
         }
-        
+
         let result = exploreData.trendingPosts.compactMap({ model in
             ExplorePostViewModel(
                 thumbnailImage: UIImage(named: model.image),
@@ -178,7 +178,7 @@ final class ExploreManager {
         print("⭕️getExploreTrendingPosts Result⭕️ : \(result)")
         return result
     }
-    
+
     /// Get explore data for recent posts
     /// - Returns: Return collection of models
     public func getExploreRecentPosts() -> [ExplorePostViewModel] {
@@ -186,7 +186,7 @@ final class ExploreManager {
             print("⭕️ : exploreData is not working in getExploreRecentPosts")
             return []
         }
-        
+
         let result = exploreData.recentPosts.compactMap({ model in
             ExplorePostViewModel(
                 thumbnailImage: UIImage(named: model.image),
@@ -203,7 +203,7 @@ final class ExploreManager {
         print("⭕️getExploreRecentPosts Result⭕️ : \(result)")
         return result
     }
-    
+
     /// Get explore data for popular posts
     /// - Returns: Return collection of models
     public func getExplorePopularPosts() -> [ExplorePostViewModel] {
@@ -211,7 +211,7 @@ final class ExploreManager {
             print("⭕️ : exploreData is not working in getPopularPosts")
             return []
         }
-        
+
         let result = exploreData.popular.compactMap({ model in
             ExplorePostViewModel(
                 thumbnailImage: UIImage(named: model.image),
@@ -228,13 +228,13 @@ final class ExploreManager {
         print("⭕️getPopularPosts Result⭕️ : \(result)")
         return result
     }
-    
+
     public func getExploreRecommended() -> [ExplorePostViewModel] {
         guard let exploreData = parseExploreData() else {
             print("⭕️ : exploreData is not working in getExploreRecommended")
             return []
         }
-        
+
         let result = exploreData.recommended.compactMap({ model in
             ExplorePostViewModel(
                 thumbnailImage: UIImage(named: model.image),
@@ -248,20 +248,20 @@ final class ExploreManager {
                 }
             }
         })
-        
+
         print("⭕️getExploreRecommended Result⭕️ : \(result)")
         return result
     }
-    
+
     // MARK: - Private
-    
+
     /// Parse explore JSON data
     /// - Returns: Return a optional response model
     private func parseExploreData() -> ExploreResponse? {
         guard let path = Bundle.main.path(forResource: "explore", ofType: "json") else {
             return nil
         }
-        
+
         do {
             let url = URL(fileURLWithPath: path)
             let data = try Data(contentsOf: url)
@@ -271,8 +271,7 @@ final class ExploreManager {
             )
             print("⭕️decodeResult of parseExploreData(JSON)⭕️ : \(decodeResult)")
             return decodeResult
-        }
-        catch {
+        } catch {
             print(error)
             return nil
         }

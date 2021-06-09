@@ -9,15 +9,15 @@ import Foundation
 
 struct PostModel {
     let identifier: String
-    
+
     // create user every time
     let user: User
-    
+
     var fileName: String = ""
     var caption: String = ""
-    
+
     var isLikedByCurrentUsers = false
-    
+
     static func mockModel() -> [PostModel] {
         var posts = [PostModel]()
         for _ in 0...100 {
@@ -34,8 +34,7 @@ struct PostModel {
         }
         return posts
     }
-    
-    
+
     /// Represents Database child path for this post in a given user node
     var videoChildPath: String {
         // This Computed property is Derive child path

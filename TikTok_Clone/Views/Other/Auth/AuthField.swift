@@ -13,13 +13,13 @@ import UIKit
  */
 
 class AuthField: UITextField {
-    
-    //enum is for textfield make differently by each of types
+
+    // enum is for textfield make differently by each of types
     enum FieldType {
         case userName
         case email
         case password
-        
+
         // computed property must have accessors specified
         var title: String {
             switch self {
@@ -29,27 +29,27 @@ class AuthField: UITextField {
             }
         }
     }
-    
+
     // fieldType have to immutable so, make constant property
     private let type: FieldType
-    
+
     init(type: FieldType) {
         self.type = type
         // this super.init is default
         super.init(frame: .zero)
-        
+
         // For basically configure UI
         configureUI()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
+
     private func configureUI() {
         // don't auto capitalize
         autocapitalizationType = .none
-        
+
         // make field dynamically. so, make Placeholder code like "placeholder = type.title"
         backgroundColor = .secondarySystemBackground
         layer.cornerRadius = 8
@@ -62,7 +62,7 @@ class AuthField: UITextField {
         returnKeyType = .done
         // 자동완성
         autocorrectionType = .no
-        
+
         // organize between each field type(password and email)
         if type == .password {
             // password textfield에 password를 user가 입력시 어떤 content type으로 configure 할 것인지 정하는 code
@@ -74,6 +74,5 @@ class AuthField: UITextField {
             textContentType = .emailAddress
         }
     }
-    
 
 }

@@ -9,20 +9,20 @@ import UIKit
 
 class ExplorePostCollectionViewCell: UICollectionViewCell {
     static let identifier: String = "ExplorePostCollectionViewCell"
-    
+
     private let thumbnailImageView: UIImageView = {
         let imageView: UIImageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         return imageView
     }()
-    
+
     private let captionLabel: UILabel = {
         let label: UILabel = UILabel()
         label.numberOfLines = 0
         return label
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.clipsToBounds = true
@@ -31,11 +31,11 @@ class ExplorePostCollectionViewCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 8
         contentView.layer.masksToBounds = true
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         let captionHeight = contentView.height/5
@@ -45,7 +45,7 @@ class ExplorePostCollectionViewCell: UICollectionViewCell {
             width: contentView.width,
             height: contentView.height - captionHeight
         )
-        
+
         captionLabel.frame = CGRect(
             x: 0,
             y: contentView.height - captionHeight,
@@ -53,16 +53,16 @@ class ExplorePostCollectionViewCell: UICollectionViewCell {
             height: captionHeight
         )
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         thumbnailImageView.image = nil
         captionLabel.text = nil
     }
-    
+
     func configure(with viewModel: ExplorePostViewModel) {
         thumbnailImageView.image = viewModel.thumbnailImage
         captionLabel.text = viewModel.caption
     }
-    
+
 }

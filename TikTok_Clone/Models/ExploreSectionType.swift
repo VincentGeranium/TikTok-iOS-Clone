@@ -17,7 +17,7 @@ enum ExploreSectionType: CaseIterable {
     case recommended
     case popular
     case new
-    
+
     // title와 연관돤 property
     // 각 case 별 title를 return한다.
     var title: String {
@@ -36,7 +36,7 @@ enum ExploreSectionType: CaseIterable {
             return "Popular"
         case .new:
             return "Recently Posted"
-        
+
         }
     }
 }

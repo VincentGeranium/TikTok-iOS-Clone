@@ -10,7 +10,7 @@ import UIKit
 class CommentTableViewCell: UITableViewCell {
     // cell indentifier
     static let identifier: String = "CommentTableViewCell"
-    
+
     private let avatarImageView: UIImageView = {
         let imageView: UIImageView = UIImageView()
         imageView.clipsToBounds = true
@@ -18,7 +18,7 @@ class CommentTableViewCell: UITableViewCell {
         imageView.layer.masksToBounds = true
         return imageView
     }()
-    
+
     // user comment
     private let commentLabel: UILabel = {
         let label: UILabel = UILabel()
@@ -26,16 +26,16 @@ class CommentTableViewCell: UITableViewCell {
         label.textColor = .label
         return label
     }()
-    
+
     private let dateLabel: UILabel = {
         let label: UILabel = UILabel()
         label.numberOfLines = 0
         label.textColor = .secondaryLabel
         return label
     }()
-    
-    // MARK:- init
-    
+
+    // MARK: - init
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         clipsToBounds = true
@@ -45,16 +45,16 @@ class CommentTableViewCell: UITableViewCell {
         contentView.addSubview(commentLabel)
         contentView.addSubview(dateLabel)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         commentLabel.sizeToFit()
         dateLabel.sizeToFit()
-        
+
         // Assign frames
         // layout actuall cell
         /*
@@ -67,7 +67,7 @@ class CommentTableViewCell: UITableViewCell {
             width: imageSize,
             height: imageSize
         )
-        
+
         let commentLabelHeight = min(contentView.height - dateLabel.top, commentLabel.height)
         commentLabel.frame = CGRect(
             x: avatarImageView.right + 10,
@@ -75,7 +75,7 @@ class CommentTableViewCell: UITableViewCell {
             width: contentView.width - avatarImageView.right - 10,
             height: commentLabelHeight
         )
-        
+
         dateLabel.frame = CGRect(
             x: avatarImageView.right + 10,
             y: commentLabel.bottom,
@@ -83,7 +83,7 @@ class CommentTableViewCell: UITableViewCell {
             height: dateLabel.height
         )
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         // for reset
@@ -91,17 +91,17 @@ class CommentTableViewCell: UITableViewCell {
         dateLabel.text = nil
         avatarImageView.image = nil
     }
-    
+
     // for configure comment
     public func configure(with model: PostComment) {
         commentLabel.text = model.text
         dateLabel.text = .date(with: model.date)
-        
+
         if let url = model.user.profilePictureURL {
             print(url)
         } else {
             avatarImageView.image = UIImage(systemName: "person.circle")
         }
-        
+
     }
 }

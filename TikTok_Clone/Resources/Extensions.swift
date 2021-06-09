@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 
-
 /*
  This extension is help to make view more easily
  handy to make views
@@ -18,27 +17,27 @@ extension UIView {
     var width: CGFloat {
         return frame.size.width
     }
-    
+
     var height: CGFloat {
         return frame.size.height
     }
-    
+
     var left: CGFloat {
         return frame.origin.x
     }
-    
+
     var right: CGFloat {
         return left + width
     }
-    
+
     var top: CGFloat {
         return frame.origin.y
     }
-    
+
     var bottom: CGFloat {
         return top + height
     }
-    
+
 }
 
 extension DateFormatter {
@@ -56,6 +55,6 @@ extension DateFormatter {
 extension String {
     // Date를 String으로 format하기 위한 extension
     static func date(with date: Date) -> String {
-        return DateFormatter.defaultFormatter.string(from: date)        
+        return DateFormatter.defaultFormatter.string(from: date)
     }
 }

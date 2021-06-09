@@ -20,7 +20,7 @@ class NotificationsViewController: UIViewController {
         label.isHidden = true
         return label
     }()
-    
+
     // explore different type of cell and tableView
     private let tableView: UITableView = {
         let tableView: UITableView = UITableView()
@@ -43,7 +43,7 @@ class NotificationsViewController: UIViewController {
         )
         return tableView
     }()
-    
+
     // make spinner used apple own framework
     // but at CaptionVC make spinner useing ProgressHUD(another framework, not apple)
     private let spinner: UIActivityIndicatorView = {
@@ -52,10 +52,10 @@ class NotificationsViewController: UIViewController {
         spinner.startAnimating()
         return spinner
     }()
-    
+
     var notifications = [Notification]()
-    
-    // MARK:- Lifecycle
+
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(tableView)
@@ -63,23 +63,23 @@ class NotificationsViewController: UIViewController {
         view.addSubview(spinner
         )
         self.view.backgroundColor = .systemBackground
-        
+
         tableView.delegate = self
         tableView.dataSource = self
-        
+
         // make refreshControl for pull to refresh
         let control = UIRefreshControl()
         control.addTarget(self, action: #selector(didPullToRefresh(_:)), for: .valueChanged)
         tableView.refreshControl = control
-        
+
         // get all result(label and tableview)
         fetchNotifications()
     }
-    
+
     @objc func didPullToRefresh(_ sender: UIRefreshControl) {
         // actual tableview refresh data code
         sender.beginRefreshing()
-        
+
         // reset data
         DatabaseManager.shared.getNotification { [weak self] notification in
             DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
@@ -89,21 +89,21 @@ class NotificationsViewController: UIViewController {
             }
         }
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds
-        
+
         noNotificationLabel.frame = CGRect(x: 0, y: 0, width: 200, height: 200)
         // for calculate??
         noNotificationLabel.center = view.center
-        
+
         spinner.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
         spinner.center = view.center
     }
-    
-    // MARK:- Functions
-    
+
+    // MARK: - Functions
+
     // why fetch??
         // -> for show spinner to user.
         // user want to know about progressing.
@@ -117,22 +117,19 @@ class NotificationsViewController: UIViewController {
             }
         }
     }
-    
+
     func updateUI() {
         if notifications.isEmpty {
             noNotificationLabel.isHidden = false
             tableView.isHidden = true
-        }
-        else {
+        } else {
             noNotificationLabel.isHidden = true
             tableView.isHidden = false
         }
         tableView.reloadData()
     }
-    
-    
-}
 
+}
 
 // in the lecture delegate and datasource are not make used extension but i made used by extension
 extension NotificationsViewController: UITableViewDelegate, UITableViewDataSource {
@@ -140,20 +137,20 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return notifications.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // get the actual model out
         // indexpath.row = position
         let model = notifications[indexPath.row]
-        
+
         // actually make to different type of cell
         // make unique cell
         switch model.type {
-        
+
         case .postLike(let postName):
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: NotificationsPostLikeTableViewCell.identifier,
@@ -195,23 +192,23 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
             return cell
         }
     }
-    
+
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
-    
+
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .delete
     }
-    
+
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         guard editingStyle == .delete else {
             return
         }
-        
+
         let model = notifications[indexPath.row]
         model.isHidden = true
-        
+
         // mark database to delete the notification,
         DatabaseManager.shared.markNotification(notificationID: model.identifier) { [weak self] success in
             DispatchQueue.main.async {
@@ -225,7 +222,7 @@ extension NotificationsViewController: UITableViewDelegate, UITableViewDataSourc
             }
         }
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
     }
@@ -248,7 +245,7 @@ extension NotificationsViewController: NotificationsUserFollowTableViewCellDeleg
             }
         }
     }
-    
+
     func notificationsUserFollowTableViewCell(_ cell: NotificationsUserFollowTableViewCell, didTapAvatarFor userName: String) {
         // this haptic function is not aggressive vibration it's very common settle vibration
         // when user tap avatar imageView for edit profile, play vibartion
@@ -263,7 +260,6 @@ extension NotificationsViewController: NotificationsUserFollowTableViewCellDeleg
         navigationController?.pushViewController(vc, animated: true)
     }
 }
-
 
 // extension for notificationsPostLikeTableViewCellDelegate
 extension NotificationsViewController: NotificationsPostLikeTableViewCellDelegate {
@@ -295,6 +291,6 @@ extension NotificationsViewController {
         vc.title = "Video"
         // push this VC on to the Stack
         navigationController?.pushViewController(vc, animated: true)
-        
+
     }
 }

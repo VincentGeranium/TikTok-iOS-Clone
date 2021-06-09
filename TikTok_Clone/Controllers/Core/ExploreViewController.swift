@@ -11,7 +11,7 @@ import UIKit
 // make colletcionView but different layout section
 
 class ExploreViewController: UIViewController {
-    
+
     // make property searchBar global space
     private let searchBar: UISearchBar = {
         let searchBar: UISearchBar = UISearchBar()
@@ -20,11 +20,11 @@ class ExploreViewController: UIViewController {
         searchBar.layer.cornerRadius = 8
         return searchBar
     }()
-    
+
     // collection section
     // ExploreSection Object
     private var sections = [ExploreSection]()
-    
+
     /*
      🛑
      옵셔널인 이유
@@ -34,7 +34,6 @@ class ExploreViewController: UIViewController {
     // primary view for collectionView
     // the drive explore page
     private var colletcionView: UICollectionView?
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,26 +43,26 @@ class ExploreViewController: UIViewController {
         setUpSearchBar()
         setUpCollectionView()
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         // for setuo colletcionView frame
         colletcionView?.frame = view.bounds
     }
-    
-    // MARK:-  SetUp SearchBar
+
+    // MARK: - SetUp SearchBar
     func setUpSearchBar() {
-        //Attach in view used by navigationItem, Display in view
+        // Attach in view used by navigationItem, Display in view
         navigationItem.titleView = searchBar
         searchBar.delegate = self
     }
-    
-    // MARK:- Configure Models // 29:30
+
+    // MARK: - Configure Models // 29:30
     private func configureModels() {
         // configure the each sections
-//15:30        // configure the each sections
-        
-// MARK:- Creat all model of cases
+// 15:30        // configure the each sections
+
+// MARK: - Creat all model of cases
         // Banner
         sections.append(
             ExploreSection(
@@ -74,7 +73,7 @@ class ExploreViewController: UIViewController {
                 })
             )
         )
-        
+
         // Trending Posts
         sections.append(
             ExploreSection(
@@ -84,7 +83,7 @@ class ExploreViewController: UIViewController {
                 })
             )
         )
-        
+
         // Users
         sections.append(
             ExploreSection(
@@ -94,7 +93,7 @@ class ExploreViewController: UIViewController {
                 })
             )
         )
-        
+
         // Trending hashtags
         sections.append(
             ExploreSection(
@@ -104,7 +103,7 @@ class ExploreViewController: UIViewController {
                 })
             )
         )
-        
+
         // Popular
         sections.append(
             ExploreSection(
@@ -114,7 +113,7 @@ class ExploreViewController: UIViewController {
                 })
             )
         )
-        
+
         // new
         sections.append(
             ExploreSection(
@@ -125,16 +124,16 @@ class ExploreViewController: UIViewController {
             )
         )
     }
-    
-    // MARK:- SetUp CollectionViewLayout, setUpCollectionView method
+
+    // MARK: - SetUp CollectionViewLayout, setUpCollectionView method
     func setUpCollectionView() {
         let layout: UICollectionViewCompositionalLayout = UICollectionViewCompositionalLayout { section, _ -> NSCollectionLayoutSection? in
             // return layout each every section
             // make dynamically
             return self.layout(for: section)
-            
+
         }
-        
+
         let collectionView = UICollectionView(
             frame: .zero,
             // collectionViewLayout에서 가장 중요한 parameter
@@ -145,43 +144,42 @@ class ExploreViewController: UIViewController {
             UICollectionViewCell.self,
             forCellWithReuseIdentifier: "cell"
         )
-        
+
         // collectionView regist the ExploreBannerCollectionViewCell.
         collectionView.register(
             ExploreBannerCollectionViewCell.self,
             forCellWithReuseIdentifier: ExploreBannerCollectionViewCell.identifier
         )
-        
+
         // collectionView regist the ExploreUserCollectionViewCell
         collectionView.register(
             ExploreUserCollectionViewCell.self,
             forCellWithReuseIdentifier: ExploreUserCollectionViewCell.identifier
         )
-        
+
         // collectionView regist the ExploreHashtagCollectionViewCell.
         collectionView.register(
             ExploreHashtagCollectionViewCell.self,
             forCellWithReuseIdentifier: ExploreHashtagCollectionViewCell.idetifier
         )
-        
+
         // collectionView regist the ExplorePostCollectionViewCell
         collectionView.register(
             ExplorePostCollectionViewCell.self,
             forCellWithReuseIdentifier: ExplorePostCollectionViewCell.identifier
         )
-        
-        
+
         collectionView.backgroundColor = .systemBackground
         collectionView.delegate = self
         collectionView.dataSource = self
-        
+
         view.addSubview(collectionView)
-        
+
         self.colletcionView = collectionView
     }
 }
 
-// MARK:- extension
+// MARK: - extension
 // colletcionView를 위한 extenstion
 extension ExploreViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -197,18 +195,18 @@ extension ExploreViewController: UICollectionViewDelegate, UICollectionViewDataS
         // sections의 주어진 section의 cell 갯수 만큼 반환
         return sections[section].cells.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         /*
          how we gonna be return differents cells, each of cell types
          in this case model is each sections of cells, actually enum value
          so, make switch statment
          */
-        
+
         // model for the cell
         // ExploreSection을 가리키고 -> 그 안에 cells을 가리키고 -> 마지막은 ExploreCell enum을 가리킨다.
         let model = sections[indexPath.section].cells[indexPath.row]
-        
+
         switch model {
         // bring all differents types here (banner, post, hashtag, user)
         // dequeue all this differents cells
@@ -224,7 +222,7 @@ extension ExploreViewController: UICollectionViewDelegate, UICollectionViewDataS
             }
             cell.configure(with: viewModel)
             return cell
-            
+
         case .post(let viewModel):
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ExplorePostCollectionViewCell.identifier,
@@ -237,7 +235,7 @@ extension ExploreViewController: UICollectionViewDelegate, UICollectionViewDataS
             }
             cell.configure(with: viewModel)
             return cell
-            
+
         case .hashtag(let viewModel):
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ExploreHashtagCollectionViewCell.idetifier,
@@ -250,7 +248,7 @@ extension ExploreViewController: UICollectionViewDelegate, UICollectionViewDataS
             }
             cell.configure(with: viewModel)
             return cell
-            
+
         case .user(let viewModel):
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ExploreUserCollectionViewCell.identifier,
@@ -264,26 +262,25 @@ extension ExploreViewController: UICollectionViewDelegate, UICollectionViewDataS
             cell.configure(with: viewModel)
             return cell
         }
-        
-        
+
         // actual return the colletcion view item
         let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: "cell",
             for: indexPath
         )
-        
+
         // this backgroundColor is for developing, test color
         cell.backgroundColor = .red
         return cell
     }
-    
+
     // collectionView의 cell을 선택시 진행되는 코드.
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         HapticsManager.shared.vibrateForSelection()
-        
+
         let model = sections[indexPath.section].cells[indexPath.row]
-        
+
         // handler는 viewController 가 push 된 뒤에 실행이된다.
         switch model {
         case .banner(viewModel: let viewModel):
@@ -296,8 +293,7 @@ extension ExploreViewController: UICollectionViewDelegate, UICollectionViewDataS
             viewModel.handler()
         }
     }
-    
-    
+
 }
 
 // serchBar를 위한 extension
@@ -306,16 +302,15 @@ extension ExploreViewController: UISearchBarDelegate {
         // make Cancel button and keyboard dismissed + all text is deleted
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Cancel", style: .done, target: self, action: #selector(didTapCancel))
     }
-    
+
     @objc private func didTapCancel() {
         // Cancel button delete code
         navigationItem.rightBarButtonItem = nil
-        
+
         searchBar.text = nil
         searchBar.resignFirstResponder()
     }
-    
-    
+
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         // Cancel button delete code
         navigationItem.rightBarButtonItem = nil
@@ -324,9 +319,7 @@ extension ExploreViewController: UISearchBarDelegate {
     }
 }
 
-
-
-// MARK:- extension about Section Layout
+// MARK: - extension about Section Layout
 extension ExploreViewController {
     // layout(for section:) method
     // layout argument is most important pices this
@@ -349,10 +342,10 @@ extension ExploreViewController {
                     heightDimension: .fractionalHeight(1)
                 )
             )
-            
+
             // apply contentInsets of item
             item.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4)
-            
+
             // 2. Group (items are going)
             // cell will be scroller so selected horizontal(layoutSize:, subitems:) method
             let group = NSCollectionLayoutGroup.horizontal(
@@ -362,15 +355,15 @@ extension ExploreViewController {
                 ),
                 subitems: [item]
             )
-            
+
             // 3. Section layout
             let sectionLayout = NSCollectionLayoutSection(group: group)
             // sectionLayout을 horizontal하게 scroll 하기 위한 method
             sectionLayout.orthogonalScrollingBehavior = .groupPaging
-            
+
             // 4. Return set section layout
             return sectionLayout
-            
+
         case .users:
             // 1. Item
             // three different way to various of component
@@ -383,10 +376,10 @@ extension ExploreViewController {
                     heightDimension: .fractionalHeight(1)
                 )
             )
-            
+
             // apply contentInsets of item
             item.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4)
-            
+
             // 2. Group (items are going)
             // cell will be scroller so selected horizontal(layoutSize:, subitems:) method
             let group = NSCollectionLayoutGroup.horizontal(
@@ -396,15 +389,15 @@ extension ExploreViewController {
                 ),
                 subitems: [item]
             )
-            
+
             // 3. Section layout
             let sectionLayout = NSCollectionLayoutSection(group: group)
             // sectionLayout을 horizontal하게 scroll 하기 위한 method
             sectionLayout.orthogonalScrollingBehavior = .continuous
-            
+
             // 4. Return set section layout
             return sectionLayout
-            
+
         // trending hastag layout is make vertical three group of time
         case .trendingHashtags:
             // 1. Item
@@ -418,10 +411,10 @@ extension ExploreViewController {
                     heightDimension: .fractionalHeight(1)
                 )
             )
-            
+
             // apply contentInsets of item
             item.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4)
-            
+
             // 2. Group (items are going)
             // cell will be scroller so selected horizontal(layoutSize:, subitems:) method
             let verticalGroup = NSCollectionLayoutGroup.vertical(
@@ -431,13 +424,13 @@ extension ExploreViewController {
                 ),
                 subitems: [item]
             )
-            
+
             // 3. Section layout
             let sectionLayout = NSCollectionLayoutSection(group: verticalGroup)
-            
+
             // 4. Return set section layout
             return sectionLayout
-            
+
         // trendind post ,popular, recommended and new is same style layout so code is like this used by switch statement
         case .trendingPosts, .recommended, .new:
             // 1. Item
@@ -451,10 +444,10 @@ extension ExploreViewController {
                     heightDimension: .fractionalHeight(1)
                 )
             )
-            
+
             // apply contentInsets of item
             item.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4)
-            
+
             // 2. Group (items are going)
             // cell will be scroller so selected horizontal(layoutSize:, subitems:) method
             let verticalGroup = NSCollectionLayoutGroup.vertical(
@@ -465,7 +458,7 @@ extension ExploreViewController {
                 subitem: item,
                 count: 2
             )
-            
+
             let group = NSCollectionLayoutGroup.horizontal(
                 layoutSize: NSCollectionLayoutSize(
                     widthDimension: .absolute(110),
@@ -473,15 +466,15 @@ extension ExploreViewController {
                 ),
                 subitems: [verticalGroup]
             )
-            
+
             // 3. Section layout
             let sectionLayout = NSCollectionLayoutSection(group: group)
             // sectionLayout을 horizontal하게 scroll 하기 위한 method
             sectionLayout.orthogonalScrollingBehavior = .continuous
-            
+
             // 4. Return set section layout
             return sectionLayout
-            
+
         case .popular:
             // 1. Item
             // three different way to various of component
@@ -494,14 +487,13 @@ extension ExploreViewController {
                     heightDimension: .fractionalHeight(1)
                 )
             )
-            
+
             // apply contentInsets of item
             item.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4)
-            
+
             // 2. Group (items are going)
             // cell will be scroller so selected horizontal(layoutSize:, subitems:) method
-            
-            
+
             let group = NSCollectionLayoutGroup.horizontal(
                 layoutSize: NSCollectionLayoutSize(
                     widthDimension: .absolute(110),
@@ -509,20 +501,20 @@ extension ExploreViewController {
                 ),
                 subitems: [item]
             )
-            
+
             // 3. Section layout
             let sectionLayout = NSCollectionLayoutSection(group: group)
             // sectionLayout을 horizontal하게 scroll 하기 위한 method
             sectionLayout.orthogonalScrollingBehavior = .continuous
-            
+
             // 4. Return set section layout
             return sectionLayout
-            
+
         }
     }
 }
 
-// MARK:- extension about ExploreManagerDelegate
+// MARK: - extension about ExploreManagerDelegate
 extension ExploreViewController: ExploreManagerDelegate {
     func pushViewController(_ vc: UIViewController) {
         // this haptic function is not aggressive vibration it's very common settle vibration
@@ -531,7 +523,7 @@ extension ExploreViewController: ExploreManagerDelegate {
         //
         navigationController?.pushViewController(vc, animated: true)
     }
-    
+
     func didTapHashtag(_ hashtag: String) {
         // this haptic function is not aggressive vibration it's very common settle vibration
         // when user tap hashtag play haptic

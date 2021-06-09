@@ -14,14 +14,14 @@ import ProgressHUD
 import UIKit
 
 class ProfileViewController: UIViewController {
-    
+
     // two type of picker
     // make by enum
     enum PicturePickerType {
         case camera
         case photoLibrary
     }
-    
+
     // this property for user is current user confirm
     // when checked the user who sign into that function is used over and over(one of the base)
     // so make computed property
@@ -33,11 +33,10 @@ class ProfileViewController: UIViewController {
         }
         return false
     }
-    
-    
+
     // local property
     var user: User
-    
+
     // Primary view is collectionView
     private let collectionView: UICollectionView = {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
@@ -56,31 +55,30 @@ class ProfileViewController: UIViewController {
         )
         return collection
     }()
-    
-    // MARK:- initialize posts property.
+
+    // MARK: - initialize posts property.
         // init by [PostModel] -> PostModel array
     private var posts = [PostModel]()
-    
-    // MARK:- initialize followers and following property.
+
+    // MARK: - initialize followers and following property.
         // init by [String] -> String array
     private var following = [String]()
     private var followers = [String]()
-    
+
     private var isFollower: Bool = false
-    
-    
-    // MARK:- Init
+
+    // MARK: - Init
     // 각기 다른 유저의 데이터마다 새로운 vc가 아닌 재사용 vc를 위한 logic
     init(user: User) {
         self.user = user
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
-    // MARK:- Lifecycle
+
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         title = user.userName.uppercased()
@@ -88,7 +86,7 @@ class ProfileViewController: UIViewController {
         view.addSubview(collectionView)
         collectionView.delegate = self
         collectionView.dataSource = self
-        
+
         let userName = UserDefaults.standard.string(forKey: "userName")?.uppercased() ?? "ME"
         if title == userName {
             navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -106,10 +104,10 @@ class ProfileViewController: UIViewController {
         // fetchPost method
         fetchPosts()
     }
-    
+
     func fetchPosts() {
         // get current user
-    
+
         DatabaseManager.shared.getPosts(for: user) { [weak self] postsModel in
             DispatchQueue.main.async {
                 self?.posts = postsModel
@@ -117,12 +115,12 @@ class ProfileViewController: UIViewController {
             }
         }
     }
-    
+
     @objc private func didTapSettings() {
         let vc = SettingViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         // collectionView frame have to entire view, so make like this code
@@ -144,7 +142,7 @@ extension ProfileViewController: UICollectionViewDataSource {
         // number of post
         return posts.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         // enth
         let postModel = posts[indexPath.row]
@@ -159,40 +157,40 @@ extension ProfileViewController: UICollectionViewDataSource {
         cell.configure(with: postModel)
         return cell
     }
-    
+
     // anonymous somebody tapping post
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         // open the post
-        
+
         // this haptic function is not aggressive vibration it's very common settle vibration
         // when user tap post for open the post, play vibartion
         HapticsManager.shared.vibrateForSelection()
             // get the post out of post collection here
         let post = posts[indexPath.row]
-        
+
         // create postVC and passing in the Model for the post
         let vc = PostViewController(model: post)
         vc.delegate = self
         vc.title = "Video"
         navigationController?.pushViewController(vc, animated: true)
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width: CGFloat = (view.width - 12) / 3
         return CGSize(width: width, height: width * 1.5)
     }
-    
+
     // line spacing
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 1
     }
-    
+
     // lter item spacing
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 1
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         guard kind == UICollectionView.elementKindSectionHeader,
               let header = collectionView.dequeueReusableSupplementaryView(
@@ -202,18 +200,18 @@ extension ProfileViewController: UICollectionViewDataSource {
               ) as? ProfileHeaderCollectionReusableView else {
             return UICollectionReusableView()
         }
-        
+
         header.delegate = self
-        
-        // MARK:- DispatchGroup
+
+        // MARK: - DispatchGroup
             // concurrent, make two request by notify block -> network call, syncronized
         let group = DispatchGroup()
-        
+
         // action twice (followers and following)
         group.enter()
         group.enter()
         group.enter()
-        
+
         // setup getRelationships function call to the databaseManager
             // [weak self] is for retain cycle (don't want leak memory)
             // c.f : all of object have default value by strong.
@@ -226,7 +224,7 @@ extension ProfileViewController: UICollectionViewDataSource {
             // retain these users
             self?.followers = followers
         }
-        
+
         DatabaseManager.shared.getRelationships(for: user, type: .following) { [weak self] following in
             // defer is closure
                 // defer is acting when before finished function
@@ -236,9 +234,9 @@ extension ProfileViewController: UICollectionViewDataSource {
             // retain these users
             self?.following = following
         }
-        
+
         // Extend DispatchGroup here
-        
+
         // user parameter value is who own this profile
         DatabaseManager.shared.isValidRelationship(
             for: user,
@@ -249,7 +247,7 @@ extension ProfileViewController: UICollectionViewDataSource {
             }
             self?.isFollower = isFollower
         }
-        
+
         // most important part of dispatch group is notify
         group.notify(queue: .main) {
             // excute after all this closure done?
@@ -260,23 +258,22 @@ extension ProfileViewController: UICollectionViewDataSource {
                 // if "isFollowing" is false show to follow button and if is true show unfollow button
                 isFollowing: self.isCurrentUserProfile ? nil : self.isFollower
             )
-            
+
             header.configure(with: viewModel)
-            
+
         }
 
-        
         return header
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: view.width, height: 300)
     }
-    
+
 }
 
 extension ProfileViewController: UICollectionViewDelegateFlowLayout {
-    
+
 }
 
 // confirm the protocol
@@ -294,8 +291,7 @@ extension ProfileViewController: ProfileHeaderCollectionReusableViewDelegate {
             let vc = EditProfileViewController()
             let naviVC = UINavigationController(rootViewController: vc)
             self.present(naviVC, animated: true, completion: nil)
-        }
-        else {
+        } else {
             // Follow or unfollow current users profile that we are viewing
             if self.isFollower {
                 // Unfollower
@@ -305,13 +301,11 @@ extension ProfileViewController: ProfileHeaderCollectionReusableViewDelegate {
                             self?.isFollower = false
                             self?.collectionView.reloadData()
                         }
-                    }
-                    else {
+                    } else {
                         // if not success
                     }
                 }
-            }
-            else {
+            } else {
                 // Follower
                 DatabaseManager.shared.updateRelationship(for: user, follow: true) { [weak self] success in
                     if success {
@@ -319,15 +313,14 @@ extension ProfileViewController: ProfileHeaderCollectionReusableViewDelegate {
                             self?.isFollower = true
                             self?.collectionView.reloadData()
                         }
-                    }
-                    else {
+                    } else {
                         // if not success
                     }
                 }
             }
         }
     }
-    
+
     func profileHeaderCollectionReusableView(_ header: ProfileHeaderCollectionReusableView, didTapfollowersButtonWith viewModel: ProfileHeaderViewModel) {
         // this haptic function is not aggressive vibration it's very common settle vibration
         // when user tap follow button, play vibartion
@@ -338,10 +331,9 @@ extension ProfileViewController: ProfileHeaderCollectionReusableViewDelegate {
         vc.users = followers
         // push viewcontroller on to the stack with push call
         navigationController?.pushViewController(vc, animated: true)
-        
-        
+
     }
-    
+
     func profileHeaderCollectionReusableView(_ header: ProfileHeaderCollectionReusableView, didTapfollowingButtonWith viewModel: ProfileHeaderViewModel) {
         // this haptic function is not aggressive vibration it's very common settle vibration
         // when user tap following button, play vibartion
@@ -352,9 +344,9 @@ extension ProfileViewController: ProfileHeaderCollectionReusableViewDelegate {
         vc.users = following
         // push viewcontroller on to the stack with push call
         navigationController?.pushViewController(vc, animated: true)
-        
+
     }
-    
+
     func profileHeaderCollectionReusableView(_ header: ProfileHeaderCollectionReusableView, didTapAvatarFor viewModel: ProfileHeaderViewModel) {
         guard isCurrentUserProfile else {
             return
@@ -362,7 +354,7 @@ extension ProfileViewController: ProfileHeaderCollectionReusableViewDelegate {
         // this haptic function is not aggressive vibration it's very common settle vibration
         // did tap avatar function here
         HapticsManager.shared.vibrateForSelection()
-        
+
         let actionSheet = UIAlertController(title: "Profile Picture", message: nil, preferredStyle: .actionSheet)
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         actionSheet.addAction(UIAlertAction(title: "Camera", style: .default, handler: { _ in
@@ -373,10 +365,10 @@ extension ProfileViewController: ProfileHeaderCollectionReusableViewDelegate {
         actionSheet.addAction(UIAlertAction(title: "Photo Library", style: .default, handler: { _ in
             self.presentProfilePicturePicker(type: .photoLibrary)
         }))
-        
+
         present(actionSheet, animated: true, completion: nil)
     }
-    
+
     func presentProfilePicturePicker(type: PicturePickerType) {
         let picker = UIImagePickerController()
         picker.sourceType = type == .camera ? .camera : .photoLibrary
@@ -393,13 +385,13 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         picker.dismiss(animated: true, completion: nil)
         guard let image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else {
             return
         }
-        
+
         // progress show, this is not apple own framework
         ProgressHUD.show("Uploading")
         // upload and uopdate UI
@@ -411,12 +403,12 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
                 }
                 switch result {
                 case .success(let downloadURL):
-                    //cacheing the downlodUrl for userDefault
+                    // cacheing the downlodUrl for userDefault
                     UserDefaults.standard.setValue(downloadURL.absoluteString, forKey: "profile_picture_url")
                     // this haptic for success for update the profile image
                         // this is success case haptic
                     HapticsManager.shared.vibrate(for: .success)
-                    
+
                     // reasign the user
                     // reload the actual collectionView for reasign the user
                     // recreate the header -> show new uploaded picture
@@ -434,7 +426,7 @@ extension ProfileViewController: UIImagePickerControllerDelegate, UINavigationCo
                     ProgressHUD.showError("Failed to upload profile image")
                 }
             }
-            
+
         }
     }
 }
@@ -444,10 +436,9 @@ extension ProfileViewController: PostViewControllerDelegate {
     func postViewController(_ vc: PostViewController, didTapCommentButtonFor post: PostModel) {
         // present comments
     }
-    
+
     func postViewController(_ vc: PostViewController, didTapProfileButtonFor post: PostModel) {
         // push another profile
     }
-    
-    
+
 }

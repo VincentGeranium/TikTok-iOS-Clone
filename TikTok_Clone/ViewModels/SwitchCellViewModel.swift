@@ -13,7 +13,7 @@ struct SwitchCellViewModel {
         // 2. isOn
     let title: String
     var isOn: Bool
-    
+
     // mutating func
         // reason of make mutation function -> will gonna mutating these value type the struct in place
     mutating func setOn(_ on: Bool) {

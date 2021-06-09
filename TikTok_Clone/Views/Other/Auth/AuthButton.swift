@@ -17,7 +17,7 @@ class AuthButton: UIButton {
         case signIn
         case signUp
         case plain
-        
+
         var title: String {
             switch self {
             case .signIn: return "Sign In"
@@ -26,9 +26,9 @@ class AuthButton: UIButton {
             }
         }
     }
-    
+
     private let type: ButtonType
-    
+
     init(type: ButtonType, title: String?) {
         self.type = type
         // 왜 super.init(frame: .zero)의 frame를 .zero를 주었는지 공부, 이해 필요.
@@ -40,16 +40,16 @@ class AuthButton: UIButton {
         }
         configureUI()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
+
     private func configureUI() {
         if type != .plain {
             setTitle(type.title, for: .normal)
         }
-        
+
         switch type {
         case .signIn: backgroundColor = .systemBlue
         case .signUp: backgroundColor = .systemGreen

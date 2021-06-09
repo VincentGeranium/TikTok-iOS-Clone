@@ -12,7 +12,7 @@ enum NotificationType {
     case postLike(postName: String)
     case userFollow(userName: String)
     case postComment(postName: String)
-    
+
     // Reason of why make identifier
         // in datebase stored(postLike, userFollow, postComment) have each of the string
         // that is how to we content out what we wanna put into the actual viewModel and type of notification
@@ -33,13 +33,13 @@ class Notification {
     let text: String
     let type: NotificationType
     let date: Date
-    
+
     init(text: String, type: NotificationType, date: Date) {
         self.text = text
         self.type = type
         self.date = date
     }
-    
+
     static func mockData() -> [Notification] {
         let first = Array(0...5).compactMap({
             Notification(
@@ -48,7 +48,7 @@ class Notification {
                 date: Date()
             )
         })
-        
+
         let second = Array(0...5).compactMap({
             Notification(
                 text: "Something happend: \($0)",
@@ -56,7 +56,7 @@ class Notification {
                 date: Date()
             )
         })
-        
+
         let third = Array(0...5).compactMap({
             Notification(
                 text: "Something happend: \($0)",
@@ -64,7 +64,7 @@ class Notification {
                 date: Date()
             )
         })
-        
+
         return first + second + third
     }
 }

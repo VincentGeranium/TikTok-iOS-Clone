@@ -12,12 +12,12 @@ protocol CommentsViewControllerDelegate: AnyObject {
 }
 
 class CommentsViewController: UIViewController {
-    
+
     // weak로 하는 이유 :  retain cycle 때문에
     weak var delegate: CommentsViewControllerDelegate?
-    
+
     private var comments = [PostComment]()
-    
+
     // tableView를 사용하여 comment를 구성할 것이다.
     private let tableView: UITableView = {
         let tableView: UITableView = UITableView()
@@ -28,25 +28,25 @@ class CommentsViewController: UIViewController {
         )
         return tableView
     }()
-    
+
     private let closeButton: UIButton = {
         let button: UIButton = UIButton()
         button.setBackgroundImage(UIImage(systemName: "xmark"), for: .normal)
         button.tintColor = .label
         return button
     }()
-    
+
     private let post: PostModel
-    
+
     init(post: PostModel) {
         self.post = post
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         print("⭕️ : present CommentsVC")
@@ -58,7 +58,7 @@ class CommentsViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         /*
@@ -71,13 +71,13 @@ class CommentsViewController: UIViewController {
                                  width: view.width,
                                  height: view.width - closeButton.bottom)
     }
-    
+
     @objc private func didTapClose() {
         // close tring to close current CommentsViewController
         print("⭕️ : didTapClose method is working")
         delegate?.didCloseForComments(with: self)
     }
-    
+
     func fetchPostComment() {
         // DatabaseManager.shared.fetchComment
         self.comments = PostComment.mockComment()
@@ -88,27 +88,27 @@ extension CommentsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return comments.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let comments = self.comments[indexPath.row]
-        
+
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: CommentTableViewCell.identifier,
             for: indexPath
         ) as? CommentTableViewCell else {
             return UITableViewCell()
         }
-        
+
         cell.configure(with: comments)
-        
+
         return cell
     }
-    
+
     // 실제 테이블 뷰의 셀 높이를 조절하기 위한 method
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 80
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
     }

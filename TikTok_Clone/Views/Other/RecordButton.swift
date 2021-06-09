@@ -8,9 +8,9 @@
 import UIKit
 
 class RecordButton: UIButton {
-    
+
     // make button circular white line
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         // no background color
@@ -21,21 +21,21 @@ class RecordButton: UIButton {
         layer.borderColor = UIColor.white.cgColor
         layer.borderWidth = 2.5
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         layer.cornerRadius = height/2
     }
-    
+
     enum State {
         case recording
         case notRecording
     }
-    
+
     // toggle func fot to recording state and not recording state
     // paramter "State" is enum
     public func toggle(for state: State) {
@@ -46,5 +46,5 @@ class RecordButton: UIButton {
             backgroundColor = nil
         }
     }
-    
+
 }

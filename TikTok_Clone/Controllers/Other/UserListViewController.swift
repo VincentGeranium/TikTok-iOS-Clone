@@ -8,20 +8,20 @@
 import UIKit
 
 class UserListViewController: UIViewController {
-    
+
     // tableview is responsable showing followers and following
     let tableView: UITableView = {
         let tableView: UITableView = UITableView()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         return tableView
     }()
-    
+
     // enumeration give to rawValue String
     enum ListType: String {
         case followers
         case following
     }
-    
+
     private let noUserLabel: UILabel = {
         let label: UILabel = UILabel()
         label.text = "No User."
@@ -29,12 +29,12 @@ class UserListViewController: UIViewController {
         label.textColor = .secondaryLabel
         return label
     }()
-    
+
     let user: User
     let type: ListType
     public var users = [String]()
-    
-    // MARK:- Init
+
+    // MARK: - Init
     init(type: ListType, user: User) {
         self.type = type
         self.user = user
@@ -46,20 +46,20 @@ class UserListViewController: UIViewController {
          */
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError()
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        
+
         switch type {
         case .followers: title = "Followers"
         case .following: title = "Following"
         }
-        
+
         // if users are empty
         if users.isEmpty {
             // show no user notify.
@@ -71,15 +71,14 @@ class UserListViewController: UIViewController {
             tableView.dataSource = self
         }
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         // lay this out conditionaly
         // c.f : view -> current view
         if tableView.superview == view {
             tableView.frame = view.bounds
-        }
-        else {
+        } else {
             noUserLabel.center = view.center
         }
     }
@@ -92,21 +91,20 @@ extension UserListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return users.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // actual text each of cell
         let cell = tableView.dequeueReusableCell(
             withIdentifier: "cell",
             for: indexPath
         )
-    
+
         // if u want to push profile that user's user name on it
         cell.selectionStyle = .none
-        
+
         // users[indexPath.row] -> actual users name
         cell.textLabel?.text = users[indexPath.row].lowercased()
         return cell
     }
-    
-    
+
 }

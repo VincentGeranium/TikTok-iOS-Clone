@@ -17,11 +17,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window.rootViewController = TabBarViewController()
         self.window = window
         self.window?.makeKeyAndVisible()
-        
+
         FirebaseApp.configure()
-        
+
         // when u want to debugging which sign in and sign out
-        //MARK:- this code is like log-out
+        // MARK: - this code is like log-out
 //        AuthManager.shared.signOut { _ in
 //
 //        }
@@ -41,6 +41,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
-
 }
-

@@ -21,6 +21,7 @@ class CommentsViewController: UIViewController {
     // tableView를 사용하여 comment를 구성할 것이다.
     private let tableView: UITableView = {
         let tableView: UITableView = UITableView()
+        tableView.backgroundColor = .secondarySystemBackground
         tableView.register(
             CommentTableViewCell.self,
             forCellReuseIdentifier: CommentTableViewCell.identifier
@@ -31,7 +32,7 @@ class CommentsViewController: UIViewController {
     private let closeButton: UIButton = {
         let button: UIButton = UIButton()
         button.setBackgroundImage(UIImage(systemName: "xmark"), for: .normal)
-        button.tintColor = .black
+        button.tintColor = .label
         return button
     }()
     
@@ -51,7 +52,7 @@ class CommentsViewController: UIViewController {
         print("⭕️ : present CommentsVC")
         view.addSubview(closeButton)
         closeButton.addTarget(self, action: #selector(didTapClose), for: .touchUpInside)
-        view.backgroundColor = .white
+        view.backgroundColor = .secondarySystemBackground
         fetchPostComment()
         view.addSubview(tableView)
         tableView.delegate = self

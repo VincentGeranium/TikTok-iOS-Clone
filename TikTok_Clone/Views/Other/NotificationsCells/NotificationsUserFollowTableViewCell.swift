@@ -93,6 +93,7 @@ class NotificationsUserFollowTableViewCell: UITableViewCell {
         // update follow button ui code
         followButton.setTitle("Following", for: .normal)
         followButton.backgroundColor = .clear
+        followButton.setTitleColor(.label, for: .normal)
         followButton.layer.borderWidth = 1
         followButton.layer.borderColor = UIColor.lightGray.cgColor
         

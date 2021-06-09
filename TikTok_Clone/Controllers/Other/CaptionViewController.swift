@@ -5,6 +5,7 @@
 //  Created by 김광준 on 2021/05/17.
 //
 
+import Appirater
 // this framwork is not apple basic framework
 // this framework for make spiner for simple code.
 import ProgressHUD
@@ -77,6 +78,8 @@ class CaptionViewController: UIViewController {
                     // Updata Database
                     DatabaseManager.shared.insertPost(fileName: newVideoName, caption: caption) { databaseUpdated in
                         if databaseUpdated {
+                            // when uploaded video, show app rating
+//                            Appirater.tryToShowPrompt()
                             // Vibrate when post is success
                             HapticsManager.shared.vibrate(for: .success)
 

@@ -5,6 +5,7 @@
 //  Created by 김광준 on 2021/04/18.
 //
 
+import Appirater
 // make Sign out ui -> make table view and make sign out button at tableview footer
 import SafariServices
 import UIKit
@@ -35,6 +36,22 @@ class SettingViewController: UIViewController {
                 title: "Preferences",
                 options: [
                     SettingsOption(title: "Save Videos", handler: {})
+                ]
+            ),
+            SettingsSection(
+                title: "Enjoying the app?",
+                options: [
+                    SettingsOption(title: "Rate App", handler: {
+                        DispatchQueue.main.async {
+                            // this is for show prompt
+                            // because we are not published app yet
+                            // actually this can be saying to mock data
+                            Appirater.tryToShowPrompt()
+                            // url -> put in publish app url
+//                            UIApplication.shared.open(URL(string: ""), options: [:], completionHandler: nil)
+                        }
+
+                    })
                 ]
             ),
             SettingsSection(

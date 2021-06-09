@@ -4,6 +4,7 @@
 //
 //  Created by 김광준 on 2021/04/18.
 //
+import Appirater
 import Firebase
 import UIKit
 
@@ -13,6 +14,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        Appirater.appLaunched(true)
+        Appirater.setDebug(false)
+        Appirater.setAppId("vincentGeranium.TikTok-Clone")
+        Appirater.setDaysUntilPrompt(7)
+        
         let window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = TabBarViewController()
         self.window = window

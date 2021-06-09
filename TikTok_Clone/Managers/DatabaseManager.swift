@@ -162,7 +162,7 @@ final class DatabaseManager {
     /// Get a current users notifications
     /// - Parameter completion: Result callback of method
     public func getNotification(completion: @escaping([Notification]) -> Void) {
-        completion(Notification.mockData())
+//        completion(Notification.mockData())
     }
 
     /// Mark a notification has hidden

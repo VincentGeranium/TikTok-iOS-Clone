@@ -41,16 +41,34 @@ class SettingViewController: UIViewController {
             SettingsSection(
                 title: "Enjoying the app?",
                 options: [
-                    SettingsOption(title: "Rate App", handler: {
+                    SettingsOption(title: "Rate App", handler: { [weak self] in
                         DispatchQueue.main.async {
                             // this is for show prompt
                             // because we are not published app yet
                             // actually this can be saying to mock data
                             Appirater.tryToShowPrompt()
+//                            Appirater.tryToShowPrompt()
                             // url -> put in publish app url
 //                            UIApplication.shared.open(URL(string: ""), options: [:], completionHandler: nil)
                         }
 
+                    }),
+                    SettingsOption(title: "Share App", handler: { [weak self] in
+                        DispatchQueue.main.async {
+                            // Actually when developer published app and get the URL Directly and Share the app
+                            // But we aren't published, so make share function another way.
+                            guard let url = URL(string: "https://www.facebook.com") else {
+                                return
+                            }
+                            
+                            let vc = UIActivityViewController(
+                                activityItems: [url],
+                                applicationActivities: []
+                            )
+                            
+                            self?.present(vc, animated: true, completion: nil)
+                        }
+                        
                     })
                 ]
             ),

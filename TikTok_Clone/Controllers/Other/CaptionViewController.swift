@@ -79,7 +79,7 @@ class CaptionViewController: UIViewController {
                     DatabaseManager.shared.insertPost(fileName: newVideoName, caption: caption) { databaseUpdated in
                         if databaseUpdated {
                             // when uploaded video, show app rating
-//                            Appirater.tryToShowPrompt()
+                            Appirater.tryToShowPrompt()
                             // Vibrate when post is success
                             HapticsManager.shared.vibrate(for: .success)
 

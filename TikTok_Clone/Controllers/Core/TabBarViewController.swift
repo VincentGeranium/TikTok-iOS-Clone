@@ -7,6 +7,8 @@
 
 import UIKit
 
+/// TabBarController about managing 5 navigation view controller.
+/// Primary view controller.
 class TabBarViewController: UITabBarController {
 
     private var signInPresented = false
@@ -25,7 +27,8 @@ class TabBarViewController: UITabBarController {
             presentSignInIfNeeded()
         }
     }
-
+    
+    /// Checking User sign in or not
     private func presentSignInIfNeeded() {
         // user sign in validation이 false일 경우 sign in vc를 띄운다.
         if !AuthManager.shared.isSignedIn {

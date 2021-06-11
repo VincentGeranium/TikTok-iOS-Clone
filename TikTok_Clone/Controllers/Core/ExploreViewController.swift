@@ -10,6 +10,7 @@ import UIKit
 // this ViewController is compotional colletcionView
 // make colletcionView but different layout section
 
+/// Holding a Collection View with Composition layout.
 class ExploreViewController: UIViewController {
 
     // make property searchBar global space

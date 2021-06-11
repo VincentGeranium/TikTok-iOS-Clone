@@ -12,6 +12,7 @@
 
 import UIKit
 
+/// As Container Scroll View, some buttons and two UIPageController
 class HomeViewController: UIViewController {
 
     // closer pattern
@@ -22,7 +23,8 @@ class HomeViewController: UIViewController {
         scrollView.isPagingEnabled = true
         return scrollView
     }()
-
+    
+    /// Segment control in the header
     let control: UISegmentedControl = {
         // left : following, right : for you
         let titles = ["Following", "For You"]
@@ -42,12 +44,14 @@ class HomeViewController: UIViewController {
     }()
 
     // make two PageViewController globaly
+    /// Following page view controller,
     let followingPagingController = UIPageViewController(
         transitionStyle: .scroll,
         navigationOrientation: .vertical,
         options: [:]
     )
-
+    
+    /// For you page view controller,
     let forYouPagingController = UIPageViewController(
         transitionStyle: .scroll,
         navigationOrientation: .vertical,

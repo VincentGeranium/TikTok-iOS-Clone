@@ -137,6 +137,8 @@ extension ProfileViewController: UICollectionViewDelegate {
 
 }
 
+
+// MARK:- Extension : UICollectionViewDataSource
 extension ProfileViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // number of post

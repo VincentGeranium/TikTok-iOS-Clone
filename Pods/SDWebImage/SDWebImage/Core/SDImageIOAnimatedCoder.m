@@ -13,7 +13,6 @@
 #import "SDImageCoderHelper.h"
 #import "SDAnimatedImageRep.h"
 #import "UIImage+ForceDecode.h"
-#import "SDInternalMacros.h"
 
 // Specify DPI for vector format in CGImageSource, like PDF
 static NSString * kSDCGImageSourceRasterizationDPI = @"kCGImageSourceRasterizationDPI";
@@ -30,9 +29,6 @@ static NSString * kSDCGImageDestinationRequestedFileSize = @"kCGImageDestination
 @implementation SDImageIOCoderFrame
 @end
 
-static BOOL applicationWillTerminate = NO;
-SD_LOCK_DECLARE_STATIC(applicationWillTerminateLock);
-
 @implementation SDImageIOAnimatedCoder {
     size_t _width, _height;
     CGImageSourceRef _imageSource;
@@ -46,39 +42,8 @@ SD_LOCK_DECLARE_STATIC(applicationWillTerminateLock);
     CGSize _thumbnailSize;
 }
 
-+ (void)initialize {
-    if (self == SDImageIOAnimatedCoder.class) {
-        SD_LOCK_INIT(applicationWillTerminateLock);
-#if SD_UIKIT
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(applicationWillTerminate:)
-                                                     name:UIApplicationWillTerminateNotification
-                                                   object:nil];
-
-#endif
-#if SD_MAC
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(applicationWillTerminate:)
-                                                     name:NSApplicationWillTerminateNotification
-                                                   object:nil];
-#endif
-    }
-}
-
-+ (void)applicationWillTerminate:(NSNotification *)notification {
-    SD_LOCK(applicationWillTerminateLock);
-    applicationWillTerminate = YES;
-    SD_UNLOCK(applicationWillTerminateLock);
-}
-
-+ (BOOL)willTerminate {
-    SD_LOCK(applicationWillTerminateLock);
-    BOOL willTerminate = applicationWillTerminate;
-    SD_UNLOCK(applicationWillTerminateLock);
-    return willTerminate;
-}
-
-- (void)dealloc {
+- (void)dealloc
+{
     if (_imageSource) {
         CFRelease(_imageSource);
         _imageSource = NULL;
@@ -88,7 +53,8 @@ SD_LOCK_DECLARE_STATIC(applicationWillTerminateLock);
 #endif
 }
 
-- (void)didReceiveMemoryWarning:(NSNotification *)notification {
+- (void)didReceiveMemoryWarning:(NSNotification *)notification
+{
     if (_imageSource) {
         for (size_t i = 0; i < _frameCount; i++) {
             CGImageSourceRemoveCacheAtIndex(_imageSource, i);
@@ -222,16 +188,11 @@ SD_LOCK_DECLARE_STATIC(applicationWillTerminateLock);
 }
 
 + (UIImage *)createFrameAtIndex:(NSUInteger)index source:(CGImageSourceRef)source scale:(CGFloat)scale preserveAspectRatio:(BOOL)preserveAspectRatio thumbnailSize:(CGSize)thumbnailSize options:(NSDictionary *)options {
-    // Earily return when application will be terminated.
-    if (SDImageIOAnimatedCoder.willTerminate) {
-        return nil;
-    }
-    
     // Some options need to pass to `CGImageSourceCopyPropertiesAtIndex` before `CGImageSourceCreateImageAtIndex`, or ImageIO will ignore them because they parse once :)
     // Parse the image properties
     NSDictionary *properties = (__bridge_transfer NSDictionary *)CGImageSourceCopyPropertiesAtIndex(source, index, (__bridge CFDictionaryRef)options);
-    NSUInteger pixelWidth = [properties[(__bridge NSString *)kCGImagePropertyPixelWidth] unsignedIntegerValue];
-    NSUInteger pixelHeight = [properties[(__bridge NSString *)kCGImagePropertyPixelHeight] unsignedIntegerValue];
+    CGFloat pixelWidth = [properties[(__bridge NSString *)kCGImagePropertyPixelWidth] doubleValue];
+    CGFloat pixelHeight = [properties[(__bridge NSString *)kCGImagePropertyPixelHeight] doubleValue];
     CGImagePropertyOrientation exifOrientation = (CGImagePropertyOrientation)[properties[(__bridge NSString *)kCGImagePropertyOrientation] unsignedIntegerValue];
     if (!exifOrientation) {
         exifOrientation = kCGImagePropertyOrientationUp;
@@ -414,11 +375,11 @@ SD_LOCK_DECLARE_STATIC(applicationWillTerminateLock);
         CGSize thumbnailSize = CGSizeZero;
         NSValue *thumbnailSizeValue = options[SDImageCoderDecodeThumbnailPixelSize];
         if (thumbnailSizeValue != nil) {
-#if SD_MAC
+    #if SD_MAC
             thumbnailSize = thumbnailSizeValue.sizeValue;
-#else
+    #else
             thumbnailSize = thumbnailSizeValue.CGSizeValue;
-#endif
+    #endif
         }
         _thumbnailSize = thumbnailSize;
         BOOL preserveAspectRatio = YES;
@@ -435,10 +396,6 @@ SD_LOCK_DECLARE_STATIC(applicationWillTerminateLock);
 }
 
 - (void)updateIncrementalData:(NSData *)data finished:(BOOL)finished {
-    // Earily return when application will be terminated.
-    if (SDImageIOAnimatedCoder.willTerminate) {
-        return;
-    }
     if (_finished) {
         return;
     }
@@ -539,8 +496,8 @@ SD_LOCK_DECLARE_STATIC(applicationWillTerminateLock);
         maxPixelSize = maxPixelSizeValue.CGSizeValue;
 #endif
     }
-    NSUInteger pixelWidth = CGImageGetWidth(imageRef);
-    NSUInteger pixelHeight = CGImageGetHeight(imageRef);
+    CGFloat pixelWidth = (CGFloat)CGImageGetWidth(imageRef);
+    CGFloat pixelHeight = (CGFloat)CGImageGetHeight(imageRef);
     CGFloat finalPixelSize = 0;
     if (maxPixelSize.width > 0 && maxPixelSize.height > 0 && pixelWidth > maxPixelSize.width && pixelHeight > maxPixelSize.height) {
         CGFloat pixelRatio = pixelWidth / pixelHeight;

@@ -110,6 +110,7 @@ class PostViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = .black
         // added videoView on the top layer
         view.addSubview(videoView)
@@ -250,7 +251,8 @@ class PostViewController: UIViewController {
                     strongSelf.player?.play()
                 case .failure:
                     // this is mock data for first lunched app and show video
-                    guard let path = Bundle.main.path(forResource: "mockVideo", ofType: "mp4") else {
+                    
+                    guard let path = Bundle.main.path(forResource: "mockVideo-\(Int.random(in: 1...3))", ofType: "mp4") else {
                         return
                     }
                     let url = URL(fileURLWithPath: path)
@@ -262,6 +264,7 @@ class PostViewController: UIViewController {
                     strongSelf.videoView.layer.addSublayer(playerLayer)
                     strongSelf.player?.volume = 0
                     strongSelf.player?.play()
+                    
                 }
             }
         }

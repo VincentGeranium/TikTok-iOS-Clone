@@ -104,7 +104,8 @@ class HomeViewController: UIViewController {
      */
     private func setupFeed() {
         // make horizontalScrolleViewContent
-        horizontalScrollView.contentSize = CGSize(width: view.width * 2, height: view.height)
+        // width 파라미터에 값을 전달시 viwe.width * 2로 전달해주면 Scroll이 좌.우로도 가능하다.
+        horizontalScrollView.contentSize = CGSize(width: view.width, height: view.height)
 
         setupFollowingFeed()
         setupForYouFeed()

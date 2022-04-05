@@ -17,7 +17,6 @@
 		6A33FE4C262C107D00ABE5A7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A33FE4B262C107D00ABE5A7 /* Assets.xcassets */; };
 		6A33FE4F262C107D00ABE5A7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A33FE4D262C107D00ABE5A7 /* LaunchScreen.storyboard */; };
 		6A340C5E2647A573002BAEC5 /* ExploreUserCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A340C5D2647A573002BAEC5 /* ExploreUserCollectionViewCell.swift */; };
-		6A4F2C14263D42B4002508E3 /* mockVideo.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 6A4F2C13263D42B4002508E3 /* mockVideo.mp4 */; };
 		6A4FBFAC263BF986006B8E21 /* CommentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A4FBFAB263BF986006B8E21 /* CommentTableViewCell.swift */; };
 		6A55F0132671F08F0074A443 /* ExploreResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A55F0122671F08F0074A443 /* ExploreResponse.swift */; };
 		6A55F0152671F0E00074A443 /* Banner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A55F0142671F0E00074A443 /* Banner.swift */; };
@@ -70,6 +69,9 @@
 		6ADE980B2647989500809A23 /* ExploreBannerCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ADE980A2647989500809A23 /* ExploreBannerCollectionViewCell.swift */; };
 		6AE52CDE2671F2E800C2DB2C /* TikTok_CloneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AE52CDD2671F2E800C2DB2C /* TikTok_CloneTests.swift */; };
 		6AFA39EE262D7ABD002C958E /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6AFA39ED262D7ABD002C958E /* GoogleService-Info.plist */; };
+		BFD7D86627FBC21B0034E7C9 /* mockVideo-1.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = BFD7D86527FBC21B0034E7C9 /* mockVideo-1.mp4 */; };
+		BFD7D86927FBC3C00034E7C9 /* mockVideo-3.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = BFD7D86727FBC3C00034E7C9 /* mockVideo-3.mp4 */; };
+		BFD7D86A27FBC3C00034E7C9 /* mockVideo-2.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = BFD7D86827FBC3C00034E7C9 /* mockVideo-2.mp4 */; };
 		F95670C8A70A52B892BC72A0 /* Pods_TikTok_Clone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 118FB7E0137244D0A05EB204 /* Pods_TikTok_Clone.framework */; };
 /* End PBXBuildFile section */
 
@@ -98,7 +100,6 @@
 		6A33FE4E262C107D00ABE5A7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6A33FE50262C107D00ABE5A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6A340C5D2647A573002BAEC5 /* ExploreUserCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreUserCollectionViewCell.swift; sourceTree = "<group>"; };
-		6A4F2C13263D42B4002508E3 /* mockVideo.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = mockVideo.mp4; sourceTree = "<group>"; };
 		6A4FBFAB263BF986006B8E21 /* CommentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentTableViewCell.swift; sourceTree = "<group>"; };
 		6A55F0122671F08F0074A443 /* ExploreResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreResponse.swift; sourceTree = "<group>"; };
 		6A55F0142671F0E00074A443 /* Banner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Banner.swift; sourceTree = "<group>"; };
@@ -155,6 +156,9 @@
 		6AFA39ED262D7ABD002C958E /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		789ECC693895EC653F249A69 /* Pods-TikTok_CloneTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TikTok_CloneTests.debug.xcconfig"; path = "Target Support Files/Pods-TikTok_CloneTests/Pods-TikTok_CloneTests.debug.xcconfig"; sourceTree = "<group>"; };
 		9A5CA72349D6764DCF652A2D /* Pods_TikTok_CloneTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TikTok_CloneTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BFD7D86527FBC21B0034E7C9 /* mockVideo-1.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "mockVideo-1.mp4"; path = "../../../mockVideo-1.mp4"; sourceTree = "<group>"; };
+		BFD7D86727FBC3C00034E7C9 /* mockVideo-3.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "mockVideo-3.mp4"; path = "../../../../Downloads/mockVideo-3.mp4"; sourceTree = "<group>"; };
+		BFD7D86827FBC3C00034E7C9 /* mockVideo-2.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = "mockVideo-2.mp4"; path = "../../../../Downloads/mockVideo-2.mp4"; sourceTree = "<group>"; };
 		F94DB877476CB2A06806B6B5 /* Pods-TikTok_Clone.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TikTok_Clone.debug.xcconfig"; path = "Target Support Files/Pods-TikTok_Clone/Pods-TikTok_Clone.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -235,7 +239,9 @@
 			children = (
 				6A59A60C264525D80067A4DC /* explore.json */,
 				6A33FE4B262C107D00ABE5A7 /* Assets.xcassets */,
-				6A4F2C13263D42B4002508E3 /* mockVideo.mp4 */,
+				BFD7D86527FBC21B0034E7C9 /* mockVideo-1.mp4 */,
+				BFD7D86827FBC3C00034E7C9 /* mockVideo-2.mp4 */,
+				BFD7D86727FBC3C00034E7C9 /* mockVideo-3.mp4 */,
 				6AFA39ED262D7ABD002C958E /* GoogleService-Info.plist */,
 				6A33FE42262C107D00ABE5A7 /* AppDelegate.swift */,
 				6A33FE44262C107D00ABE5A7 /* SceneDelegate.swift */,
@@ -493,9 +499,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BFD7D86927FBC3C00034E7C9 /* mockVideo-3.mp4 in Resources */,
+				BFD7D86A27FBC3C00034E7C9 /* mockVideo-2.mp4 in Resources */,
 				6A59A60D264525D80067A4DC /* explore.json in Resources */,
+				BFD7D86627FBC21B0034E7C9 /* mockVideo-1.mp4 in Resources */,
 				6A33FE4F262C107D00ABE5A7 /* LaunchScreen.storyboard in Resources */,
-				6A4F2C14263D42B4002508E3 /* mockVideo.mp4 in Resources */,
 				6A33FE4C262C107D00ABE5A7 /* Assets.xcassets in Resources */,
 				6AFA39EE262D7ABD002C958E /* GoogleService-Info.plist in Resources */,
 			);
@@ -827,7 +835,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 64WAG22Y2J;
 				INFOPLIST_FILE = TikTok_Clone/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -848,7 +856,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 64WAG22Y2J;
 				INFOPLIST_FILE = TikTok_Clone/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
